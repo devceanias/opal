@@ -35,7 +35,7 @@ public abstract class OPlugin extends JavaPlugin {
     public final void onLoad() {
         ORegistry.registerPlugin(this);
 
-        this.scheduler = getServer().getScheduler();
+        scheduler = getServer().getScheduler();
 
         loadPlugin();
     }
