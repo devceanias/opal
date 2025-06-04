@@ -1,1 +1,1 @@
-rootProject.name = "Plantium"
+rootProject.name = "Oceanilib"
