@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.bukkit.plugin.Plugin;
 
+@SuppressWarnings("unused")
 public final class ORegistry {
     private static final Map<Plugin, OPlugin> registry = new ConcurrentHashMap<>();
 
