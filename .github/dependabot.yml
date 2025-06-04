@@ -7,5 +7,4 @@ updates:
       interval: "daily"
       time: "17:00"
     ignore:
-      - dependency-name: "io.papermc.paper:paper-api"
-        versions: [ "*" ]
+      - dependency-name: "io.papermc.paper:*"
