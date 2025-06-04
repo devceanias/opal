@@ -1,0 +1,115 @@
+# User-specific project files
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# IntelliJ output directory
+out/
+
+# Compiled class files
+*.class
+
+# Log files only
+*.log
+
+# BlueJ specific files
+*.ctxt
+
+# Package archive files
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# JVM crash logs
+hs_err_pid*
+
+# Hidden temporary files
+*~
+.fuse_hidden*
+
+# KDE preference files
+.directory
+
+# Linux trash folders
+.Trash-*
+
+# NFS temporary files
+.nfs*
+
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon metadata files
+Icon
+
+# Thumbnail cache files
+._*
+
+# Root volume files
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# AFP share files
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Windows thumbnail cache
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+
+# Dump files only
+*.stackdump
+
+# Windows folder configuration
+[Dd]esktop.ini
+
+# Windows recycle bin
+$RECYCLE.BIN/
+
+# Windows installer files
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+
+# Windows shortcut files
+*.lnk
+
+# Gradle build files
+.gradle/
+build/
+**/build/
+
+# Gradle GUI configuration
+gradle-app.setting
+
+# Gradle task cache
+.gradletasknamecache
+
+# Common working directories
+run/
+
+# Gradle wrapper files
+!gradle-wrapper.jar
+!gradle-wrapper.properties
+
+# Resource directory files
+!src/main/resources/**
