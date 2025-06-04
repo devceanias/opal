@@ -4,7 +4,7 @@ invUI = "1.45"
 commandAPI = "10.0.1"
 configLib = "4.6.1"
 lombok = "1.18.36"
-paper = "1.21.4-R0.1-SNAPSHOT"
+paper = "1.21.5-R0.1-SNAPSHOT"
 
 [libraries]
 invUI = { group = "xyz.xenondevs.invui", name = "invui", version.ref = "invUI" }
