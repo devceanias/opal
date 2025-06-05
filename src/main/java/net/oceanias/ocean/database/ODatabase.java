@@ -25,8 +25,10 @@ public abstract class ODatabase implements OProvider {
         final Duration interval = getAutosave();
 
         if (interval != null && !interval.isZero() && !interval.isNegative()) {
+            final long ticks = interval.toSeconds() * 20L;
+
             autosave = new Autosave(this);
-            autosave.runTaskTimerAsynchronously(plugin, 0L, interval.toSeconds() * 20L);
+            autosave.runTaskTimerAsynchronously(plugin, ticks, ticks);
         }
 
         if (isConnected()) {
