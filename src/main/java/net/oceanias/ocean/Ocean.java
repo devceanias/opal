@@ -1,6 +1,7 @@
 package net.oceanias.ocean;
 
 import net.oceanias.ocean.configuration.OConfiguration;
+import net.oceanias.ocean.database.ODatabase;
 import net.oceanias.ocean.module.OModule;
 import net.oceanias.ocean.plugin.OPlugin;
 import net.oceanias.ocean.utility.builder.OItemBuilder;
@@ -11,6 +12,7 @@ import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 
 @SuppressWarnings("unused")
@@ -39,12 +41,19 @@ public final class Ocean extends OPlugin {
 
     @Contract(pure = true)
     @Override
-    public @Unmodifiable List<OConfiguration<?>> getConfigurations() {
+    public @Unmodifiable @NotNull List<OConfiguration<?>> getConfigurations() {
         return List.of(Config.get());
     }
 
+    @Contract(pure = true)
     @Override
-    public String getColour() {
+    public @Nullable ODatabase getDatabase() {
+        return null;
+    }
+
+    @Contract(pure = true)
+    @Override
+    public @NotNull String getColour() {
         return "";
     }
 

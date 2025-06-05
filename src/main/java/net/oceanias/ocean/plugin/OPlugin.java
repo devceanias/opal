@@ -2,6 +2,7 @@ package net.oceanias.ocean.plugin;
 
 import net.oceanias.ocean.Ocean;
 import net.oceanias.ocean.configuration.OConfiguration;
+import net.oceanias.ocean.database.ODatabase;
 import net.oceanias.ocean.module.OModule;
 import java.util.List;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -21,9 +22,11 @@ public abstract class OPlugin extends JavaPlugin {
         return getDescription().getAuthors();
     }
 
-    public abstract List<OModule> getModules();
-
     public abstract List<OConfiguration<?>> getConfigurations();
+
+    public abstract ODatabase getDatabase();
+
+    public abstract List<OModule> getModules();
 
     public abstract String getColour();
 
@@ -59,6 +62,10 @@ public abstract class OPlugin extends JavaPlugin {
             return;
         }
 
+        if (getDatabase() != null) {
+            getDatabase().onRegister();
+        }
+
         for (final OModule module : getModules()) {
             module.onRegister();
         }
@@ -68,15 +75,19 @@ public abstract class OPlugin extends JavaPlugin {
 
     @Override
     public final void onDisable() {
+        disablePlugin();
+
         for (final OModule module : getModules()) {
             module.onUnregister();
+        }
+
+        if (getDatabase() != null) {
+            getDatabase().onUnregister();
         }
 
         for (final OConfiguration<?> config : getConfigurations()) {
             config.onUnregister();
         }
-
-        disablePlugin();
 
         ORegistry.unregisterPlugin(this);
     }
