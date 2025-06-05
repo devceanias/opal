@@ -141,7 +141,7 @@ public final class OTeleportHelper extends OListener.Bukkit {
     }
 
     @EventHandler
-    public void onPlayerDamage(@NotNull final EntityDamageEvent event) {
+    public void onEntityDamage(@NotNull final EntityDamageEvent event) {
         if (!(event.getEntity() instanceof final Player player)) {
             return;
         }

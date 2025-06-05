@@ -3,8 +3,10 @@ package net.oceanias.ocean;
 import net.oceanias.ocean.configuration.OConfiguration;
 import net.oceanias.ocean.module.OModule;
 import net.oceanias.ocean.plugin.OPlugin;
+import net.oceanias.ocean.utility.builder.OItemBuilder;
 import net.oceanias.ocean.utility.helper.OTeleportHelper;
 import java.util.List;
+import xyz.xenondevs.invui.gui.structure.Structure;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.Contract;
@@ -55,6 +57,8 @@ public final class Ocean extends OPlugin {
     @Override
     protected void loadPlugin() {
         get = this;
+
+        Structure.addGlobalIngredient('#', OItemBuilder.getBorder());
     }
 
     @Override
