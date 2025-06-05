@@ -22,16 +22,15 @@ public final class OPlayerExtension {
         final boolean lines,
         final boolean blanks
     ) {
-        final String beginning = prefixed ? ORegistry.getCaller().getPrefix() : "";
-
         final String line = lines ? OStringExtension.CHAT_DIVIDER : null;
         final String blank = blanks ? "" : null;
+        final String beginning = prefixed ? ORegistry.getCaller().getPrefix() : "";
 
-        final String list = Stream.of(line, blank, beginning + message, blank, line)
+        player.sendMessage(Stream.of(line, blank, beginning + message, blank, line)
             .filter(Objects::nonNull)
-            .collect(Collectors.joining("\n"));
-
-        player.sendMessage(list.deserialize());
+            .collect(Collectors.joining("\n"))
+            .deserialize()
+        );
     }
 
     public static void messageDSR(

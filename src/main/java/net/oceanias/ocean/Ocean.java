@@ -40,7 +40,7 @@ public final class Ocean extends OPlugin {
     @Contract(pure = true)
     @Override
     public @Unmodifiable List<OConfiguration<?>> getConfigurations() {
-        return List.of();
+        return List.of(Config.get());
     }
 
     @Override
@@ -58,7 +58,7 @@ public final class Ocean extends OPlugin {
     protected void loadPlugin() {
         get = this;
 
-        Structure.addGlobalIngredient('#', OItemBuilder.getBorder());
+        Structure.addGlobalIngredient(Config.get().getMenu().getIngredients().getBorder(), OItemBuilder.getBorder());
     }
 
     @Override

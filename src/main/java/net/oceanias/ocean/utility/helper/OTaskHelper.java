@@ -7,7 +7,7 @@ import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
-public class OTaskHelper {
+public final class OTaskHelper {
     public static @NotNull BukkitTask runTask(final Runnable task) {
         return ORegistry.getCaller().getScheduler().runTask(ORegistry.getCaller(), task);
     }

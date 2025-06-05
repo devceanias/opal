@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
 @ExtensionMethod({ OStringExtension.class, OComponentExtension.class })
-public class OItemBuilder implements ItemProvider {
+public final class OItemBuilder implements ItemProvider {
     private final ItemStack stack;
 
     @Getter

@@ -28,10 +28,10 @@ public final class OCooldown {
         return plugin.getPermission("cooldown." + label.replace(" ", ".") + ".bypass");
     }
 
-    public void setCooldown(@NotNull final Player player, final boolean state) {
+    public void setCooldown(@NotNull final Player player, final boolean cooldown) {
         final UUID uuid = player.getUniqueId();
 
-        if (!state) {
+        if (!cooldown) {
             cooldowns.remove(uuid);
 
             return;

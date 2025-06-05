@@ -41,6 +41,10 @@ public abstract class OPlugin extends JavaPlugin {
 
         scheduler = getServer().getScheduler();
 
+        for (final OConfiguration<?> config : getConfigurations()) {
+            config.onRegister();
+        }
+
         loadPlugin();
     }
 
@@ -55,10 +59,6 @@ public abstract class OPlugin extends JavaPlugin {
             return;
         }
 
-        for (final OConfiguration<?> config : getConfigurations()) {
-            config.loadConfiguration();
-        }
-
         for (final OModule module : getModules()) {
             module.onRegister();
         }
@@ -70,6 +70,10 @@ public abstract class OPlugin extends JavaPlugin {
     public final void onDisable() {
         for (final OModule module : getModules()) {
             module.onUnregister();
+        }
+
+        for (final OConfiguration<?> config : getConfigurations()) {
+            config.onUnregister();
         }
 
         disablePlugin();
