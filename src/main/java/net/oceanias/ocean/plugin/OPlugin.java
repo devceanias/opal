@@ -1,6 +1,5 @@
 package net.oceanias.ocean.plugin;
 
-import net.oceanias.ocean.registry.ORegistry;
 import net.oceanias.ocean.Ocean;
 import net.oceanias.ocean.configuration.OConfiguration;
 import net.oceanias.ocean.module.OModule;
@@ -9,18 +8,24 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import lombok.Getter;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({ "unused", "deprecation" })
 @Getter
 public abstract class OPlugin extends JavaPlugin {
     private BukkitScheduler scheduler;
 
-    public abstract String getLabel();
+    public String getLabel() {
+        return getDescription().getName().toLowerCase();
+    }
 
-    public abstract List<String> getAuthors();
+    public List<String> getAuthors() {
+        return getDescription().getAuthors();
+    }
 
     public abstract List<OModule> getModules();
 
     public abstract List<OConfiguration<?>> getConfigurations();
+
+    public abstract String getColour();
 
     public abstract String getPrefix();
 

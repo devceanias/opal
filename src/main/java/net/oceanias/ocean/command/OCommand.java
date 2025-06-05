@@ -4,8 +4,6 @@ import net.oceanias.ocean.module.OProvider;
 import net.oceanias.ocean.plugin.OPlugin;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Predicate;
-import org.bukkit.command.CommandSender;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.CommandTree;
@@ -29,16 +27,8 @@ public abstract class OCommand implements OProvider {
         return Collections.emptyList();
     }
 
-    public List<String> getAliases() {
-        return Collections.emptyList();
-    }
-
     public CommandPermission getPermission() {
         return ofPermission(plugin, getLabel());
-    }
-
-    public Predicate<CommandSender> getRequirement() {
-        return sender -> true;
     }
 
     public CommandTree getCommand() {
@@ -47,15 +37,12 @@ public abstract class OCommand implements OProvider {
 
     @Override
     public void onRegister() {
-        final CommandTree tree = getCommand()
-            .withAliases(getAliases().toArray(new String[0]))
-            .withPermission(getPermission())
-            .withRequirement(getRequirement());
+        final CommandTree tree = getCommand().withPermission(getPermission());
 
         CommandAPI.unregister(getLabel(), true);
 
         for (final OSubcommand subcommand : getSubcommands()) {
-            tree.then(subcommand.get());
+            tree.then(subcommand.buildSubcommand());
         }
 
         tree.register();

@@ -2,6 +2,7 @@ package net.oceanias.ocean.cooldown;
 
 import net.oceanias.ocean.plugin.OPlugin;
 import net.oceanias.ocean.utility.extension.OPlayerExtension;
+import net.oceanias.ocean.utility.helper.OTaskHelper;
 import java.time.Duration;
 import java.util.List;
 import java.util.UUID;
@@ -42,7 +43,7 @@ public final class OCooldown {
 
         cooldowns.put(uuid, Pair.of(System.currentTimeMillis(), length));
 
-        plugin.getScheduler().runTaskLaterAsynchronously(plugin, () -> cooldowns.remove(uuid), length.toMillis() / 50);
+        OTaskHelper.runTaskLaterAsync(() -> cooldowns.remove(uuid), length);
     }
 
     public void showReminder(@NotNull final Player player) {

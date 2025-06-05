@@ -3,6 +3,7 @@ package net.oceanias.ocean;
 import net.oceanias.ocean.configuration.OConfiguration;
 import net.oceanias.ocean.module.OModule;
 import net.oceanias.ocean.plugin.OPlugin;
+import net.oceanias.ocean.utility.helper.OTeleportHelper;
 import java.util.List;
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -40,6 +41,11 @@ public final class Ocean extends OPlugin {
         return List.of();
     }
 
+    @Override
+    public String getColour() {
+        return "";
+    }
+
     @Contract(pure = true)
     @Override
     public @NotNull String getPrefix() {
@@ -49,5 +55,10 @@ public final class Ocean extends OPlugin {
     @Override
     protected void loadPlugin() {
         get = this;
+    }
+
+    @Override
+    protected void enablePlugin() {
+        new OTeleportHelper(this).onRegister();
     }
 }

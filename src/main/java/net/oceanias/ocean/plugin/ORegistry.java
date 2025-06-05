@@ -1,6 +1,5 @@
-package net.oceanias.ocean.registry;
+package net.oceanias.ocean.plugin;
 
-import net.oceanias.ocean.plugin.OPlugin;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.bukkit.plugin.Plugin;

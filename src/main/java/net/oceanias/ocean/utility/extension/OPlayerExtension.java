@@ -1,6 +1,6 @@
 package net.oceanias.ocean.utility.extension;
 
-import net.oceanias.ocean.registry.ORegistry;
+import net.oceanias.ocean.plugin.ORegistry;
 import java.time.Duration;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -35,10 +35,7 @@ public final class OPlayerExtension {
     }
 
     public static void messageDSR(
-        final Player player,
-        final String message,
-        final boolean prefixed,
-        final boolean lines
+        final Player player, final String message, final boolean prefixed, final boolean lines
     ) {
         messageDSR(player, message, prefixed, lines, false);
     }
@@ -83,10 +80,7 @@ public final class OPlayerExtension {
     }
 
     public static void soundDSR(
-        final Player player,
-        final org.bukkit.Sound sound,
-        final float volume,
-        final float pitch
+        final Player player, final org.bukkit.Sound sound, final float volume, final float pitch
     ) {
         soundDSR(player, sound, volume, pitch, Sound.Emitter.self(), Sound.Source.MASTER);
     }
@@ -117,21 +111,12 @@ public final class OPlayerExtension {
     }
 
     public static void titleDSR(
-        final Player player,
-        final String title,
-        final String subtitle,
-        final long fadeIn,
-        final long onScreen
+        final Player player, final String title, final String subtitle, final long fadeIn, final long onScreen
     ) {
         titleDSR(player, title, subtitle, fadeIn, onScreen, 1000);
     }
 
-    public static void titleDSR(
-        final Player player,
-        final String title,
-        final String subtitle,
-        final long fadeIn
-    ) {
+    public static void titleDSR(final Player player, final String title, final String subtitle, final long fadeIn) {
         titleDSR(player, title, subtitle, fadeIn, 3000, 1000);
     }
 

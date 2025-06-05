@@ -38,11 +38,11 @@ public abstract class OSubcommand {
 
     public abstract Argument<String> getSubcommand();
 
-    public final Argument<String> get() {
+    public final Argument<String> buildSubcommand() {
         final Argument<String> base = getSubcommand().withPermission(getPermission());
 
         for (final OSubcommand subcommand : getSubcommands()) {
-            base.then(subcommand.get());
+            base.then(subcommand.buildSubcommand());
         }
 
         return base;
