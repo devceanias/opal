@@ -1,4 +1,4 @@
-project.group = "net.oceanias.oceanilib"
+project.group = "net.oceanias.ocean"
 project.version = "1.0.0"
 
 plugins {

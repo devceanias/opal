@@ -1,4 +1,4 @@
-package net.oceanias.oceanilib.module;
+package net.oceanias.ocean.module;
 
 import java.util.List;
 

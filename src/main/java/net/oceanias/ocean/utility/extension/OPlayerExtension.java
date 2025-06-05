@@ -1,6 +1,6 @@
-package net.oceanias.oceanilib.utility.extension;
+package net.oceanias.ocean.utility.extension;
 
-import net.oceanias.oceanilib.ORegistry;
+import net.oceanias.ocean.registry.ORegistry;
 import java.time.Duration;
 import java.util.Objects;
 import java.util.stream.Collectors;

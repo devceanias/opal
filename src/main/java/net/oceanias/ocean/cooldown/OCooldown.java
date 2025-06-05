@@ -1,7 +1,7 @@
-package net.oceanias.oceanilib.cooldown;
+package net.oceanias.ocean.cooldown;
 
-import net.oceanias.oceanilib.plugin.OPlugin;
-import net.oceanias.oceanilib.utility.extension.OPlayerExtension;
+import net.oceanias.ocean.plugin.OPlugin;
+import net.oceanias.ocean.utility.extension.OPlayerExtension;
 import java.time.Duration;
 import java.util.List;
 import java.util.UUID;

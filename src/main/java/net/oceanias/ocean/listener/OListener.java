@@ -1,7 +1,7 @@
-package net.oceanias.oceanilib.listener;
+package net.oceanias.ocean.listener;
 
-import net.oceanias.oceanilib.module.OProvider;
-import net.oceanias.oceanilib.plugin.OPlugin;
+import net.oceanias.ocean.module.OProvider;
+import net.oceanias.ocean.plugin.OPlugin;
 import org.bukkit.event.Listener;
 import lombok.RequiredArgsConstructor;
 

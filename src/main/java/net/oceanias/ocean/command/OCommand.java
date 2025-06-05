@@ -1,7 +1,7 @@
-package net.oceanias.oceanilib.command;
+package net.oceanias.ocean.command;
 
-import net.oceanias.oceanilib.module.OProvider;
-import net.oceanias.oceanilib.plugin.OPlugin;
+import net.oceanias.ocean.module.OProvider;
+import net.oceanias.ocean.plugin.OPlugin;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;

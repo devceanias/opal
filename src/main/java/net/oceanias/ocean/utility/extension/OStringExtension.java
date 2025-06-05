@@ -1,4 +1,4 @@
-package net.oceanias.oceanilib.utility.extension;
+package net.oceanias.ocean.utility.extension;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;

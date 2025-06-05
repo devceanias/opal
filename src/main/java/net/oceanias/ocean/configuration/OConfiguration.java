@@ -1,6 +1,6 @@
-package net.oceanias.oceanilib.configuration;
+package net.oceanias.ocean.configuration;
 
-import net.oceanias.oceanilib.plugin.OPlugin;
+import net.oceanias.ocean.plugin.OPlugin;
 import java.io.File;
 import java.nio.file.Path;
 import de.exlll.configlib.YamlConfigurationProperties;

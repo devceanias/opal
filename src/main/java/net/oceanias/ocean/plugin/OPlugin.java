@@ -1,9 +1,10 @@
-package net.oceanias.oceanilib.plugin;
+package net.oceanias.ocean.plugin;
 
-import net.oceanias.oceanilib.ORegistry;
-import net.oceanias.oceanilib.configuration.OConfiguration;
-import net.oceanias.oceanilib.module.OModule;
-import java.util.ArrayList;
+import net.oceanias.ocean.registry.ORegistry;
+import net.oceanias.ocean.Ocean;
+import net.oceanias.ocean.configuration.OConfiguration;
+import net.oceanias.ocean.module.OModule;
+import java.util.List;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import lombok.Getter;
@@ -15,21 +16,19 @@ public abstract class OPlugin extends JavaPlugin {
 
     public abstract String getLabel();
 
-    public abstract String getAuthor();
+    public abstract List<String> getAuthors();
 
-    public abstract String getVersion();
+    public abstract List<OModule> getModules();
 
-    public abstract ArrayList<OModule> getModules();
-
-    public abstract ArrayList<OConfiguration<?>> getConfigurations();
+    public abstract List<OConfiguration<?>> getConfigurations();
 
     public abstract String getPrefix();
 
-    protected abstract void loadPlugin();
+    protected void loadPlugin() {}
 
-    protected abstract void enablePlugin();
+    protected void enablePlugin() {}
 
-    protected abstract void disablePlugin();
+    protected void disablePlugin() {}
 
     @Override
     public final void onLoad() {
@@ -42,6 +41,15 @@ public abstract class OPlugin extends JavaPlugin {
 
     @Override
     public final void onEnable() {
+        if (getClass() != Ocean.class &&
+            !getServer().getPluginManager().isPluginEnabled(Ocean.get().getDescription().getName())
+        ) {
+            getLogger().severe("Oceanilib is missing or not enabled — this plugin will be disabled.");
+            getServer().getPluginManager().disablePlugin(this);
+
+            return;
+        }
+
         for (final OConfiguration<?> config : getConfigurations()) {
             config.loadConfiguration();
         }

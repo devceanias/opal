@@ -1,6 +1,6 @@
-package net.oceanias.oceanilib.command;
+package net.oceanias.ocean.command;
 
-import net.oceanias.oceanilib.plugin.OPlugin;
+import net.oceanias.ocean.plugin.OPlugin;
 import java.util.Collections;
 import java.util.List;
 import dev.jorel.commandapi.CommandPermission;
