@@ -22,6 +22,8 @@ public final class OAdminCommand extends OCommand {
 
     @Contract(" -> new")
     public @NotNull @Unmodifiable List<OSubcommand> getSubcommands() {
-        return List.of(new OReloadSubcommand(plugin, this));
+        return List.of(
+            new OReloadSubcommand(plugin, this)
+        );
     }
 }

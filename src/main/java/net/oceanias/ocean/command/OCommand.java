@@ -137,11 +137,13 @@ public abstract class OCommand implements OProvider {
                 builder.append("<yellow>[").append(seg.name).append("]</yellow>");
             }
 
+            final List<String> description = line.description;
+
             Component component = ("<gray>• <white>" + builder).deserialize();
 
-            if (line.description != null) {
+            if (description != null) {
                 component = component.hoverEvent(HoverEvent.showText(
-                    String.join("\n", line.description).deserialize()
+                    String.join("\n", plugin.getColour() + description).deserialize()
                 ));
             }
 
