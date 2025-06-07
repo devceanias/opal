@@ -1,1 +1,1 @@
-rootProject.name = "Oceanilib"
+rootProject.name = "Ocean"

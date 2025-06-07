@@ -1,0 +1,7 @@
+name: "Ocean"
+version: "${version}"
+main: "net.oceanias.ocean.Ocean"
+description: "The utility plugin for Oceanias."
+api-version: "1.21"
+authors: [ "Plantal" ]
+website: "https://oceanias.net"

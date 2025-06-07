@@ -1,5 +1,6 @@
-package net.oceanias.ocean;
+package net.oceanias.ocean.configuration.impl;
 
+import net.oceanias.ocean.Ocean;
 import net.oceanias.ocean.configuration.OConfiguration;
 import net.oceanias.ocean.plugin.OPlugin;
 import java.io.File;
@@ -12,13 +13,23 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings("FieldMayBeFinal")
 @Getter
 @Configuration
-final class Config extends OConfiguration<Config> {
+public final class OPrimaryConfig extends OConfiguration<OPrimaryConfig> {
     @Getter
     @Accessors(fluent = true)
-    private static final Config get = new Config(Ocean.get());
+    private static final OPrimaryConfig get = new OPrimaryConfig(Ocean.get());
 
-    public Config(final OPlugin plugin) {
+    public OPrimaryConfig() {
+        super(Ocean.get());
+    }
+
+    public OPrimaryConfig(final OPlugin plugin) {
         super(plugin);
+    }
+
+    @Contract(pure = true)
+    @Override
+    public @NotNull String getLabel() {
+        return "primary";
     }
 
     @Contract(value = " -> new", pure = true)
@@ -28,20 +39,20 @@ final class Config extends OConfiguration<Config> {
     }
 
     @Override
-    protected Class<Config> getClazz() {
-        return Config.class;
+    protected Class<OPrimaryConfig> getClazz() {
+        return OPrimaryConfig.class;
     }
 
     private Menu menu = new Menu();
 
     @Getter
     @Configuration
-    static final class Menu {
+    public static final class Menu {
         private Ingredients ingredients = new Ingredients();
 
         @Getter
         @Configuration
-        static final class Ingredients {
+        public static final class Ingredients {
             private char border = '#';
         }
     }

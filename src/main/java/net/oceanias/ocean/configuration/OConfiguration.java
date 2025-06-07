@@ -16,6 +16,8 @@ public abstract class OConfiguration<T> implements OProvider {
 
     private T config;
 
+    public abstract String getLabel();
+
     protected abstract File getFile();
 
     protected YamlConfigurationProperties getProperties() {

@@ -70,6 +70,7 @@ dependencies {
     compileOnly(libs.paper)
 
     implementation(libs.configLib)
+    implementation(libs.commonsText)
 }
 
 defaultTasks("build")
@@ -84,7 +85,13 @@ tasks {
     }
 
     jar {
-        enabled = false
+        enabled = true
+
+        manifest {
+            attributes(
+                "Implementation-Version" to project.version
+            )
+        }
     }
 
     shadowJar {

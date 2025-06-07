@@ -5,13 +5,15 @@ commandAPI = "10.0.1"
 configLib = "4.6.1"
 lombok = "1.18.38"
 paper = "1.21.4-R0.1-SNAPSHOT"
+commonsText = "1.13.1"
 
 [libraries]
 invUI = { group = "xyz.xenondevs.invui", name = "invui", version.ref = "invUI" }
-commandAPI = { group = "dev.jorel", name = "commandapi-bukkit-shade", version.ref = "commandAPI" }
+commandAPI = { group = "dev.jorel", name = "commandapi-bukkit-shade-mojang-mapped", version.ref = "commandAPI" }
 configLib = { group = "de.exlll", name = "configlib-paper", version.ref = "configLib" }
 lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" }
 paper = { group = "io.papermc.paper", name = "paper-api", version.ref = "paper" }
+commonsText = { group = "org.apache.commons", name = "commons-text", version.ref = "commonsText" }
 
 [bundles]
 

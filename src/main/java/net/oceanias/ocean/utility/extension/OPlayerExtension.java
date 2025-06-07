@@ -22,7 +22,7 @@ public final class OPlayerExtension {
         final boolean lines,
         final boolean blanks
     ) {
-        final String line = lines ? OStringExtension.CHAT_DIVIDER : null;
+        final String line = lines ? OStringExtension.CHAT_DIVIDER_SHORT : null;
         final String blank = blanks ? "" : null;
         final String beginning = prefixed ? ORegistry.getCaller().getPrefix() : "";
 

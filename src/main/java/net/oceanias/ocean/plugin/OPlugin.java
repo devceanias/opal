@@ -7,6 +7,8 @@ import net.oceanias.ocean.module.OModule;
 import java.util.List;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
+import dev.jorel.commandapi.CommandAPI;
+import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import lombok.Getter;
 
 @SuppressWarnings({ "unused", "deprecation" })
@@ -42,11 +44,9 @@ public abstract class OPlugin extends JavaPlugin {
     public final void onLoad() {
         ORegistry.registerPlugin(this);
 
-        scheduler = getServer().getScheduler();
+        CommandAPI.onLoad(new CommandAPIBukkitConfig(this).setNamespace(getLabel()));
 
-        for (final OConfiguration<?> config : getConfigurations()) {
-            config.onRegister();
-        }
+        scheduler = getServer().getScheduler();
 
         loadPlugin();
     }
@@ -56,10 +56,16 @@ public abstract class OPlugin extends JavaPlugin {
         if (getClass() != Ocean.class &&
             !getServer().getPluginManager().isPluginEnabled(Ocean.get().getDescription().getName())
         ) {
-            getLogger().severe("Oceanilib is missing or not enabled — this plugin will be disabled.");
+            getLogger().severe("Ocean is missing or not enabled — this plugin will be disabled.");
             getServer().getPluginManager().disablePlugin(this);
 
             return;
+        }
+
+        CommandAPI.onEnable();
+
+        for (final OConfiguration<?> config : getConfigurations()) {
+            config.onRegister();
         }
 
         if (getDatabase() != null) {
@@ -88,6 +94,8 @@ public abstract class OPlugin extends JavaPlugin {
         for (final OConfiguration<?> config : getConfigurations()) {
             config.onUnregister();
         }
+
+        CommandAPI.onDisable();
 
         ORegistry.unregisterPlugin(this);
     }

@@ -13,30 +13,40 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings("unused")
 @RequiredArgsConstructor
 public abstract class OSubcommand {
+    public static final String SUBCOMMAND_NODE_NAME = "subcommand";
+
     protected final OPlugin plugin;
+
+    private MultiLiteralArgument base;
 
     public abstract OCommand getParent();
 
-    public abstract String getSublabel();
+    public abstract String getLabel();
 
-    public final String getLabel() {
-        return getParent().getLabel();
+    public List<String> getDescription() {
+        return List.of();
     }
 
     @Contract(" -> new")
     protected final @NotNull MultiLiteralArgument getBase() {
-        return new MultiLiteralArgument("subcommand", getSublabel());
+        if (base == null) {
+            base = new MultiLiteralArgument(SUBCOMMAND_NODE_NAME, getLabel());
+        }
+
+        return base;
     }
 
     public CommandPermission getPermission() {
-        return OCommand.ofPermission(plugin, getLabel() + "." + getSublabel());
+        return OCommand.ofPermission(plugin, getParent().getLabel() + "." + getLabel());
     }
 
     public List<OSubcommand> getSubcommands() {
         return Collections.emptyList();
     }
 
-    public abstract Argument<String> getSubcommand();
+    public Argument<String> getSubcommand() {
+        return getBase();
+    }
 
     public final Argument<String> buildSubcommand() {
         final Argument<String> base = getSubcommand().withPermission(getPermission());

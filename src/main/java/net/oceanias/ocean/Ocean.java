@@ -1,8 +1,10 @@
 package net.oceanias.ocean;
 
 import net.oceanias.ocean.configuration.OConfiguration;
+import net.oceanias.ocean.configuration.impl.OPrimaryConfig;
 import net.oceanias.ocean.database.ODatabase;
 import net.oceanias.ocean.module.OModule;
+import net.oceanias.ocean.module.admin.OAdminModule;
 import net.oceanias.ocean.plugin.OPlugin;
 import net.oceanias.ocean.utility.builder.OItemBuilder;
 import net.oceanias.ocean.utility.helper.OTeleportHelper;
@@ -23,26 +25,16 @@ public final class Ocean extends OPlugin {
 
     @Contract(pure = true)
     @Override
-    public @NotNull String getLabel() {
-        return "ocean";
-    }
-
-    @Contract(value = " -> new", pure = true)
-    @Override
-    public @NotNull @Unmodifiable List<String> getAuthors() {
-        return List.of("Plantal");
-    }
-
-    @Contract(pure = true)
-    @Override
-    public @Unmodifiable List<OModule> getModules() {
-        return List.of();
+    public @Unmodifiable @NotNull List<OModule> getModules() {
+        return List.of(
+            new OAdminModule(this)
+        );
     }
 
     @Contract(pure = true)
     @Override
     public @Unmodifiable @NotNull List<OConfiguration<?>> getConfigurations() {
-        return List.of(Config.get());
+        return List.of(OPrimaryConfig.get());
     }
 
     @Contract(pure = true)
@@ -54,20 +46,23 @@ public final class Ocean extends OPlugin {
     @Contract(pure = true)
     @Override
     public @NotNull String getColour() {
-        return "";
+        return "<#B700FF>";
     }
 
     @Contract(pure = true)
     @Override
     public @NotNull String getPrefix() {
-        return "";
+        return "<#B700FF><bold>OCEAN </bold><gray>»";
     }
 
     @Override
     protected void loadPlugin() {
         get = this;
 
-        Structure.addGlobalIngredient(Config.get().getMenu().getIngredients().getBorder(), OItemBuilder.getBorder());
+        Structure.addGlobalIngredient(
+            OPrimaryConfig.get().getMenu().getIngredients().getBorder(),
+            OItemBuilder.getBorder()
+        );
     }
 
     @Override

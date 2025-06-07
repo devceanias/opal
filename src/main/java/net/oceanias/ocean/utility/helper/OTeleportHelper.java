@@ -35,7 +35,7 @@ public final class OTeleportHelper extends OListener.Bukkit {
         final UUID uuid = player.getUniqueId();
 
         if (pending.containsKey(uuid)) {
-            player.actionDSR("&fA &6teleportation &fis &calready &fpending.");
+            player.actionDSR("<white>A <gold>teleportation <white>is <red>already <white>pending.");
 
             return;
         }
@@ -52,7 +52,7 @@ public final class OTeleportHelper extends OListener.Bukkit {
 
             final BukkitTask task = OTaskHelper.runTaskLater(() -> {
                 player.actionDSR(
-                    "&fTeleporting in " + getSecondsColour(remaining, seconds) + remaining + " seconds&f."
+                    "<white>Teleporting in " + getSecondsColour(remaining, seconds) + remaining + " seconds<white>."
                 );
 
                 player.soundDSR(Sound.ENTITY_EXPERIENCE_ORB_PICKUP);
@@ -68,7 +68,11 @@ public final class OTeleportHelper extends OListener.Bukkit {
 
             player.teleport(destination);
 
-            player.actionDSR(ORegistry.getCaller().getColour() + "&aTeleportation complete&f!");
+            player.actionDSR(
+                ORegistry.getCaller().getColour() +
+                "<white>The <gold>teleportation <white>has <green>commenced<white>."
+            );
+
             player.soundDSR(Sound.ENTITY_ENDERMAN_TELEPORT);
 
             pending.remove(uuid);

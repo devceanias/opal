@@ -64,7 +64,7 @@ public final class OCooldown {
             return;
         }
 
-        player.actionDSR("&fPlease wait &6" + formatDuration(remaining) + "&f.");
+        player.actionDSR("<white>Please wait <gold>" + formatDuration(remaining) + "&f.");
         player.soundDSR(Sound.BLOCK_NOTE_BLOCK_BASS);
     }
 
