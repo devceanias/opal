@@ -1,6 +1,6 @@
 package net.oceanias.ocean.listener;
 
-import net.oceanias.ocean.module.OProvider;
+import net.oceanias.ocean.component.OProvider;
 import net.oceanias.ocean.plugin.OPlugin;
 import org.bukkit.event.Listener;
 import lombok.RequiredArgsConstructor;
@@ -9,11 +9,13 @@ import lombok.RequiredArgsConstructor;
 public final class OListener {
     @RequiredArgsConstructor
     public static abstract class Bukkit implements Listener, OProvider {
-        protected final OPlugin plugin;
+        protected abstract OPlugin getPlugin();
 
         @Override
-        public void onRegister() {
-            plugin.getServer().getPluginManager().registerEvents(this, plugin);
+        public final void registerInternally() {
+            getPlugin().getServer().getPluginManager().registerEvents(this, getPlugin());
+
+            OProvider.super.registerInternally();
         }
     }
 }

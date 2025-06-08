@@ -1,6 +1,6 @@
 package net.oceanias.ocean.cooldown;
 
-import net.oceanias.ocean.plugin.OPlugin;
+import net.oceanias.ocean.Ocean;
 import net.oceanias.ocean.utility.extension.OPlayerExtension;
 import net.oceanias.ocean.utility.helper.OTaskHelper;
 import java.time.Duration;
@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 @RequiredArgsConstructor
 @ExtensionMethod(OPlayerExtension.class)
 public final class OCooldown {
-    private final OPlugin plugin;
+    private final Ocean plugin;
     private final String label;
     private final Duration length;
 

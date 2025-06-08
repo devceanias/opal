@@ -1,5 +1,6 @@
 package net.oceanias.ocean.utility.helper;
 
+import net.oceanias.ocean.Ocean;
 import net.oceanias.ocean.listener.OListener;
 import net.oceanias.ocean.plugin.OPlugin;
 import net.oceanias.ocean.plugin.ORegistry;
@@ -15,18 +16,23 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitTask;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.ExtensionMethod;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
 @ExtensionMethod({ OPlayerExtension.class })
+@RequiredArgsConstructor
 public final class OTeleportHelper extends OListener.Bukkit {
     private static final ConcurrentHashMap<UUID, List<BukkitTask>> pending = new ConcurrentHashMap<>();
     private static final Map<UUID, Location> locations = new HashMap<>();
 
-    public OTeleportHelper(final OPlugin plugin) {
-        super(plugin);
+    private final Ocean plugin;
+
+    @Override
+    protected OPlugin getPlugin() {
+        return plugin;
     }
 
     public static void createTeleportTimer(

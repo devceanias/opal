@@ -6,18 +6,16 @@ import java.util.List;
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
-import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
-@RequiredArgsConstructor
 public abstract class OSubcommand {
     public static final String SUBCOMMAND_NODE_NAME = "subcommand";
 
-    protected final OPlugin plugin;
-
     private MultiLiteralArgument base;
+
+    protected abstract OPlugin getPlugin();
 
     public abstract OCommand getParent();
 
@@ -37,7 +35,7 @@ public abstract class OSubcommand {
     }
 
     public CommandPermission getPermission() {
-        return OCommand.ofPermission(plugin, getParent().getLabel() + "." + getLabel());
+        return OCommand.ofPermission(getPlugin(), getParent().getLabel() + "." + getLabel());
     }
 
     public List<OSubcommand> getSubcommands() {

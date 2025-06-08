@@ -16,14 +16,11 @@ import org.jetbrains.annotations.NotNull;
 public final class OPrimaryConfig extends OConfiguration<OPrimaryConfig> {
     @Getter
     @Accessors(fluent = true)
-    private static final OPrimaryConfig get = new OPrimaryConfig(Ocean.get());
+    private static final OPrimaryConfig get = new OPrimaryConfig();
 
-    public OPrimaryConfig() {
-        super(Ocean.get());
-    }
-
-    public OPrimaryConfig(final OPlugin plugin) {
-        super(plugin);
+    @Override
+    protected OPlugin getPlugin() {
+        return Ocean.get();
     }
 
     @Contract(pure = true)
@@ -53,7 +50,9 @@ public final class OPrimaryConfig extends OConfiguration<OPrimaryConfig> {
         @Getter
         @Configuration
         public static final class Ingredients {
-            private char border = '#';
+            private char fillerItem = '#';
+            private char nextPage = '<';
+            private char previousPage = '>';
         }
     }
 }

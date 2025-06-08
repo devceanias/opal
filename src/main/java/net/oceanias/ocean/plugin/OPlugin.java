@@ -3,7 +3,7 @@ package net.oceanias.ocean.plugin;
 import net.oceanias.ocean.Ocean;
 import net.oceanias.ocean.configuration.OConfiguration;
 import net.oceanias.ocean.database.ODatabase;
-import net.oceanias.ocean.module.OModule;
+import net.oceanias.ocean.component.OModule;
 import java.util.List;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -65,15 +65,15 @@ public abstract class OPlugin extends JavaPlugin {
         CommandAPI.onEnable();
 
         for (final OConfiguration<?> config : getConfigurations()) {
-            config.onRegister();
+            config.registerInternally();
         }
 
         if (getDatabase() != null) {
-            getDatabase().onRegister();
+            getDatabase().registerInternally();
         }
 
         for (final OModule module : getModules()) {
-            module.onRegister();
+            module.registerInternally();
         }
 
         enablePlugin();
@@ -84,15 +84,15 @@ public abstract class OPlugin extends JavaPlugin {
         disablePlugin();
 
         for (final OModule module : getModules()) {
-            module.onUnregister();
+            module.unregisterInternally();
         }
 
         if (getDatabase() != null) {
-            getDatabase().onUnregister();
+            getDatabase().unregisterInternally();
         }
 
         for (final OConfiguration<?> config : getConfigurations()) {
-            config.onUnregister();
+            config.unregisterInternally();
         }
 
         CommandAPI.onDisable();

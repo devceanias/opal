@@ -60,7 +60,7 @@ public abstract class OMenu {
                     .hideAll();
             }
 
-            return OItemBuilder.getBorder();
+            return OItemBuilder.getFiller();
         }
 
         @Override
@@ -104,7 +104,7 @@ public abstract class OMenu {
                     .hideAll();
             }
 
-            return OItemBuilder.getBorder();
+            return OItemBuilder.getFiller();
         }
 
         @Override

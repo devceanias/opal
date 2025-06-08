@@ -1,6 +1,6 @@
 package net.oceanias.ocean.command;
 
-import net.oceanias.ocean.module.OProvider;
+import net.oceanias.ocean.component.OProvider;
 import net.oceanias.ocean.plugin.OPlugin;
 import net.oceanias.ocean.utility.extension.OPlayerExtension;
 import net.oceanias.ocean.utility.extension.OStringExtension;
@@ -16,7 +16,6 @@ import dev.jorel.commandapi.*;
 import dev.jorel.commandapi.arguments.AbstractArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import dev.jorel.commandapi.executors.CommandArguments;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.ExtensionMethod;
 import org.apache.commons.text.WordUtils;
 import org.jetbrains.annotations.Contract;
@@ -24,14 +23,13 @@ import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
 @ExtensionMethod({ OPlayerExtension.class, OStringExtension.class })
-@RequiredArgsConstructor
 public abstract class OCommand implements OProvider {
-    protected final OPlugin plugin;
-
     private ArrayList<HelpLine> help;
     private final HashMap<ArrayList<String>, List<String>> descriptions = new HashMap<>();
 
     private CommandTree base;
+
+    protected abstract OPlugin getPlugin();
 
     public abstract String getLabel();
 
@@ -48,7 +46,7 @@ public abstract class OCommand implements OProvider {
     }
 
     public CommandPermission getPermission() {
-        return ofPermission(plugin, getLabel());
+        return ofPermission(getPlugin(), getLabel());
     }
 
     public CommandTree getCommand() {
@@ -56,7 +54,7 @@ public abstract class OCommand implements OProvider {
     }
 
     @Override
-    public void onRegister() {
+    public final void registerInternally() {
         final CommandTree tree = getCommand()
             .withPermission(getPermission());
 
@@ -77,6 +75,15 @@ public abstract class OCommand implements OProvider {
         }
 
         tree.register();
+
+        OProvider.super.registerInternally();
+    }
+
+    @Override
+    public final void unregisterInternally() {
+        OProvider.super.unregisterInternally();
+
+        CommandAPI.unregister(getLabel(), true);
     }
 
     private void buildDescriptions(@NotNull final List<OSubcommand> commands, final ArrayList<String> path) {
@@ -113,7 +120,7 @@ public abstract class OCommand implements OProvider {
 
         final ArrayList<Component> lines = new ArrayList<>(List.of(
             OStringExtension.CHAT_DIVIDER_SHORT.deserialize(),
-            (plugin.getColour() + WordUtils.capitalize(getLabel()) + " Commands:").deserialize()
+            (getPlugin().getColour() + WordUtils.capitalize(getLabel()) + " Commands:").deserialize()
         ));
 
         for (final HelpLine line : getUsages()) {
@@ -129,12 +136,12 @@ public abstract class OCommand implements OProvider {
                 }
 
                 if (seg.optional) {
-                    builder.append("<yellow>(").append(seg.name).append(")</yellow>");
+                    builder.append("<yellow>[").append(seg.name).append("]</yellow>");
 
                     continue;
                 }
 
-                builder.append("<yellow>[").append(seg.name).append("]</yellow>");
+                builder.append("<yellow>(").append(seg.name).append(")</yellow>");
             }
 
             final List<String> description = line.description;
@@ -143,7 +150,7 @@ public abstract class OCommand implements OProvider {
 
             if (description != null) {
                 component = component.hoverEvent(HoverEvent.showText(
-                    String.join("\n", plugin.getColour() + description).deserialize()
+                    String.join("\n", getPlugin().getColour() + description).deserialize()
                 ));
             }
 
@@ -240,11 +247,6 @@ public abstract class OCommand implements OProvider {
         throw new NoSuchFieldException(
             "Error finding field with name arguments in " + node.getClass().getSimpleName() + "."
         );
-    }
-
-    @Override
-    public void onUnregister() {
-        CommandAPI.unregister(getLabel(), true);
     }
 
     @Contract("_, _ -> new")

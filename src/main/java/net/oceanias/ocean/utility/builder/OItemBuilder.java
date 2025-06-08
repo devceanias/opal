@@ -25,7 +25,7 @@ public final class OItemBuilder implements ItemProvider {
     private final ItemStack stack;
 
     @Getter
-    private static final OItemBuilder border = new OItemBuilder(Material.BLACK_STAINED_GLASS_PANE)
+    private static final OItemBuilder filler = new OItemBuilder(Material.BLACK_STAINED_GLASS_PANE)
         .setName("")
         .hideAll();
 

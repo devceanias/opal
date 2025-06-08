@@ -10,19 +10,22 @@ import java.util.List;
 import org.bukkit.Sound;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.ExtensionMethod;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
 @SuppressWarnings("deprecation")
 @ExtensionMethod(OPlayerExtension.class)
+@RequiredArgsConstructor
 public final class OReloadSubcommand extends OSubcommand {
+    private final Ocean plugin;
     private final OCommand parent;
 
-    public OReloadSubcommand(final OPlugin plugin, final OCommand parent) {
-        super(plugin);
-
-        this.parent = parent;
+    @Override
+    protected OPlugin getPlugin() {
+        return plugin;
     }
 
     @Override
@@ -38,7 +41,7 @@ public final class OReloadSubcommand extends OSubcommand {
 
     @Contract(pure = true)
     @Override
-    public @NotNull List<String> getDescription() {
+    public @NotNull @Unmodifiable List<String> getDescription() {
         return List.of("Reloads all configurations or a specific one.");
     }
 
@@ -63,7 +66,7 @@ public final class OReloadSubcommand extends OSubcommand {
                 player.soundDSR(Sound.BLOCK_NOTE_BLOCK_BELL);
             })
             .thenNested(
-                new MultiLiteralArgument("type", configurations)
+                new MultiLiteralArgument("configuration", configurations)
                     .executesPlayer((player, arguments) -> {
                         final String type = (String) arguments.get("type");
 

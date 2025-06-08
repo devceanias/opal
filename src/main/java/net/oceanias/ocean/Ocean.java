@@ -3,7 +3,8 @@ package net.oceanias.ocean;
 import net.oceanias.ocean.configuration.OConfiguration;
 import net.oceanias.ocean.configuration.impl.OPrimaryConfig;
 import net.oceanias.ocean.database.ODatabase;
-import net.oceanias.ocean.module.OModule;
+import net.oceanias.ocean.menu.OMenu;
+import net.oceanias.ocean.component.OModule;
 import net.oceanias.ocean.module.admin.OAdminModule;
 import net.oceanias.ocean.plugin.OPlugin;
 import net.oceanias.ocean.utility.builder.OItemBuilder;
@@ -60,13 +61,18 @@ public final class Ocean extends OPlugin {
         get = this;
 
         Structure.addGlobalIngredient(
-            OPrimaryConfig.get().getMenu().getIngredients().getBorder(),
-            OItemBuilder.getBorder()
+            OPrimaryConfig.get().getMenu().getIngredients().getFillerItem(), OItemBuilder.getFiller()
+        );
+
+        Structure.addGlobalIngredient(OPrimaryConfig.get().getMenu().getIngredients().getNextPage(), new OMenu.Next());
+
+        Structure.addGlobalIngredient(
+            OPrimaryConfig.get().getMenu().getIngredients().getPreviousPage(), new OMenu.Previous()
         );
     }
 
     @Override
     protected void enablePlugin() {
-        new OTeleportHelper(this).onRegister();
+        new OTeleportHelper(this).registerInternally();
     }
 }
