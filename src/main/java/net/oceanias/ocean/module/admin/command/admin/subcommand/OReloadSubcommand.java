@@ -66,7 +66,7 @@ public final class OReloadSubcommand extends OSubcommand {
                 player.soundDSR(Sound.BLOCK_NOTE_BLOCK_BELL);
             })
             .thenNested(
-                new MultiLiteralArgument("configuration", configurations)
+                new MultiLiteralArgument("type", configurations)
                     .executesPlayer((player, arguments) -> {
                         final String type = (String) arguments.get("type");
 
