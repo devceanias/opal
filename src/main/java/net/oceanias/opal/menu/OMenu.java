@@ -51,13 +51,13 @@ public abstract class OMenu {
                 return new OItemBuilder(Material.TIPPED_ARROW)
                     .setPotionType(PotionType.LONG_LEAPING)
                     .setName(ORegistry.getCaller().getColour() + "Previous Page")
-                    .addLines(List.of(
+                    .addLore(List.of(
                         "&7• &fTransition: &e" + now + " &7/ &e" + max + " &7» &6" + (now + 1) + " &7/ &6" + max,
                         "",
                         ORegistry.getCaller().getColour() + "Click &7to show!"
                     ))
                     .addGlint()
-                    .hideAll();
+                    .hideFlags();
             }
 
             return OItemBuilder.getFiller();
@@ -95,13 +95,13 @@ public abstract class OMenu {
                 return new OItemBuilder(Material.TIPPED_ARROW)
                     .setPotionType(PotionType.LONG_FIRE_RESISTANCE)
                     .setName(ORegistry.getCaller().getColour() + "Next Page")
-                    .addLines(List.of(
+                    .addLore(List.of(
                         "&7• &fTransition: &6" + now + " &7/ &6" + max + " &7» &e" + (now - 1) + " &7/ &e" + max,
                         "",
                         ORegistry.getCaller().getColour() + "Click &7to show!"
                     ))
                     .addGlint()
-                    .hideAll();
+                    .hideFlags();
             }
 
             return OItemBuilder.getFiller();

@@ -27,7 +27,8 @@ public final class OItemBuilder implements ItemProvider {
     @Getter
     private static final OItemBuilder filler = new OItemBuilder(Material.BLACK_STAINED_GLASS_PANE)
         .setName("")
-        .hideAll();
+        .hideFlags()
+        .hideTooltip();
 
     public OItemBuilder(final Material material) {
         stack = new ItemStack(material);
@@ -53,7 +54,7 @@ public final class OItemBuilder implements ItemProvider {
         return this;
     }
 
-    public OItemBuilder addLines(final List<String> lines, final boolean divider) {
+    public OItemBuilder addLore(final List<String> lines, final boolean divider) {
         final ItemMeta meta = stack.getItemMeta();
 
         if (meta != null) {
@@ -77,8 +78,8 @@ public final class OItemBuilder implements ItemProvider {
         return this;
     }
 
-    public OItemBuilder addLines(final List<String> lines) {
-        return addLines(lines, true);
+    public OItemBuilder addLore(final List<String> lines) {
+        return addLore(lines, true);
     }
 
     public OItemBuilder setUnbreakable(final boolean unbreakable) {
@@ -133,13 +134,24 @@ public final class OItemBuilder implements ItemProvider {
         return this;
     }
 
-    public OItemBuilder hideAll() {
+    public OItemBuilder hideFlags() {
+        final ItemMeta meta = stack.getItemMeta();
+
+        if (meta != null) {
+            meta.setAttributeModifiers(HashMultimap.create());
+            meta.addItemFlags(ItemFlag.values());
+
+            stack.setItemMeta(meta);
+        }
+
+        return this;
+    }
+
+    public OItemBuilder hideTooltip() {
         final ItemMeta meta = stack.getItemMeta();
 
         if (meta != null) {
             meta.setHideTooltip(true);
-            meta.setAttributeModifiers(HashMultimap.create());
-            meta.addItemFlags(ItemFlag.values());
 
             stack.setItemMeta(meta);
         }
@@ -151,9 +163,9 @@ public final class OItemBuilder implements ItemProvider {
         final String name, final List<String> lines, final boolean filler, final boolean glint
     ) {
         setName(name)
-            .addLines(lines, filler)
+            .addLore(lines, filler)
             .setUnbreakable(true)
-            .hideAll();
+            .hideFlags();
 
         if (glint) {
             addGlint();

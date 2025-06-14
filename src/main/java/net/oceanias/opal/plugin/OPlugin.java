@@ -2,13 +2,18 @@ package net.oceanias.opal.plugin;
 
 import net.oceanias.opal.Opal;
 import net.oceanias.opal.configuration.OConfiguration;
+import net.oceanias.opal.configuration.impl.OPrimaryConfig;
 import net.oceanias.opal.database.ODatabase;
 import net.oceanias.opal.component.impl.OModule;
+import net.oceanias.opal.menu.OMenu;
+import net.oceanias.opal.utility.builder.OItemBuilder;
 import java.util.List;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
+import xyz.xenondevs.invui.InvUI;
+import xyz.xenondevs.invui.gui.structure.Structure;
 import lombok.Getter;
 
 @SuppressWarnings({ "unused", "deprecation" })
@@ -44,7 +49,9 @@ public abstract class OPlugin extends JavaPlugin {
     public final void onLoad() {
         ORegistry.registerPlugin(this);
 
-        CommandAPI.onLoad(new CommandAPIBukkitConfig(this).setNamespace(getLabel()));
+        if (getClass() == Opal.class) {
+            CommandAPI.onLoad(new CommandAPIBukkitConfig(this).setNamespace(getLabel()));
+        }
 
         scheduler = getServer().getScheduler();
 
@@ -62,7 +69,23 @@ public abstract class OPlugin extends JavaPlugin {
             return;
         }
 
-        CommandAPI.onEnable();
+        if (getClass() == Opal.class) {
+            CommandAPI.onEnable();
+
+            InvUI.getInstance().setPlugin(this);
+
+            Structure.addGlobalIngredient(
+                OPrimaryConfig.get().getMenu().getIngredients().getFillerItem(), OItemBuilder.getFiller()
+            );
+
+            Structure.addGlobalIngredient(
+                OPrimaryConfig.get().getMenu().getIngredients().getNextPage(), new OMenu.Next()
+            );
+
+            Structure.addGlobalIngredient(
+                OPrimaryConfig.get().getMenu().getIngredients().getPreviousPage(), new OMenu.Previous()
+            );
+        }
 
         for (final OConfiguration<?> config : getConfigurations()) {
             config.registerInternally();
@@ -95,7 +118,9 @@ public abstract class OPlugin extends JavaPlugin {
             config.unregisterInternally();
         }
 
-        CommandAPI.onDisable();
+        if (getClass() == Opal.class) {
+            CommandAPI.onDisable();
+        }
 
         ORegistry.unregisterPlugin(this);
     }

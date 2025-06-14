@@ -10,6 +10,7 @@ import net.oceanias.opal.plugin.OPlugin;
 import net.oceanias.opal.utility.builder.OItemBuilder;
 import net.oceanias.opal.utility.helper.OTeleportHelper;
 import java.util.List;
+import xyz.xenondevs.invui.InvUI;
 import xyz.xenondevs.invui.gui.structure.Structure;
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -61,16 +62,6 @@ public final class Opal extends OPlugin {
     @Override
     protected void loadPlugin() {
         get = this;
-
-        Structure.addGlobalIngredient(
-            OPrimaryConfig.get().getMenu().getIngredients().getFillerItem(), OItemBuilder.getFiller()
-        );
-
-        Structure.addGlobalIngredient(OPrimaryConfig.get().getMenu().getIngredients().getNextPage(), new OMenu.Next());
-
-        Structure.addGlobalIngredient(
-            OPrimaryConfig.get().getMenu().getIngredients().getPreviousPage(), new OMenu.Previous()
-        );
     }
 
     @Override

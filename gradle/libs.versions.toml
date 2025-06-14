@@ -1,15 +1,16 @@
 [versions]
 shadow = "8.3.6"
-invUI = "1.45"
-commandAPI = "10.0.1"
+invUi = "1.45"
+commandApi = "10.0.1"
 configLib = "4.6.1"
 lombok = "1.18.38"
 paper = "1.21.4-R0.1-SNAPSHOT"
 commonsText = "1.13.1"
 
 [libraries]
-invUI = { group = "xyz.xenondevs.invui", name = "invui", version.ref = "invUI" }
-commandAPI = { group = "dev.jorel", name = "commandapi-bukkit-shade-mojang-mapped", version.ref = "commandAPI" }
+invUi = { group = "xyz.xenondevs.invui", name = "invui-core", version.ref = "invUi" }
+inventoryAccess = { group = "xyz.xenondevs.invui", name = "inventory-access-r23", version.ref = "invUi" }
+commandApi = { group = "dev.jorel", name = "commandapi-bukkit-shade-mojang-mapped", version.ref = "commandApi" }
 configLib = { group = "de.exlll", name = "configlib-paper", version.ref = "configLib" }
 lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" }
 paper = { group = "io.papermc.paper", name = "paper-api", version.ref = "paper" }

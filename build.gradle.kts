@@ -1,3 +1,5 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 project.group = "net.oceanias"
 project.version = "1.0.0"
 
@@ -63,9 +65,10 @@ publishing {
 dependencies {
     annotationProcessor(libs.lombok)
 
-    api(libs.invUI)
-    api(libs.commandAPI)
+    api(libs.commandApi)
+    api(libs.invUi)
 
+    compileOnly(variantOf(libs.inventoryAccess) { classifier("remapped-mojang") })
     compileOnly(libs.lombok)
     compileOnly(libs.paper)
 
@@ -79,7 +82,7 @@ tasks {
     processResources {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
-        filesMatching("plugin.yml") {
+        filesMatching("paper-plugin.yml") {
             expand("version" to project.version)
         }
     }
@@ -89,20 +92,31 @@ tasks {
     }
 
     jar {
-        enabled = true
+        enabled = false
+    }
 
-        manifest {
-            attributes(
-                "Implementation-Version" to project.version
-            )
+    val apiJar = register<ShadowJar>("api") {
+        archiveClassifier.set("api")
+
+        from(sourceSets.main.get().output)
+
+        configurations = listOf(project.configurations.runtimeClasspath.get())
+    }
+
+    val serverJar = register<ShadowJar>("server") {
+        archiveClassifier.set("server")
+
+        from(sourceSets.main.get().output)
+
+        configurations = listOf(project.configurations.runtimeClasspath.get())
+
+        dependencies {
+            exclude(dependency("xyz.xenondevs.invui:invui-core"))
+            exclude(dependency("xyz.xenondevs.invui:inventory-access-r23"))
         }
     }
 
-    shadowJar {
-        archiveClassifier.set("")
-    }
-
     build {
-        dependsOn(shadowJar)
+        dependsOn(apiJar, serverJar)
     }
 }

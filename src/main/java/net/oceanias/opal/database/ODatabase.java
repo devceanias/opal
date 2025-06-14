@@ -1,7 +1,6 @@
 package net.oceanias.opal.database;
 
 import net.oceanias.opal.component.impl.OProvider;
-import net.oceanias.opal.plugin.OPlugin;
 import net.oceanias.opal.utility.helper.OTaskHelper;
 import java.time.Duration;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -10,8 +9,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public abstract class ODatabase implements OProvider {
     private AutosaveTask autosave;
-
-    protected abstract OPlugin getPlugin();
 
     public abstract void openConnection();
 
