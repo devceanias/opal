@@ -1,1 +1,1 @@
-rootProject.name = "Opal"
+rootProject.name = "opal"

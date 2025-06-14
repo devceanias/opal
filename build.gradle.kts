@@ -84,6 +84,10 @@ tasks {
         }
     }
 
+    withType<Jar>().configureEach {
+        archiveBaseName.set(rootProject.name.replaceFirstChar { char -> char.uppercase() })
+    }
+
     jar {
         enabled = true
 
