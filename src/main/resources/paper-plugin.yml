@@ -1,6 +1,6 @@
-name: "Ocean"
+name: "Opal"
 version: "${version}"
-main: "net.oceanias.ocean.Ocean"
+main: "net.oceanias.opal.Opal"
 description: "The utility plugin for Oceanias."
 api-version: "1.21"
 authors: [ "Plantal" ]

@@ -1,0 +1,103 @@
+package net.oceanias.opal.utility.builder;
+
+import net.oceanias.opal.utility.extension.OStringExtension;
+import net.oceanias.opal.utility.helper.OTaskHelper;
+import java.time.Duration;
+import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+import net.kyori.adventure.text.Component;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+import lombok.experimental.ExtensionMethod;
+import org.jetbrains.annotations.NotNull;
+
+@Getter
+@Accessors(chain = true)
+@ExtensionMethod(OStringExtension.class)
+public class OActionBuilder {
+    @Setter
+    private String text;
+
+    @Setter
+    private Duration duration;
+
+    private PersistenceTask persistenceTask;
+
+    public OActionBuilder(@NotNull final String text) {
+        this.text = text;
+    }
+
+    public OActionBuilder showText(@NotNull final Player player) {
+        player.sendActionBar(text.deserialize());
+
+        return this;
+    }
+
+    public OActionBuilder clearText(@NotNull final Player player) {
+        player.sendActionBar(Component.empty());
+
+        return this;
+    }
+
+    public OActionBuilder showPersistent(final Player player, final Duration duration) {
+        if (persistenceTask != null) {
+            persistenceTask.cancel();
+        }
+
+        this.duration = duration;
+
+        persistenceTask = new PersistenceTask(player, duration);
+
+        OTaskHelper.runTaskTimer(persistenceTask, Duration.ZERO, Duration.ofSeconds(1));
+
+        return this;
+    }
+
+    public OActionBuilder cancelText() {
+        if (persistenceTask != null) {
+            persistenceTask.cancel();
+            persistenceTask = null;
+        }
+
+        return this;
+    }
+
+    @RequiredArgsConstructor
+    public final class PersistenceTask extends BukkitRunnable {
+        private final Player player;
+        private Duration remaining;
+
+        public PersistenceTask(final Player player, final Duration duration) {
+            this.player = player;
+            this.remaining = duration;
+        }
+
+        @Override
+        public void run() {
+            if (!player.isOnline()) {
+                cancel();
+
+                return;
+            }
+
+            if (remaining.isZero() || remaining.isNegative()) {
+                cancel();
+
+                return;
+            }
+
+            showText(player);
+
+            remaining = remaining.minusSeconds(1);
+        }
+
+        @Override
+        public void cancel() {
+            super.cancel();
+
+            clearText(player);
+        }
+    }
+}
