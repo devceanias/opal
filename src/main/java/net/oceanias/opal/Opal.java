@@ -35,7 +35,9 @@ public final class Opal extends OPlugin {
     @Contract(pure = true)
     @Override
     public @Unmodifiable @NotNull List<OConfiguration<?>> getConfigurations() {
-        return List.of(OPrimaryConfig.get());
+        return List.of(
+            OPrimaryConfig.get()
+        );
     }
 
     @Contract(pure = true)
