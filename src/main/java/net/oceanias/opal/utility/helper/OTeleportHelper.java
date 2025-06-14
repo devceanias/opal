@@ -25,8 +25,8 @@ import org.jetbrains.annotations.NotNull;
 @ExtensionMethod({ OPlayerExtension.class })
 @RequiredArgsConstructor
 public final class OTeleportHelper extends OListener.Bukkit {
-    private static final ConcurrentHashMap<UUID, List<BukkitTask>> pending = new ConcurrentHashMap<>();
-    private static final Map<UUID, Location> locations = new HashMap<>();
+    private static final Map<UUID, List<BukkitTask>> pending = new ConcurrentHashMap<>();
+    private static final Map<UUID, Location> locations = new ConcurrentHashMap<>();
 
     private final Opal plugin;
 

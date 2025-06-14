@@ -5,6 +5,7 @@ import net.oceanias.opal.utility.extension.OPlayerExtension;
 import net.oceanias.opal.utility.helper.OTaskHelper;
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import org.bukkit.Sound;
@@ -22,7 +23,7 @@ public final class OCooldown {
     private final String label;
     private final Duration length;
 
-    private final ConcurrentHashMap<UUID, Pair<Long, Duration>> cooldowns = new ConcurrentHashMap<>();
+    private final Map<UUID, Pair<Long, Duration>> cooldowns = new ConcurrentHashMap<>();
 
     private String getBypass() {
         return plugin.getPermission("cooldown." + label.replace(" ", ".") + ".bypass");

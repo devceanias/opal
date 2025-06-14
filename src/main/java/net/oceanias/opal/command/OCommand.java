@@ -6,6 +6,7 @@ import net.oceanias.opal.utility.extension.OPlayerExtension;
 import net.oceanias.opal.utility.extension.OStringExtension;
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -24,8 +25,8 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings("unused")
 @ExtensionMethod({ OPlayerExtension.class, OStringExtension.class })
 public abstract class OCommand implements OProvider {
-    private ArrayList<HelpLine> help;
-    private final HashMap<ArrayList<String>, List<String>> descriptions = new HashMap<>();
+    private List<HelpLine> help;
+    private final Map<List<String>, List<String>> descriptions = new ConcurrentHashMap<>();
 
     private CommandTree base;
 
@@ -86,9 +87,9 @@ public abstract class OCommand implements OProvider {
         CommandAPI.unregister(getLabel(), true);
     }
 
-    private void buildDescriptions(@NotNull final List<OSubcommand> commands, final ArrayList<String> path) {
+    private void buildDescriptions(@NotNull final List<OSubcommand> commands, final List<String> path) {
         for (final OSubcommand command : commands) {
-            final ArrayList<String> chain = new ArrayList<>(path);
+            final List<String> chain = new ArrayList<>(path);
             final List<String> description = command.getDescription();
 
             chain.add(command.getLabel());
@@ -118,7 +119,7 @@ public abstract class OCommand implements OProvider {
             return;
         }
 
-        final ArrayList<Component> lines = new ArrayList<>(List.of(
+        final List<Component> lines = new ArrayList<>(List.of(
             OStringExtension.CHAT_DIVIDER_SHORT.deserialize(),
             (getPlugin().getColour() + WordUtils.capitalize(getLabel()) + " Commands:").deserialize()
         ));
@@ -163,7 +164,7 @@ public abstract class OCommand implements OProvider {
         player.soundDSR(Sound.BLOCK_NOTE_BLOCK_CHIME);
     }
 
-    private @NotNull ArrayList<HelpLine> getUsages() {
+    private @NotNull List<HelpLine> getUsages() {
         if (help == null) {
             try {
                 help = new ArrayList<>();
@@ -254,7 +255,7 @@ public abstract class OCommand implements OProvider {
         return CommandPermission.fromString(plugin.getLabel() + ".command." + name);
     }
 
-    private record HelpLine(ArrayList<HelpSegment> segments, List<String> description) {}
+    private record HelpLine(List<HelpSegment> segments, List<String> description) {}
 
     private record HelpSegment(String name, boolean literal, boolean optional) {}
 }
