@@ -22,7 +22,7 @@ public final class OAdminCommand extends OCommand {
 
     @Override
     public @NotNull String getLabel() {
-        return Opal.get().getLabel();
+        return plugin.getLabel();
     }
 
     @Contract(" -> new")
