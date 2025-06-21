@@ -1,5 +1,6 @@
 package net.oceanias.opal.menu;
 
+import net.oceanias.opal.configuration.impl.OPrimaryConfig;
 import net.oceanias.opal.plugin.ORegistry;
 import net.oceanias.opal.utility.builder.OItemBuilder;
 import net.oceanias.opal.utility.extension.OPlayerExtension;
@@ -14,6 +15,7 @@ import org.bukkit.potion.PotionType;
 import xyz.xenondevs.inventoryaccess.component.AdventureComponentWrapper;
 import xyz.xenondevs.invui.gui.Gui;
 import xyz.xenondevs.invui.gui.PagedGui;
+import xyz.xenondevs.invui.gui.structure.Structure;
 import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.impl.controlitem.PageItem;
 import xyz.xenondevs.invui.window.Window;
@@ -35,6 +37,20 @@ public abstract class OMenu {
     @Contract("_ -> new")
     public static @NotNull AdventureComponentWrapper ofTitle(@NotNull final String title) {
         return new AdventureComponentWrapper(title.deserialize());
+    }
+
+    public static void addIngredients() {
+        Structure.addGlobalIngredient(
+            OPrimaryConfig.get().getMenu().getIngredients().getFillerItem(), OItemBuilder.getFiller()
+        );
+
+        Structure.addGlobalIngredient(
+            OPrimaryConfig.get().getMenu().getIngredients().getNextPage(), new OMenu.Next()
+        );
+
+        Structure.addGlobalIngredient(
+            OPrimaryConfig.get().getMenu().getIngredients().getPreviousPage(), new OMenu.Previous()
+        );
     }
 
     public static final class Previous extends PageItem {

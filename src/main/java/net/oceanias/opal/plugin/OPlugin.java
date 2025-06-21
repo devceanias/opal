@@ -74,17 +74,7 @@ public abstract class OPlugin extends JavaPlugin {
 
             InvUI.getInstance().setPlugin(this);
 
-            Structure.addGlobalIngredient(
-                OPrimaryConfig.get().getMenu().getIngredients().getFillerItem(), OItemBuilder.getFiller()
-            );
-
-            Structure.addGlobalIngredient(
-                OPrimaryConfig.get().getMenu().getIngredients().getNextPage(), new OMenu.Next()
-            );
-
-            Structure.addGlobalIngredient(
-                OPrimaryConfig.get().getMenu().getIngredients().getPreviousPage(), new OMenu.Previous()
-            );
+            OMenu.addIngredients();
         }
 
         for (final OConfiguration<?> config : getConfigurations()) {

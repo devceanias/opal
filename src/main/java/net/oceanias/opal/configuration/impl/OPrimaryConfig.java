@@ -2,6 +2,7 @@ package net.oceanias.opal.configuration.impl;
 
 import net.oceanias.opal.Opal;
 import net.oceanias.opal.configuration.OConfiguration;
+import net.oceanias.opal.menu.OMenu;
 import net.oceanias.opal.plugin.OPlugin;
 import java.io.File;
 import de.exlll.configlib.Configuration;
@@ -33,6 +34,11 @@ public final class OPrimaryConfig extends OConfiguration<OPrimaryConfig> {
     @Override
     protected @NotNull File getFile() {
         return new File("config.yml");
+    }
+
+    @Override
+    protected void onLoad() {
+        OMenu.addIngredients();
     }
 
     @Override
