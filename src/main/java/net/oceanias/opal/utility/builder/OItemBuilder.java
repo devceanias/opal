@@ -6,11 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionType;
 import net.kyori.adventure.text.Component;
 import xyz.xenondevs.invui.item.ItemProvider;
@@ -49,6 +51,24 @@ public final class OItemBuilder implements ItemProvider {
             meta.displayName(name.deserialize().stripAbsentDecorations());
 
             stack.setItemMeta(meta);
+        }
+
+        return this;
+    }
+
+    public OItemBuilder setAmount(final int amount) {
+        stack.setAmount(amount);
+
+        return this;
+    }
+
+    public OItemBuilder setOwner(final OfflinePlayer owner) {
+        final ItemMeta meta = stack.getItemMeta();
+
+        if (meta instanceof final SkullMeta skull) {
+            skull.setOwningPlayer(owner);
+
+            stack.setItemMeta(skull);
         }
 
         return this;
