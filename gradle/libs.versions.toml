@@ -1,6 +1,6 @@
 [versions]
 shadow = "8.3.6"
-invUi = "1.45"
+invUi = "1.46"
 commandApi = "10.0.1"
 configLib = "4.6.1"
 lombok = "1.18.38"
