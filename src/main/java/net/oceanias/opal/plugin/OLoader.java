@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("UnstableApiUsage")
 public final class OLoader implements PluginLoader {
-    private static final String INVUI_VERSION = "1.45";
+    private static final String INVUI_VERSION = "1.46";
 
     @Override
     public void classloader(@NotNull final PluginClasspathBuilder builder) {
