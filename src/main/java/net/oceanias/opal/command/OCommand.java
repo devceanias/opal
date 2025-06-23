@@ -56,10 +56,10 @@ public abstract class OCommand implements OProvider {
 
     @Override
     public final void registerInternally() {
+        final Set<String> commands = new HashSet<>();
+
         final CommandTree tree = getCommand()
             .withPermission(getPermission());
-
-        final Set<String> commands = new HashSet<>();
 
         commands.add(getLabel());
 

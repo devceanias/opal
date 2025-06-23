@@ -13,6 +13,8 @@ import de.exlll.configlib.YamlConfigurations;
 public abstract class OConfiguration<T> implements OProvider {
     private T config;
 
+    private boolean isFirstLoad = true;
+
     protected abstract OPlugin getPlugin();
 
     public abstract String getLabel();
@@ -26,7 +28,7 @@ public abstract class OConfiguration<T> implements OProvider {
             .build();
     }
 
-    protected void onLoad() {}
+    protected void onLoad(final boolean isFirstLoad) {}
 
     protected void onSave() {}
 
@@ -37,7 +39,9 @@ public abstract class OConfiguration<T> implements OProvider {
 
         config = YamlConfigurations.update(path, getClazz(), getProperties());
 
-        onLoad();
+        onLoad(isFirstLoad);
+
+        isFirstLoad = false;
     }
 
     public final void saveConfiguration() {
