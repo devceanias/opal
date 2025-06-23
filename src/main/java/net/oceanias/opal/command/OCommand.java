@@ -59,7 +59,15 @@ public abstract class OCommand implements OProvider {
         final CommandTree tree = getCommand()
             .withPermission(getPermission());
 
-        CommandAPI.unregister(getLabel(), true);
+        final Set<String> commands = new HashSet<>();
+
+        commands.add(getLabel());
+
+        Collections.addAll(commands, tree.getAliases());
+
+        for (final String command : commands) {
+            CommandAPIBukkit.unregister(command, true, true);
+        }
 
         buildDescriptions(getSubcommands(), new ArrayList<>());
 
