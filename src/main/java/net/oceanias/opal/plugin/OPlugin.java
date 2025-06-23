@@ -47,8 +47,6 @@ public abstract class OPlugin extends JavaPlugin {
 
     @Override
     public final void onLoad() {
-        ORegistry.registerPlugin(this);
-
         if (getClass() == Opal.class) {
             CommandAPI.onLoad(new CommandAPIBukkitConfig(this).setNamespace(getLabel()));
         }
@@ -111,8 +109,6 @@ public abstract class OPlugin extends JavaPlugin {
         if (getClass() == Opal.class) {
             CommandAPI.onDisable();
         }
-
-        ORegistry.unregisterPlugin(this);
     }
 
     public String getPermission(final String permission) {

@@ -1,7 +1,7 @@
 package net.oceanias.opal.menu;
 
+import net.oceanias.opal.Opal;
 import net.oceanias.opal.configuration.impl.OPrimaryConfig;
-import net.oceanias.opal.plugin.ORegistry;
 import net.oceanias.opal.utility.builder.OItemBuilder;
 import net.oceanias.opal.utility.extension.OPlayerExtension;
 import net.oceanias.opal.utility.extension.OStringExtension;
@@ -66,11 +66,11 @@ public abstract class OMenu {
             if (gui.hasPreviousPage()) {
                 return new OItemBuilder(Material.TIPPED_ARROW)
                     .setPotionType(PotionType.LONG_LEAPING)
-                    .setName(ORegistry.getCaller().getColour() + "Previous Page")
+                    .setName(Opal.get().getColour() + "Previous Page")
                     .addLore(List.of(
                         "&7• &fTransition: &e" + now + " &7/ &e" + max + " &7» &6" + (now + 1) + " &7/ &6" + max,
                         "",
-                        ORegistry.getCaller().getColour() + "Click &7to show!"
+                        Opal.get().getColour() + "Click &7to show!"
                     ))
                     .addGlint()
                     .hideFlags();
@@ -110,11 +110,11 @@ public abstract class OMenu {
             if (gui.hasNextPage()) {
                 return new OItemBuilder(Material.TIPPED_ARROW)
                     .setPotionType(PotionType.LONG_FIRE_RESISTANCE)
-                    .setName(ORegistry.getCaller().getColour() + "Next Page")
+                    .setName(Opal.get().getColour() + "Next Page")
                     .addLore(List.of(
                         "&7• &fTransition: &6" + now + " &7/ &6" + max + " &7» &e" + (now - 1) + " &7/ &e" + max,
                         "",
-                        ORegistry.getCaller().getColour() + "Click &7to show!"
+                        Opal.get().getColour() + "Click &7to show!"
                     ))
                     .addGlint()
                     .hideFlags();

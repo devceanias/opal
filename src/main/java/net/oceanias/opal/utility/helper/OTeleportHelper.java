@@ -3,7 +3,6 @@ package net.oceanias.opal.utility.helper;
 import net.oceanias.opal.Opal;
 import net.oceanias.opal.listener.OListener;
 import net.oceanias.opal.plugin.OPlugin;
-import net.oceanias.opal.plugin.ORegistry;
 import net.oceanias.opal.utility.extension.OPlayerExtension;
 import java.time.Duration;
 import java.util.*;
@@ -75,7 +74,7 @@ public final class OTeleportHelper extends OListener.Bukkit {
             player.teleport(destination);
 
             player.actionDSR(
-                ORegistry.getCaller().getColour() +
+                Opal.get().getColour() +
                 "<white>The <gold>teleportation <white>has <green>commenced<white>."
             );
 

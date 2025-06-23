@@ -1,6 +1,6 @@
 package net.oceanias.opal.utility.extension;
 
-import net.oceanias.opal.plugin.ORegistry;
+import net.oceanias.opal.Opal;
 import java.time.Duration;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -24,7 +24,7 @@ public final class OPlayerExtension {
     ) {
         final String line = lines ? OStringExtension.CHAT_DIVIDER_SHORT : null;
         final String blank = blanks ? "" : null;
-        final String beginning = prefixed ? ORegistry.getCaller().getPrefix() : "";
+        final String beginning = prefixed ? Opal.get().getPrefix() : "";
 
         player.sendMessage(Stream.of(line, blank, beginning + message, blank, line)
             .filter(Objects::nonNull)
