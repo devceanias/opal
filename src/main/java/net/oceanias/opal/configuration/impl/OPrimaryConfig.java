@@ -37,7 +37,11 @@ public final class OPrimaryConfig extends OConfiguration<OPrimaryConfig> {
     }
 
     @Override
-    protected void onLoad() {
+    protected void onLoad(final boolean isFirstLoad) {
+        if (isFirstLoad) {
+            return;
+        }
+
         OMenu.addIngredients();
     }
 
