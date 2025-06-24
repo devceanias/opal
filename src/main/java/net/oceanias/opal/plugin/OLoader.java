@@ -8,7 +8,7 @@ import org.eclipse.aether.graph.Dependency;
 import org.eclipse.aether.repository.RemoteRepository;
 import org.jetbrains.annotations.NotNull;
 
-@SuppressWarnings("UnstableApiUsage")
+@SuppressWarnings({ "unused", "UnstableApiUsage" })
 public final class OLoader implements PluginLoader {
     private static final String INVUI_VERSION = "1.46";
 

@@ -4,14 +4,12 @@ import net.oceanias.opal.component.impl.OProvider;
 import net.oceanias.opal.plugin.OPlugin;
 import java.io.File;
 import java.nio.file.Path;
-import de.exlll.configlib.ConfigLib;
-import de.exlll.configlib.NameFormatters;
-import de.exlll.configlib.YamlConfigurationProperties;
-import de.exlll.configlib.YamlConfigurations;
+import de.exlll.configlib.*;
 
 @SuppressWarnings("unused")
 public abstract class OConfiguration<T> implements OProvider {
-    private T config;
+    private Path path;
+    private YamlConfigurationStore<T> store;
 
     private boolean isFirstLoad = true;
 
@@ -28,6 +26,10 @@ public abstract class OConfiguration<T> implements OProvider {
             .build();
     }
 
+    protected abstract T getInstance();
+
+    protected abstract void setInstance(T config);
+
     protected void onLoad(final boolean isFirstLoad) {}
 
     protected void onSave() {}
@@ -35,9 +37,15 @@ public abstract class OConfiguration<T> implements OProvider {
     protected abstract Class<T> getClazz();
 
     public final void loadConfiguration() {
-        final Path path = new File(getPlugin().getDataFolder(), getFile().getPath()).toPath();
+        if (path == null) {
+            path = new File(getPlugin().getDataFolder(), getFile().getPath()).toPath();
+        }
 
-        config = YamlConfigurations.update(path, getClazz(), getProperties());
+        if (store == null) {
+            store = new YamlConfigurationStore<>(getClazz(), getProperties());
+        }
+
+        setInstance(store.update(path));
 
         onLoad(isFirstLoad);
 
@@ -45,11 +53,11 @@ public abstract class OConfiguration<T> implements OProvider {
     }
 
     public final void saveConfiguration() {
-        if (config == null) {
+        if (path == null || store == null || getInstance() == null) {
             return;
         }
 
-        YamlConfigurations.save(new File(getPlugin().getDataFolder(), getFile().getPath()).toPath(), getClazz(), config);
+        store.save(getInstance(), path);
 
         onSave();
     }

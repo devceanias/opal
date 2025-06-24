@@ -39,6 +39,8 @@ public abstract class OPlugin extends JavaPlugin {
 
     public abstract String getPrefix();
 
+    protected abstract void setInstance();
+
     protected void loadPlugin() {}
 
     protected void enablePlugin() {}
@@ -53,12 +55,13 @@ public abstract class OPlugin extends JavaPlugin {
 
         scheduler = getServer().getScheduler();
 
+        setInstance();
         loadPlugin();
     }
 
     @Override
     public final void onEnable() {
-        if (getClass() != Opal.class &&
+        if (!isOpal() &&
             !getServer().getPluginManager().isPluginEnabled(Opal.get().getDescription().getName())
         ) {
             getLogger().severe("Opal is missing or not enabled — this plugin will be disabled.");
@@ -67,16 +70,18 @@ public abstract class OPlugin extends JavaPlugin {
             return;
         }
 
-        if (getClass() == Opal.class) {
+        if (isOpal()) {
             CommandAPI.onEnable();
 
             InvUI.getInstance().setPlugin(this);
-
-            OMenu.addIngredients();
         }
 
         for (final OConfiguration<?> config : getConfigurations()) {
             config.registerInternally();
+        }
+
+        if (isOpal()) {
+            OMenu.addIngredients();
         }
 
         if (getDatabase() != null) {
@@ -113,5 +118,9 @@ public abstract class OPlugin extends JavaPlugin {
 
     public String getPermission(final String permission) {
         return getLabel() + "." + permission;
+    }
+
+    private boolean isOpal() {
+        return getClass() == Opal.class;
     }
 }

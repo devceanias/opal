@@ -67,12 +67,12 @@ dependencies {
 
     api(libs.commandApi)
     api(libs.invUi)
+    api(libs.configLib)
 
     compileOnly(variantOf(libs.inventoryAccess) { classifier("remapped-mojang") })
     compileOnly(libs.lombok)
     compileOnly(libs.paper)
 
-    implementation(libs.configLib)
     implementation(libs.commonsText)
 }
 

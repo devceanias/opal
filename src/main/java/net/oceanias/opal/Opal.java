@@ -56,7 +56,7 @@ public final class Opal extends OPlugin {
     }
 
     @Override
-    protected void loadPlugin() {
+    protected void setInstance() {
         get = this;
     }
 

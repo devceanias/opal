@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 public final class OPrimaryConfig extends OConfiguration<OPrimaryConfig> {
     @Getter
     @Accessors(fluent = true)
-    private static final OPrimaryConfig get = new OPrimaryConfig();
+    private static OPrimaryConfig get = new OPrimaryConfig();
 
     @Override
     protected OPlugin getPlugin() {
@@ -34,6 +34,16 @@ public final class OPrimaryConfig extends OConfiguration<OPrimaryConfig> {
     @Override
     protected @NotNull File getFile() {
         return new File("config.yml");
+    }
+
+    @Override
+    protected OPrimaryConfig getInstance() {
+        return get;
+    }
+
+    @Override
+    protected void setInstance(final OPrimaryConfig config) {
+        get = config;
     }
 
     @Override

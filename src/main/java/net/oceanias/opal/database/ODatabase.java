@@ -23,7 +23,7 @@ public abstract class ODatabase implements OProvider {
         final Duration interval = getAutosave();
 
         if (interval != null && !interval.isZero() && !interval.isNegative()) {
-            autosave = new AutosaveTask(this);
+            autosave = new AutosaveTask();
 
             OTaskHelper.runTaskTimerAsync(autosave, interval, interval);
         }
@@ -56,16 +56,14 @@ public abstract class ODatabase implements OProvider {
     protected void onAutosave() {}
 
     @RequiredArgsConstructor
-    private static final class AutosaveTask extends BukkitRunnable {
-        private final ODatabase database;
-
+    private final class AutosaveTask extends BukkitRunnable {
         @Override
         public void run() {
-            if (!database.isConnected()) {
+            if (!isConnected()) {
                 return;
             }
 
-            database.onAutosave();
+            onAutosave();
         }
     }
 }
