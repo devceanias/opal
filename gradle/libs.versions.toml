@@ -1,7 +1,7 @@
 [versions]
 shadow = "8.3.7"
 invUi = "1.46"
-commandApi = "10.0.1"
+commandApi = "10.1.0"
 configLib = "4.6.1"
 lombok = "1.18.38"
 paper = "1.21.4-R0.1-SNAPSHOT"
