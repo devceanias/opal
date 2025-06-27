@@ -1,5 +1,6 @@
 package net.oceanias.opal.database;
 
+import net.oceanias.opal.Opal;
 import net.oceanias.opal.component.impl.OProvider;
 import net.oceanias.opal.utility.helper.OTaskHelper;
 import java.time.Duration;
@@ -59,7 +60,7 @@ public abstract class ODatabase implements OProvider {
     private final class AutosaveTask extends BukkitRunnable {
         @Override
         public void run() {
-            if (!isConnected()) {
+            if (!isConnected() || Opal.get().getServer().isStopping()) {
                 return;
             }
 
