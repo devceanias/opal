@@ -10,14 +10,14 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
-public abstract class OSubcommand {
+public abstract class OSubcommand implements OExecutable {
     public static final String SUBCOMMAND_NODE_NAME = "subcommand";
 
     private MultiLiteralArgument base;
 
     protected abstract OPlugin getPlugin();
 
-    public abstract OCommand getParent();
+    public abstract OExecutable getParent();
 
     public abstract String getLabel();
 
@@ -35,7 +35,7 @@ public abstract class OSubcommand {
     }
 
     public CommandPermission getPermission() {
-        return OCommand.ofPermission(getPlugin(), getParent().getLabel() + "." + getLabel());
+        return OCommand.ofPermission(getPlugin(), getParent().getPermission() + "." + getLabel());
     }
 
     public List<OSubcommand> getSubcommands() {

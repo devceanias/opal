@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
 @ExtensionMethod({ OPlayerExtension.class, OStringExtension.class })
-public abstract class OCommand implements OProvider {
+public abstract class OCommand implements OExecutable, OProvider {
     private List<HelpLine> help;
     private final Map<List<String>, List<String>> descriptions = new ConcurrentHashMap<>();
 

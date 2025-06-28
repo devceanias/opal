@@ -4,6 +4,7 @@ import net.oceanias.opal.Opal;
 import net.oceanias.opal.command.OCommand;
 import net.oceanias.opal.command.OSubcommand;
 import net.oceanias.opal.configuration.OConfiguration;
+import net.oceanias.opal.module.admin.command.admin.OAdminCommand;
 import net.oceanias.opal.plugin.OPlugin;
 import net.oceanias.opal.utility.extension.OPlayerExtension;
 import java.util.List;
@@ -21,7 +22,7 @@ import org.jetbrains.annotations.Unmodifiable;
 @RequiredArgsConstructor
 public final class OReloadSubcommand extends OSubcommand {
     private final Opal plugin;
-    private final OCommand parent;
+    private final OAdminCommand parent;
 
     @Override
     protected OPlugin getPlugin() {
