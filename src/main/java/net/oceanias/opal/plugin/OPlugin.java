@@ -50,7 +50,7 @@ public abstract class OPlugin extends JavaPlugin {
     @Override
     public final void onLoad() {
         if (getClass() == Opal.class) {
-            CommandAPI.onLoad(new CommandAPIBukkitConfig(this).setNamespace(getLabel()));
+            CommandAPI.onLoad(new CommandAPIBukkitConfig(this));
         }
 
         scheduler = getServer().getScheduler();

@@ -83,7 +83,7 @@ public abstract class OCommand implements OExecutable, OProvider {
             );
         }
 
-        tree.register();
+        tree.register(getPlugin().getLabel());
 
         OProvider.super.registerInternally();
     }
