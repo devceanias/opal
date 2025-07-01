@@ -41,6 +41,10 @@ public abstract class OPlugin extends JavaPlugin {
 
     protected abstract void setInstance();
 
+    public boolean reloadsDatapacks() {
+        return false;
+    }
+
     protected void loadPlugin() {}
 
     protected void enablePlugin() {}
@@ -50,7 +54,10 @@ public abstract class OPlugin extends JavaPlugin {
     @Override
     public final void onLoad() {
         if (getClass() == Opal.class) {
-            CommandAPI.onLoad(new CommandAPIBukkitConfig(this));
+            CommandAPI.onLoad(new CommandAPIBukkitConfig(this)
+                .skipReloadDatapacks(!reloadsDatapacks())
+                .missingExecutorImplementationMessage("This command does not support %s.")
+            );
         }
 
         scheduler = getServer().getScheduler();

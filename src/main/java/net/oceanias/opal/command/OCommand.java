@@ -123,10 +123,6 @@ public abstract class OCommand implements OExecutable, OProvider {
     }
 
     private void sendHelp(final CommandSender sender, final CommandArguments args) {
-        if (!(sender instanceof final Player player)) {
-            return;
-        }
-
         final List<Component> lines = new ArrayList<>(List.of(
             OStringExtension.CHAT_DIVIDER_SHORT.deserialize(),
             (getPlugin().getColour() + WordUtils.capitalize(getLabel()) + " Commands:").deserialize()
@@ -168,8 +164,8 @@ public abstract class OCommand implements OExecutable, OProvider {
 
         lines.add(OStringExtension.CHAT_DIVIDER_SHORT.deserialize());
 
-        player.sendMessage(Component.join(JoinConfiguration.separator(Component.newline()), lines));
-        player.soundDSR(Sound.BLOCK_NOTE_BLOCK_CHIME);
+        sender.sendMessage(Component.join(JoinConfiguration.separator(Component.newline()), lines));
+        sender.soundDSR(Sound.BLOCK_NOTE_BLOCK_CHIME);
     }
 
     private @NotNull List<HelpLine> getUsages() {
