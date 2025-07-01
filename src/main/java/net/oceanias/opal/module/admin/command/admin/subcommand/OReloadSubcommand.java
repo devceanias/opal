@@ -6,7 +6,7 @@ import net.oceanias.opal.command.OSubcommand;
 import net.oceanias.opal.configuration.OConfiguration;
 import net.oceanias.opal.module.admin.command.admin.OAdminCommand;
 import net.oceanias.opal.plugin.OPlugin;
-import net.oceanias.opal.utility.extension.OPlayerExtension;
+import net.oceanias.opal.utility.extension.OAudienceExtension;
 import java.util.List;
 import org.bukkit.Sound;
 import dev.jorel.commandapi.arguments.Argument;
@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
 @SuppressWarnings("deprecation")
-@ExtensionMethod(OPlayerExtension.class)
+@ExtensionMethod(OAudienceExtension.class)
 @RequiredArgsConstructor
 public final class OReloadSubcommand extends OSubcommand {
     private final Opal plugin;

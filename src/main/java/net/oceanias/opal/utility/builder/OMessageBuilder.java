@@ -5,7 +5,7 @@ import net.oceanias.opal.utility.extension.OStringExtension;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.bukkit.entity.Player;
+import org.bukkit.command.CommandSender;
 import net.kyori.adventure.text.Component;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +13,7 @@ import lombok.experimental.Accessors;
 import lombok.experimental.ExtensionMethod;
 import org.jetbrains.annotations.NotNull;
 
+@SuppressWarnings("unused")
 @Getter
 @Setter
 @Accessors(chain = true)
@@ -42,8 +43,8 @@ public final class OMessageBuilder {
             .deserialize();
     }
 
-    public OMessageBuilder sendMessage(final @NotNull Player player) {
-        player.sendMessage(getMessage());
+    public OMessageBuilder sendMessage(final @NotNull CommandSender sender) {
+        sender.sendMessage(getMessage());
 
         return this;
     }

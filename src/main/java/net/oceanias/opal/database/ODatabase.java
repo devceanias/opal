@@ -7,6 +7,7 @@ import java.time.Duration;
 import org.bukkit.scheduler.BukkitRunnable;
 import lombok.RequiredArgsConstructor;
 
+@SuppressWarnings("unused")
 @RequiredArgsConstructor
 public abstract class ODatabase implements OProvider {
     private AutosaveTask autosave;

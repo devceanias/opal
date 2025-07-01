@@ -1,15 +1,16 @@
 package net.oceanias.opal.cooldown;
 
 import net.oceanias.opal.plugin.OPlugin;
-import net.oceanias.opal.utility.extension.OPlayerExtension;
+import net.oceanias.opal.utility.extension.OAudienceExtension;
 import net.oceanias.opal.utility.helper.OTaskHelper;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import org.bukkit.Sound;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.command.CommandSender;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.ExtensionMethod;
 import org.apache.commons.lang3.tuple.Pair;
@@ -17,38 +18,51 @@ import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
 @RequiredArgsConstructor
-@ExtensionMethod(OPlayerExtension.class)
+@ExtensionMethod(OAudienceExtension.class)
 public final class OCooldown {
     private final OPlugin plugin;
     private final String label;
     private final Duration length;
 
-    private final Map<UUID, Pair<Long, Duration>> cooldowns = new ConcurrentHashMap<>();
+    private final Map<String, Pair<Long, Duration>> cooldowns = new ConcurrentHashMap<>();
+
+    private @NotNull String getIdentifier(final CommandSender sender) {
+        if (sender instanceof final Player player) {
+            return "player:" + player.getUniqueId();
+        }
+
+        if (sender instanceof ConsoleCommandSender) {
+            return "console";
+        }
+
+        return sender.getClass().getSimpleName().toLowerCase() + ":" + sender.getName();
+    }
 
     private String getBypass() {
         return plugin.getPermission("cooldown." + label.replace(" ", ".") + ".bypass");
     }
 
-    public void setCooldown(@NotNull final Player player, final boolean cooldown) {
-        final UUID uuid = player.getUniqueId();
+    public void setCooldown(@NotNull final CommandSender sender, final boolean cooldown) {
+        final String identifier = getIdentifier(sender);
 
         if (!cooldown) {
-            cooldowns.remove(uuid);
+            cooldowns.remove(identifier);
 
             return;
         }
 
-        if (player.hasPermission(getBypass())) {
+        if (sender.hasPermission(getBypass())) {
             return;
         }
 
-        cooldowns.put(uuid, Pair.of(System.currentTimeMillis(), length));
+        cooldowns.put(identifier, Pair.of(System.currentTimeMillis(), length));
 
-        OTaskHelper.runTaskLaterAsync(() -> cooldowns.remove(uuid), length);
+        OTaskHelper.runTaskLaterAsync(() -> cooldowns.remove(identifier), length);
     }
 
-    public void showReminder(@NotNull final Player player) {
-        final Pair<Long, Duration> pair = cooldowns.get(player.getUniqueId());
+    public void showReminder(@NotNull final CommandSender sender) {
+        final String identifier = getIdentifier(sender);
+        final Pair<Long, Duration> pair = cooldowns.get(identifier);
 
         if (pair == null) {
             return;
@@ -60,29 +74,29 @@ public final class OCooldown {
         final Duration remaining = duration.minus(elapsed);
 
         if (remaining.isNegative() || remaining.isZero()) {
-            cooldowns.remove(player.getUniqueId());
+            cooldowns.remove(identifier);
 
             return;
         }
 
-        player.actionDSR("<white>Please wait <gold>" + formatDuration(remaining) + "&f.");
-        player.soundDSR(Sound.BLOCK_NOTE_BLOCK_BASS);
+        sender.actionDSR("<white>Please wait <gold>" + formatDuration(remaining) + "&f.");
+        sender.soundDSR(Sound.BLOCK_NOTE_BLOCK_BASS);
     }
 
-    public boolean isActive(final @NotNull Player player) {
-        return cooldowns.containsKey(player.getUniqueId());
+    public boolean isActive(final @NotNull CommandSender sender) {
+        return cooldowns.containsKey(getIdentifier(sender));
     }
 
-    public void withCooldown(final Player player, final Runnable execute) {
-        if (!isActive(player)) {
+    public void withCooldown(final CommandSender sender, final Runnable execute) {
+        if (!isActive(sender)) {
             execute.run();
 
-            setCooldown(player, true);
+            setCooldown(sender, true);
 
             return;
         }
 
-        showReminder(player);
+        showReminder(sender);
     }
 
     private static String formatDuration(@NotNull final Duration duration) {

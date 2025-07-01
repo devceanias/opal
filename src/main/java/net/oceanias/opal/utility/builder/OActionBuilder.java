@@ -5,6 +5,7 @@ import net.oceanias.opal.utility.helper.OTaskHelper;
 import java.time.Duration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.command.CommandSender;
 import net.kyori.adventure.text.Component;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import lombok.experimental.Accessors;
 import lombok.experimental.ExtensionMethod;
 import org.jetbrains.annotations.NotNull;
 
+@SuppressWarnings({ "unused", "UnusedReturnValue" })
 @Getter
 @Accessors(chain = true)
 @ExtensionMethod(OStringExtension.class)
@@ -29,28 +31,30 @@ public class OActionBuilder {
         this.text = text;
     }
 
-    public OActionBuilder showText(@NotNull final Player player) {
-        player.sendActionBar(text.deserialize());
+    public OActionBuilder showText(@NotNull final CommandSender sender) {
+        sender.sendActionBar(text.deserialize());
 
         return this;
     }
 
-    public OActionBuilder clearText(@NotNull final Player player) {
-        player.sendActionBar(Component.empty());
+    public OActionBuilder clearText(@NotNull final CommandSender sender) {
+        sender.sendActionBar(Component.empty());
 
         return this;
     }
 
-    public OActionBuilder showPersistent(final Player player, final Duration duration) {
+    public OActionBuilder showPersistent(final CommandSender sender, final Duration duration) {
         if (persistenceTask != null) {
             persistenceTask.cancel();
         }
 
-        this.duration = duration;
+        if (sender instanceof final Player player) {
+            this.duration = duration;
 
-        persistenceTask = new PersistenceTask(player, duration);
+            persistenceTask = new PersistenceTask(player, duration);
 
-        OTaskHelper.runTaskTimer(persistenceTask, Duration.ZERO, Duration.ofSeconds(1));
+            OTaskHelper.runTaskTimer(persistenceTask, Duration.ZERO, Duration.ofSeconds(1));
+        }
 
         return this;
     }

@@ -15,7 +15,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 
-@SuppressWarnings("unused")
 public final class Opal extends OPlugin {
     @Getter
     @Accessors(fluent = true)

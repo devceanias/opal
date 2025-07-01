@@ -3,7 +3,7 @@ package net.oceanias.opal.utility.helper;
 import net.oceanias.opal.Opal;
 import net.oceanias.opal.listener.OListener;
 import net.oceanias.opal.plugin.OPlugin;
-import net.oceanias.opal.utility.extension.OPlayerExtension;
+import net.oceanias.opal.utility.extension.OAudienceExtension;
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,7 +21,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
-@ExtensionMethod({ OPlayerExtension.class })
+@ExtensionMethod({ OAudienceExtension.class })
 @RequiredArgsConstructor
 public final class OTeleportHelper extends OListener.Bukkit {
     private static final Map<UUID, List<BukkitTask>> pending = new ConcurrentHashMap<>();

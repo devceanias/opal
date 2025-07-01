@@ -3,7 +3,7 @@ package net.oceanias.opal.menu;
 import net.oceanias.opal.Opal;
 import net.oceanias.opal.configuration.impl.OPrimaryConfig;
 import net.oceanias.opal.utility.builder.OItemBuilder;
-import net.oceanias.opal.utility.extension.OPlayerExtension;
+import net.oceanias.opal.utility.extension.OAudienceExtension;
 import net.oceanias.opal.utility.extension.OStringExtension;
 import java.util.List;
 import org.bukkit.Material;
@@ -24,7 +24,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
-@ExtensionMethod({ OStringExtension.class, OPlayerExtension.class })
+@ExtensionMethod({ OStringExtension.class, OAudienceExtension.class })
 public abstract class OMenu {
     public abstract Gui getGui(Player player);
 
