@@ -1,7 +1,7 @@
 package net.oceanias.opal.cooldown;
 
 import net.oceanias.opal.plugin.OPlugin;
-import net.oceanias.opal.utility.extension.OAudienceExtension;
+import net.oceanias.opal.utility.extension.OCommandSenderExtension;
 import net.oceanias.opal.utility.helper.OTaskHelper;
 import java.time.Duration;
 import java.util.List;
@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
 @RequiredArgsConstructor
-@ExtensionMethod(OAudienceExtension.class)
+@ExtensionMethod(OCommandSenderExtension.class)
 public final class OCooldown {
     private final OPlugin plugin;
     private final String label;

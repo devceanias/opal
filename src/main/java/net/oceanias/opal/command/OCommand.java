@@ -2,7 +2,7 @@ package net.oceanias.opal.command;
 
 import net.oceanias.opal.component.impl.OProvider;
 import net.oceanias.opal.plugin.OPlugin;
-import net.oceanias.opal.utility.extension.OAudienceExtension;
+import net.oceanias.opal.utility.extension.OCommandSenderExtension;
 import net.oceanias.opal.utility.extension.OStringExtension;
 import java.lang.reflect.Field;
 import java.util.*;
@@ -23,7 +23,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
-@ExtensionMethod({ OAudienceExtension.class, OStringExtension.class })
+@ExtensionMethod({ OCommandSenderExtension.class, OStringExtension.class })
 public abstract class OCommand implements OExecutable, OProvider {
     private List<HelpLine> help;
     private final Map<List<String>, List<String>> descriptions = new ConcurrentHashMap<>();

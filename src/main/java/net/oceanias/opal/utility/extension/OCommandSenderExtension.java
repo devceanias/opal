@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
 @ExtensionMethod({ OStringExtension.class })
-public final class OAudienceExtension {
+public final class OCommandSenderExtension {
     public static void messageDSR(
         @NotNull final CommandSender sender,
         final String message,
