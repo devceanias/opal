@@ -1,5 +1,5 @@
 [versions]
-shadow = "8.3.7"
+shadow = "8.3.8"
 invUi = "1.46"
 commandApi = "10.1.0"
 configLib = "4.6.1"
