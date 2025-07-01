@@ -35,7 +35,7 @@ public abstract class OSubcommand implements OExecutable {
     }
 
     public CommandPermission getPermission() {
-        return OCommand.ofPermission(getPlugin(), getParent().getPermission() + "." + getLabel());
+        return CommandPermission.fromString(getParent().getPermission() + "." + getLabel());
     }
 
     public List<OSubcommand> getSubcommands() {
