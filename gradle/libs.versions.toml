@@ -5,7 +5,7 @@ commandapi = "10.1.1"
 configlib = "4.6.1"
 lombok = "1.18.38"
 paper = "1.21.4-R0.1-SNAPSHOT"
-commons-text = "1.13.1"
+commons-text = "1.14.0"
 minitext = "v1.0.0"
 
 [libraries]
