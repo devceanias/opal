@@ -55,7 +55,10 @@ repositories {
 publishing {
     publications {
         create<MavenPublication>("jitpack") {
-            artifact(jars.api.get())
+            artifact(jars.api.get()) {
+                classifier = null
+            }
+
             artifact(tasks.named<Jar>("sourcesJar").get())
             artifact(tasks.named<Jar>("javadocJar").get())
 
