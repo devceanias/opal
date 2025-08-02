@@ -1,5 +1,28 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
+private val jars = object {
+    val api = tasks.register<ShadowJar>("api") {
+        archiveClassifier.set("api")
+
+        from(sourceSets.main.get().output)
+
+        configurations = listOf(project.configurations.runtimeClasspath.get())
+    }
+
+    val server = tasks.register<ShadowJar>("server") {
+        archiveClassifier.set("server")
+
+        from(sourceSets.main.get().output)
+
+        configurations = listOf(project.configurations.runtimeClasspath.get())
+
+        dependencies {
+            exclude(dependency("xyz.xenondevs.invui:invui-core"))
+            exclude(dependency("xyz.xenondevs.invui:inventory-access-r23"))
+        }
+    }
+}
+
 project.group = "net.oceanias"
 project.version = "1.0.1"
 
@@ -32,7 +55,7 @@ repositories {
 publishing {
     publications {
         create<MavenPublication>("jitpack") {
-            artifact(tasks.named<ShadowJar>("api").get())
+            artifact(jars.api.get())
             artifact(tasks.named<Jar>("sourcesJar").get())
             artifact(tasks.named<Jar>("javadocJar").get())
 
@@ -100,28 +123,7 @@ tasks {
         enabled = false
     }
 
-    val apiJar = register<ShadowJar>("api") {
-        archiveClassifier.set("api")
-
-        from(sourceSets.main.get().output)
-
-        configurations = listOf(project.configurations.runtimeClasspath.get())
-    }
-
-    val serverJar = register<ShadowJar>("server") {
-        archiveClassifier.set("server")
-
-        from(sourceSets.main.get().output)
-
-        configurations = listOf(project.configurations.runtimeClasspath.get())
-
-        dependencies {
-            exclude(dependency("xyz.xenondevs.invui:invui-core"))
-            exclude(dependency("xyz.xenondevs.invui:inventory-access-r23"))
-        }
-    }
-
     build {
-        dependsOn(apiJar, serverJar)
+        dependsOn(jars.api, jars.server)
     }
 }
