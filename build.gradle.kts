@@ -32,10 +32,9 @@ repositories {
 publishing {
     publications {
         create<MavenPublication>("jitpack") {
-            artifact(tasks.shadowJar)
-
-            artifact(tasks.named<Jar>("sourcesJar"))
-            artifact(tasks.named<Jar>("javadocJar"))
+            artifact(tasks.named<ShadowJar>("api").get())
+            artifact(tasks.named<Jar>("sourcesJar").get())
+            artifact(tasks.named<Jar>("javadocJar").get())
 
             pom {
                 withXml {
