@@ -1,7 +1,8 @@
 package net.oceanias.opal.utility.extension;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
+import com.bruhdows.minitext.FormattedText;
+import com.bruhdows.minitext.MiniText;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
@@ -16,6 +17,10 @@ public final class OStringExtension {
         "<dark_gray><strikethrough>                                              </strikethrough>";
 
     public static @NotNull Component deserialize(final String string) {
-        return MiniMessage.miniMessage().deserialize(string);
+        return deserializeToFormatted(string).component();
+    }
+
+    public static @NotNull FormattedText deserializeToFormatted(final String string) {
+        return MiniText.miniText().deserialize(string);
     }
 }

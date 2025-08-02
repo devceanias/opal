@@ -8,6 +8,7 @@ import net.oceanias.opal.module.admin.command.admin.OAdminCommand;
 import net.oceanias.opal.plugin.OPlugin;
 import net.oceanias.opal.utility.extension.OCommandSenderExtension;
 import java.util.List;
+import java.util.Objects;
 import org.bukkit.Sound;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
@@ -53,42 +54,40 @@ public final class OReloadSubcommand extends OSubcommand {
             .toArray(String[]::new);
 
         return getBase()
-            .executesPlayer((player, arguments) -> {
+            .executes((sender, arguments) -> {
                 for (final OConfiguration<?> configuration : Opal.get().getConfigurations()) {
                     configuration.loadConfiguration();
                 }
 
-                player.actionDSR(
+                sender.actionDSR(
                     "<white>All <gold>" +
                     plugin.getDescription().getName() +
                     " configurations <white>have been <green>reloaded<white>."
                 );
 
-                player.soundDSR(Sound.BLOCK_NOTE_BLOCK_BELL);
+                sender.soundDSR(Sound.BLOCK_NOTE_BLOCK_BELL);
             })
             .thenNested(
                 new MultiLiteralArgument("type", configurations)
-                    .executesPlayer((player, arguments) -> {
-                        final String type = (String) arguments.get("type");
+                    .executes((sender, arguments) -> {
+                        final String type = (String) Objects.requireNonNull(arguments.get("type"));
 
                         final OConfiguration<?> configuration = Opal.get().getConfigurations().stream()
                             .filter(entry -> entry.getLabel().equals(type))
                             .findFirst()
-                            .orElse(null);
-
-                        if (configuration == null) {
-                            return;
-                        }
+                            .orElseThrow(() ->
+                                new IllegalArgumentException("Error finding configuration for type " + type + ".")
+                            );
 
                         configuration.loadConfiguration();
 
-                        player.actionDSR(
+                        sender.actionDSR(
                             "<white>The <gold>" +
                             configuration.getLabel() +
                             " configuration <white>has been <green>reloaded<white>."
                         );
 
-                        player.soundDSR(Sound.BLOCK_NOTE_BLOCK_BELL);
+                        sender.soundDSR(Sound.BLOCK_NOTE_BLOCK_BELL);
                     })
             );
     }

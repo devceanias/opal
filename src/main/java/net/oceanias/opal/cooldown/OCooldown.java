@@ -110,7 +110,9 @@ public final class OCooldown {
         final List<String> parts = units.stream()
             .filter(unit -> unit.getRight() > 0)
             .map(unit -> {
-                final String extension = (unit.getRight() == 1L) ? "" : "s";
+                final String extension = (unit.getRight() == 1L)
+                    ? ""
+                    : "s";
 
                 return unit.getRight() + " " + unit.getLeft() + extension;
             })

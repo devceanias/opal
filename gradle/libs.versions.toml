@@ -1,20 +1,22 @@
 [versions]
-shadow = "8.3.8"
-invUi = "1.46"
-commandApi = "10.1.1"
-configLib = "4.6.1"
+shadow = "8.3.7"
+invui = "1.46"
+commandapi = "10.1.0"
+configlib = "4.6.1"
 lombok = "1.18.38"
 paper = "1.21.4-R0.1-SNAPSHOT"
-commonsText = "1.13.1"
+commons-text = "1.13.1"
+minitext = "v1.0.0"
 
 [libraries]
-invUi = { group = "xyz.xenondevs.invui", name = "invui-core", version.ref = "invUi" }
-inventoryAccess = { group = "xyz.xenondevs.invui", name = "inventory-access-r23", version.ref = "invUi" }
-commandApi = { group = "dev.jorel", name = "commandapi-bukkit-shade-mojang-mapped", version.ref = "commandApi" }
-configLib = { group = "de.exlll", name = "configlib-paper", version.ref = "configLib" }
+invui = { group = "xyz.xenondevs.invui", name = "invui-core", version.ref = "invui" }
+inventoryaccess = { group = "xyz.xenondevs.invui", name = "inventory-access-r23", version.ref = "invui" }
+commandapi = { group = "dev.jorel", name = "commandapi-bukkit-shade-mojang-mapped", version.ref = "commandapi" }
+configlib = { group = "de.exlll", name = "configlib-paper", version.ref = "configlib" }
 lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" }
 paper = { group = "io.papermc.paper", name = "paper-api", version.ref = "paper" }
-commonsText = { group = "org.apache.commons", name = "commons-text", version.ref = "commonsText" }
+commons-text = { group = "org.apache.commons", name = "commons-text", version.ref = "commons-text" }
+minitext = { group = "com.github.Bruhdows", name = "MiniText", version.ref = "minitext" }
 
 [bundles]
 

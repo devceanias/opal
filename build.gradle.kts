@@ -26,6 +26,7 @@ repositories {
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://oss.sonatype.org/content/groups/public/")
     maven("https://repo.xenondevs.xyz/releases")
+    maven("https://jitpack.io")
 }
 
 publishing {
@@ -55,6 +56,10 @@ publishing {
                             appendNode("id", "xenondevs")
                             appendNode("url", "https://repo.xenondevs.xyz/releases")
                         }
+                        appendNode("repository").apply {
+                            appendNode("id", "jitpack")
+                            appendNode("url", "https://jitpack.io")
+                        }
                     }
                 }
             }
@@ -65,15 +70,16 @@ publishing {
 dependencies {
     annotationProcessor(libs.lombok)
 
-    api(libs.commandApi)
-    api(libs.invUi)
-    api(libs.configLib)
+    api(libs.commandapi)
+    api(libs.invui)
+    api(libs.configlib)
 
-    compileOnly(variantOf(libs.inventoryAccess) { classifier("remapped-mojang") })
+    compileOnly(variantOf(libs.inventoryaccess) { classifier("remapped-mojang") })
     compileOnly(libs.lombok)
     compileOnly(libs.paper)
 
-    implementation(libs.commonsText)
+    implementation(libs.commons.text)
+    implementation(libs.minitext)
 }
 
 defaultTasks("build")

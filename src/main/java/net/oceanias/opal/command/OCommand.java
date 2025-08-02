@@ -217,7 +217,9 @@ public abstract class OCommand implements OExecutable, OProvider {
                     if (child instanceof final MultiLiteralArgument multi) {
                         final String[] literals = multi.getLiterals();
 
-                        name = literals.length > 0 ? literals[0] : "";
+                        name = literals.length > 0
+                            ? literals[0]
+                            : "";
                     } else {
                         name = argument.getNodeName();
                     }

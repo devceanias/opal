@@ -2,13 +2,13 @@ package net.oceanias.opal.utility.extension;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
-import net.kyori.adventure.text.minimessage.MiniMessage;
+import com.bruhdows.minitext.MiniText;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
 public final class OComponentExtension {
     public static @NotNull String serialize(final Component component) {
-        return MiniMessage.miniMessage().serialize(component);
+        return MiniText.miniText().serialize(component);
     }
 
     public static Component stripAbsentDecorations(Component component) {
