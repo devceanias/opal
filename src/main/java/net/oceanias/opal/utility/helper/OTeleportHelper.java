@@ -40,7 +40,7 @@ public final class OTeleportHelper extends OListener.Bukkit {
         final UUID uuid = player.getUniqueId();
 
         if (pending.containsKey(uuid)) {
-            player.actionDSR("<white>A <gold>teleportation <white>is <red>already <white>pending.");
+            player.actionDSR("&fA &#FFA500teleportation &fis &#FF0000already &fpending.");
 
             return;
         }
@@ -57,7 +57,7 @@ public final class OTeleportHelper extends OListener.Bukkit {
 
             final BukkitTask task = OTaskHelper.runTaskLater(() -> {
                 player.actionDSR(
-                    "<white>Teleporting in " + getSecondsColour(remaining, seconds) + remaining + " seconds<white>."
+                    "&fTeleporting in " + getSecondsColour(remaining, seconds) + remaining + " seconds&f."
                 );
 
                 player.soundDSR(Sound.ENTITY_EXPERIENCE_ORB_PICKUP);
@@ -75,7 +75,7 @@ public final class OTeleportHelper extends OListener.Bukkit {
 
             player.actionDSR(
                 Opal.get().getColour() +
-                "<white>The <gold>teleportation <white>has <green>commenced<white>."
+                "&fThe &#FFA500teleportation &fhas &#00FF00commenced&f."
             );
 
             player.soundDSR(Sound.ENTITY_ENDERMAN_TELEPORT);
@@ -94,7 +94,7 @@ public final class OTeleportHelper extends OListener.Bukkit {
         if (tasks != null) {
             tasks.forEach(BukkitTask::cancel);
 
-            player.actionDSR("&fThe &6teleportation &fhas been &ccancelled&f.");
+            player.actionDSR("&fThe &#FFA500teleportation &fhas been &#FF0000cancelled&f.");
             player.soundDSR(Sound.BLOCK_ANVIL_LAND, 1f, 0.5f);
         }
 
@@ -106,18 +106,18 @@ public final class OTeleportHelper extends OListener.Bukkit {
         final double percentage = (remaining / original) * 100;
 
         if (percentage > 67) {
-            return "&c";
+            return "&#FF0000";
         }
 
         if (percentage > 34) {
-            return "&6";
+            return "&#FFA500";
         }
 
         if (percentage > 0) {
-            return "&a";
+            return "&#00FF00";
         }
 
-        return "&e";
+        return "&#FFFF00";
     }
 
     @EventHandler

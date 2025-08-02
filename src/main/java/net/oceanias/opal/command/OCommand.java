@@ -141,17 +141,17 @@ public abstract class OCommand implements OExecutable, OProvider {
                 }
 
                 if (seg.optional) {
-                    builder.append("<yellow>[").append(seg.name).append("]</yellow>");
+                    builder.append("&#FFFF00[").append(seg.name).append("]");
 
                     continue;
                 }
 
-                builder.append("<yellow>(").append(seg.name).append(")</yellow>");
+                builder.append("&#FFFF00(").append(seg.name).append(")");
             }
 
             final List<String> description = line.description;
 
-            Component component = ("<gray>• <white>" + builder).deserialize();
+            Component component = ("&7• &f" + builder).deserialize();
 
             if (description != null) {
                 component = component.hoverEvent(HoverEvent.showText(

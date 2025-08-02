@@ -79,7 +79,7 @@ public final class OCooldown {
             return;
         }
 
-        sender.actionDSR("<white>Please wait <gold>" + formatDuration(remaining) + "&f.");
+        sender.actionDSR("&fPlease wait &#FFA500" + formatDuration(remaining) + "&f.");
         sender.soundDSR(Sound.BLOCK_NOTE_BLOCK_BASS);
     }
 

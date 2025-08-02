@@ -60,9 +60,9 @@ public final class OReloadSubcommand extends OSubcommand {
                 }
 
                 sender.actionDSR(
-                    "<white>All <gold>" +
+                    "&fAll &#FFA500" +
                     plugin.getDescription().getName() +
-                    " configurations <white>have been <green>reloaded<white>."
+                    " configurations &fhave been &#00FF00reloaded&f."
                 );
 
                 sender.soundDSR(Sound.BLOCK_NOTE_BLOCK_BELL);
@@ -82,9 +82,9 @@ public final class OReloadSubcommand extends OSubcommand {
                         configuration.loadConfiguration();
 
                         sender.actionDSR(
-                            "<white>The <gold>" +
+                            "&fThe &#FFA500" +
                             configuration.getLabel() +
-                            " configuration <white>has been <green>reloaded<white>."
+                            " configuration &fhas been &#00FF00reloaded&f."
                         );
 
                         sender.soundDSR(Sound.BLOCK_NOTE_BLOCK_BELL);

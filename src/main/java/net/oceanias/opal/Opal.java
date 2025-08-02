@@ -45,13 +45,13 @@ public final class Opal extends OPlugin {
     @Contract(pure = true)
     @Override
     public @NotNull String getColour() {
-        return "<#75F9E7>";
+        return "&#75F9E7";
     }
 
     @Contract(pure = true)
     @Override
     public @NotNull String getPrefix() {
-        return "<#75F9E7><bold>OPAL </bold><gray>»";
+        return "&#75F9E7&lOPAL &7»";
     }
 
     @Override
