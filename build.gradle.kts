@@ -1,7 +1,7 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 project.group = "net.oceanias"
-project.version = "1.0.0"
+project.version = "1.0.1"
 
 plugins {
     id("java-library")
