@@ -6,7 +6,7 @@ configlib = "4.6.1"
 lombok = "1.18.38"
 paper = "1.21.4-R0.1-SNAPSHOT"
 commons-text = "1.14.0"
-minitext = "v1.0.0"
+minitext = "v1.0.1"
 
 [libraries]
 invui = { group = "xyz.xenondevs.invui", name = "invui-core", version.ref = "invui" }
