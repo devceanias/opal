@@ -86,8 +86,6 @@ public abstract class OMenu {
             final @NotNull InventoryClickEvent event
         ) {
             if (!getGui().hasNextPage()) {
-                player.soundDSR(Sound.BLOCK_NOTE_BLOCK_BASS);
-
                 return;
             }
 
@@ -130,8 +128,6 @@ public abstract class OMenu {
             final @NotNull InventoryClickEvent event
         ) {
             if (!getGui().hasNextPage()) {
-                player.soundDSR(Sound.BLOCK_NOTE_BLOCK_BASS);
-
                 return;
             }
 
