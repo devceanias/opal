@@ -53,7 +53,7 @@ public abstract class OPlugin extends JavaPlugin {
 
     @Override
     public final void onLoad() {
-        if (getClass() == Opal.class) {
+        if (isOpal()) {
             CommandAPI.onLoad(new CommandAPIBukkitConfig(this)
                 .skipReloadDatapacks(!reloadsDatapacks())
                 .missingExecutorImplementationMessage("This command does not support %s.")
