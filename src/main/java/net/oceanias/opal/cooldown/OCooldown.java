@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.ExtensionMethod;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("unused")
 @RequiredArgsConstructor
@@ -57,15 +58,29 @@ public final class OCooldown {
 
         cooldowns.put(identifier, Pair.of(System.currentTimeMillis(), length));
 
-        OTaskHelper.runTaskLaterAsync(() -> cooldowns.remove(identifier), length);
+        OTaskHelper.runTaskLaterAsync(() ->
+            cooldowns.remove(identifier), length
+        );
     }
 
     public void showReminder(@NotNull final CommandSender sender) {
-        final String identifier = getIdentifier(sender);
+        final String message = "&fPlease wait &#FFA500" + formatDuration(getRemaining(getIdentifier(sender))) + "&f.";
+
+        if (sender instanceof ConsoleCommandSender) {
+            sender.messageDSR(message);
+
+            return;
+        }
+
+        sender.actionDSR(message);
+        sender.soundDSR(Sound.BLOCK_NOTE_BLOCK_BASS);
+    }
+
+    public Duration getRemaining(@NotNull final String identifier) {
         final Pair<Long, Duration> pair = cooldowns.get(identifier);
 
         if (pair == null) {
-            return;
+            return Duration.ZERO;
         }
 
         final long start = pair.getLeft();
@@ -76,11 +91,10 @@ public final class OCooldown {
         if (remaining.isNegative() || remaining.isZero()) {
             cooldowns.remove(identifier);
 
-            return;
+            return Duration.ZERO;
         }
 
-        sender.actionDSR("&fPlease wait &#FFA500" + formatDuration(remaining) + "&f.");
-        sender.soundDSR(Sound.BLOCK_NOTE_BLOCK_BASS);
+        return remaining;
     }
 
     public boolean isActive(final @NotNull CommandSender sender) {
