@@ -63,7 +63,7 @@ public final class OCooldown {
     }
 
     public void showReminder(@NotNull final CommandSender sender) {
-        final String message = "&fPlease wait &#FFA500" + formatDuration(getRemaining(getIdentifier(sender))) + "&f.";
+        final String message = "&fPlease wait &#FFA500" + formatDuration(getRemaining(sender)) + "&f.";
 
         if (sender instanceof ConsoleCommandSender) {
             sender.messageDSR(message);
@@ -75,7 +75,8 @@ public final class OCooldown {
         sender.soundDSR(Sound.BLOCK_NOTE_BLOCK_BASS);
     }
 
-    public Duration getRemaining(@NotNull final String identifier) {
+    public Duration getRemaining(final CommandSender sender) {
+        final String identifier = getIdentifier(sender);
         final Pair<Long, Duration> pair = cooldowns.get(identifier);
 
         if (pair == null) {
