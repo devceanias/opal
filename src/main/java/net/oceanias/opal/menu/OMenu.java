@@ -41,15 +41,15 @@ public abstract class OMenu {
 
     public static void addIngredients() {
         Structure.addGlobalIngredient(
-            OPrimaryConfig.get().getMenu().getIngredients().getFillerItem(), OItemBuilder.getFiller()
+            OPrimaryConfig.get().menu().ingredients().fillerItem(), OItemBuilder.getFiller()
         );
 
         Structure.addGlobalIngredient(
-            OPrimaryConfig.get().getMenu().getIngredients().getNextPage(), new OMenu.Next()
+            OPrimaryConfig.get().menu().ingredients().nextPage(), new OMenu.Next()
         );
 
         Structure.addGlobalIngredient(
-            OPrimaryConfig.get().getMenu().getIngredients().getPreviousPage(), new OMenu.Previous()
+            OPrimaryConfig.get().menu().ingredients().previousPage(), new OMenu.Previous()
         );
     }
 

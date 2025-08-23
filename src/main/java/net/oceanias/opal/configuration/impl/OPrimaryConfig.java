@@ -13,10 +13,10 @@ import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("FieldMayBeFinal")
 @Getter
+@Accessors(fluent = true)
 @Configuration
 public final class OPrimaryConfig extends OConfiguration<OPrimaryConfig> {
     @Getter
-    @Accessors(fluent = true)
     private static OPrimaryConfig get = new OPrimaryConfig();
 
     @Override
