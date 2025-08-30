@@ -6,7 +6,7 @@ import java.io.File;
 import java.nio.file.Path;
 import de.exlll.configlib.*;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({ "unused", "unchecked" })
 public abstract class OConfiguration<T> implements OProvider {
     private Path path;
     private YamlConfigurationStore<T> store;
@@ -45,7 +45,12 @@ public abstract class OConfiguration<T> implements OProvider {
             store = new YamlConfigurationStore<>(getClazz(), getProperties());
         }
 
-        setInstance(store.update(path));
+        final OConfiguration<T> updated = (OConfiguration<T>) store.update(path);
+
+        updated.path = path;
+        updated.store = store;
+
+        setInstance((T) updated);
 
         onLoad(isFirstLoad);
 
