@@ -124,7 +124,7 @@ public abstract class OCommand implements OExecutable, OProvider {
 
     private void sendHelp(final CommandSender sender, final CommandArguments args) {
         final List<Component> lines = new ArrayList<>(List.of(
-            OStringExtension.CHAT_DIVIDER_SHORT.deserialize(),
+            OStringExtension.CHAT_DIVIDER_LONG.deserialize(),
             (getPlugin().getColour() + WordUtils.capitalize(getLabel()) + " Commands:").deserialize()
         ));
 
@@ -162,7 +162,7 @@ public abstract class OCommand implements OExecutable, OProvider {
             lines.add(component);
         }
 
-        lines.add(OStringExtension.CHAT_DIVIDER_SHORT.deserialize());
+        lines.add(OStringExtension.CHAT_DIVIDER_LONG.deserialize());
 
         sender.sendMessage(Component.join(JoinConfiguration.separator(Component.newline()), lines));
         sender.soundDSR(Sound.BLOCK_NOTE_BLOCK_CHIME);

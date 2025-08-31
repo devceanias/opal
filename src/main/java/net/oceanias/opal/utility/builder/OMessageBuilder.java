@@ -33,7 +33,7 @@ public final class OMessageBuilder {
     }
 
     public @NotNull Component getMessage() {
-        final String divider = lines ? OStringExtension.CHAT_DIVIDER_SHORT : null;
+        final String divider = lines ? OStringExtension.CHAT_DIVIDER_LONG : null;
         final String blank = blanks ? "" : null;
         final String prefix = prefixed ? plugin.getPrefix() : "";
 

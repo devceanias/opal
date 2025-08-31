@@ -22,7 +22,7 @@ public final class OCommandSenderExtension {
         final boolean lines,
         final boolean blanks
     ) {
-        final String line = lines ? OStringExtension.CHAT_DIVIDER_SHORT : null;
+        final String line = lines ? OStringExtension.CHAT_DIVIDER_LONG : null;
         final String blank = blanks ? "" : null;
         final String beginning = prefixed ? Opal.get().getPrefix() : "";
 
