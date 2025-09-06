@@ -69,7 +69,7 @@ public final class OMessageBuilder {
     }
 
     @Contract("_ -> this")
-    public OMessageBuilder send(final @NotNull Iterable<CommandSender> senders) {
+    public OMessageBuilder send(final @NotNull Iterable<? extends CommandSender> senders) {
         final Component message = build();
 
         for (final CommandSender sender : senders) {
