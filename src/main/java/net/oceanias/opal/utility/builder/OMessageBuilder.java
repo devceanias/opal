@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 import org.bukkit.command.CommandSender;
 import net.kyori.adventure.text.Component;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.experimental.ExtensionMethod;
@@ -18,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings("unused")
 @Accessors(fluent = true)
 @ExtensionMethod(OStringExtension.class)
+@RequiredArgsConstructor
 public final class OMessageBuilder {
     @Getter
     private final OPlugin plugin;
@@ -35,10 +37,6 @@ public final class OMessageBuilder {
     @Getter
     @Setter
     private boolean blanks = false;
-
-    public OMessageBuilder(final OPlugin plugin) {
-        this.plugin = plugin;
-    }
 
     public OMessageBuilder text(final String message) {
         this.text = message;
