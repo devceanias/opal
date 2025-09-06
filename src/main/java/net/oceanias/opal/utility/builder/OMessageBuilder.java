@@ -16,30 +16,43 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
-@Getter
-@Setter
-@Accessors(chain = true)
+@Accessors(fluent = true)
 @ExtensionMethod(OStringExtension.class)
 public final class OMessageBuilder {
+    @Getter
     private final OPlugin plugin;
 
     private String text;
 
+    @Getter
+    @Setter
     private boolean prefixed = true;
+
+    @Getter
+    @Setter
     private boolean lines = false;
+
+    @Getter
+    @Setter
     private boolean blanks = false;
 
-    public OMessageBuilder(final OPlugin plugin, @NotNull final String message) {
+    public OMessageBuilder(final OPlugin plugin) {
         this.plugin = plugin;
+    }
+
+    public OMessageBuilder text(final String message) {
         this.text = message;
+
+        return this;
     }
 
-    public OMessageBuilder(final OPlugin plugin, @NotNull final List<String> lines) {
-        this.plugin = plugin;
-        this.text = String.join("\n", lines);
+    public OMessageBuilder text(final List<String> lines) {
+        text = String.join("\n", lines);
+
+        return this;
     }
 
-    public @NotNull Component getComponent() {
+    public @NotNull Component build() {
         final String divider = lines ? OStringExtension.CHAT_DIVIDER_LONG : null;
         final String blank = blanks ? "" : null;
         final String prefix = prefixed ? plugin.getPrefix() : "";
@@ -51,15 +64,15 @@ public final class OMessageBuilder {
     }
 
     @Contract("_ -> this")
-    public OMessageBuilder sendMessage(final @NotNull CommandSender sender) {
-        sender.sendMessage(getComponent());
+    public OMessageBuilder send(final @NotNull CommandSender sender) {
+        sender.sendMessage(build());
 
         return this;
     }
 
     @Contract("_ -> this")
-    public OMessageBuilder sendMessage(final @NotNull Iterable<CommandSender> senders) {
-        final Component message = getComponent();
+    public OMessageBuilder send(final @NotNull Iterable<CommandSender> senders) {
+        final Component message = build();
 
         for (final CommandSender sender : senders) {
             sender.sendMessage(message);
