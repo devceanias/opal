@@ -24,7 +24,7 @@ private val jars = object {
 }
 
 project.group = "net.oceanias"
-project.version = "1.0.8"
+project.version = "1.0.9"
 
 plugins {
     id("java-library")
