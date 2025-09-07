@@ -141,12 +141,12 @@ public abstract class OCommand implements OExecutable, OProvider {
                 }
 
                 if (seg.optional) {
-                    builder.append("&#FFFF00[").append(seg.name).append("]");
+                    builder.append("&e[").append(seg.name).append("]");
 
                     continue;
                 }
 
-                builder.append("&#FFFF00(").append(seg.name).append(")");
+                builder.append("&e(").append(seg.name).append(")");
             }
 
             final List<String> description = line.description;

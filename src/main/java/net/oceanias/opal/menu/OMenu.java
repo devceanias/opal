@@ -110,7 +110,7 @@ public abstract class OMenu {
                     .setPotionType(PotionType.LONG_FIRE_RESISTANCE)
                     .setName(Opal.get().getColour() + "Next Page")
                     .addLore(List.of(
-                        "&7• &fTransition: &#FFA500" + now + " &7/ &#FFA500" + max + " &7» &#FFFF00" + (now - 1) + " &7/ &#FFFF00" + max,
+                        "&7• &fTransition: &6" + now + " &7/ &6" + max + " &7» &e" + (now - 1) + " &7/ &e" + max,
                         "",
                         Opal.get().getColour() + "Click &7to show!"
                     ))

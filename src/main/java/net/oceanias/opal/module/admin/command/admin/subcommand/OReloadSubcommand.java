@@ -60,9 +60,9 @@ public final class OReloadSubcommand extends OSubcommand {
                 }
 
                 sender.actionDSR(
-                    "&fAll &#FFA500" +
+                    "&fAll &6" +
                     plugin.getDescription().getName() +
-                    " configurations &fhave been &#00FF00reloaded&f."
+                    " configurations &fhave been &areloaded&f."
                 );
 
                 sender.soundDSR(Sound.BLOCK_NOTE_BLOCK_BELL);
@@ -82,9 +82,9 @@ public final class OReloadSubcommand extends OSubcommand {
                         configuration.loadConfiguration();
 
                         sender.actionDSR(
-                            "&fThe &#FFA500" +
+                            "&fThe &6" +
                             configuration.getLabel() +
-                            " configuration &fhas been &#00FF00reloaded&f."
+                            " configuration &fhas been &areloaded&f."
                         );
 
                         sender.soundDSR(Sound.BLOCK_NOTE_BLOCK_BELL);

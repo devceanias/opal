@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import net.kyori.adventure.text.Component;
 import lombok.*;
 import lombok.experimental.Accessors;
@@ -58,22 +59,22 @@ public final class OMessage {
             .deserialize();
     }
 
-    @Contract("_ -> this")
-    public OMessage send(final @NotNull CommandSender sender) {
+    public void send(final @NotNull CommandSender sender) {
         sender.sendMessage(component());
-
-        return this;
     }
 
-    @Contract("_ -> this")
-    public OMessage send(final @NotNull Iterable<? extends CommandSender> senders) {
+    public void send(final @NotNull Iterable<? extends CommandSender> senders) {
         final Component message = component();
 
         for (final CommandSender sender : senders) {
             sender.sendMessage(message);
         }
+    }
 
-        return this;
+    public void broadcast() {
+        for (final Player sender : plugin.getServer().getOnlinePlayers()) {
+            send(sender);
+        }
     }
 
     @Contract(value = "_ -> new", pure = true)

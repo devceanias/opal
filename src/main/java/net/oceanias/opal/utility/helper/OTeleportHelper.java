@@ -40,7 +40,7 @@ public final class OTeleportHelper extends OListener.Bukkit {
         final UUID uuid = player.getUniqueId();
 
         if (pending.containsKey(uuid)) {
-            player.actionDSR("&fA &#FFA500teleportation &fis &#FF0000already &fpending.");
+            player.actionDSR("&fA &6teleportation &fis &calready &fpending.");
 
             return;
         }
@@ -75,7 +75,7 @@ public final class OTeleportHelper extends OListener.Bukkit {
 
             player.actionDSR(
                 Opal.get().getColour() +
-                "&fThe &#FFA500teleportation &fhas &#00FF00commenced&f."
+                "&fThe &6teleportation &fhas &acommenced&f."
             );
 
             player.soundDSR(Sound.ENTITY_ENDERMAN_TELEPORT);
@@ -94,7 +94,7 @@ public final class OTeleportHelper extends OListener.Bukkit {
         if (tasks != null) {
             tasks.forEach(BukkitTask::cancel);
 
-            player.actionDSR("&fThe &#FFA500teleportation &fhas been &#FF0000cancelled&f.");
+            player.actionDSR("&fThe &6teleportation &fhas been &ccancelled&f.");
             player.soundDSR(Sound.BLOCK_ANVIL_LAND, 1f, 0.5f);
         }
 
@@ -106,18 +106,18 @@ public final class OTeleportHelper extends OListener.Bukkit {
         final double percentage = (remaining / original) * 100;
 
         if (percentage > 67) {
-            return "&#FF0000";
+            return "&c";
         }
 
         if (percentage > 34) {
-            return "&#FFA500";
+            return "&6";
         }
 
         if (percentage > 0) {
-            return "&#00FF00";
+            return "&a";
         }
 
-        return "&#FFFF00";
+        return "&e";
     }
 
     @EventHandler

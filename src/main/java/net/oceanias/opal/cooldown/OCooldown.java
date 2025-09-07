@@ -63,7 +63,7 @@ public final class OCooldown {
     }
 
     public void showReminder(@NotNull final CommandSender sender) {
-        final String message = "&fPlease wait &#FFA500" + formatDuration(getRemaining(sender)) + "&f.";
+        final String message = "&fPlease wait &6" + formatDuration(getRemaining(sender)) + "&f.";
 
         if (sender instanceof ConsoleCommandSender) {
             sender.messageDSR(message);
