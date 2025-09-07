@@ -2,15 +2,15 @@ package net.oceanias.opal.utility.builder;
 
 import net.oceanias.opal.plugin.OPlugin;
 import net.oceanias.opal.utility.extension.OStringExtension;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.bukkit.command.CommandSender;
 import net.kyori.adventure.text.Component;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Singular;
+import lombok.*;
 import lombok.experimental.Accessors;
 import lombok.experimental.ExtensionMethod;
 import org.jetbrains.annotations.Contract;
@@ -20,21 +20,20 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @Accessors(fluent = true)
 @ExtensionMethod(OStringExtension.class)
-@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public final class OMessage {
     private final OPlugin plugin;
 
-    @Singular("line")
     private List<String> lines;
 
-    @Builder.Default
-    private boolean prefix = true;
+    @Setter
+    private boolean prefix;
 
-    @Builder.Default
-    private boolean dividers = false;
+    @Setter
+    private boolean dividers;
 
-    @Builder.Default
-    private boolean blanks = false;
+    @Setter
+    private boolean blanks;
 
     public @NotNull Component component() {
         final String addDividers = dividers ? OStringExtension.CHAT_DIVIDER_LONG : null;
@@ -64,5 +63,46 @@ public final class OMessage {
         }
 
         return this;
+    }
+
+    @Contract(value = "_ -> new", pure = true)
+    public static @NotNull OMessageBuilder builder(final OPlugin plugin) {
+        return new OMessageBuilder(plugin);
+    }
+
+    @Getter
+    public static class OMessageBuilder {
+        private final OPlugin plugin;
+
+        private final List<String> lines = new ArrayList<>();
+
+        @Setter
+        private boolean prefix = true;
+
+        @Setter
+        private boolean dividers = false;
+
+        @Setter
+        private boolean blanks = false;
+
+        public OMessageBuilder(final OPlugin plugin) {
+            this.plugin = plugin;
+        }
+
+        public OMessageBuilder line(final String line) {
+            lines.add(line);
+
+            return this;
+        }
+
+        public OMessageBuilder lines(final Collection<String> lines) {
+            this.lines.addAll(lines);
+
+            return this;
+        }
+
+        public OMessage build() {
+            return new OMessage(plugin, lines, prefix, dividers, blanks);
+        }
     }
 }
