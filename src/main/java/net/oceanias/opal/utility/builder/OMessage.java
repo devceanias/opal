@@ -3,7 +3,6 @@ package net.oceanias.opal.utility.builder;
 import net.oceanias.opal.plugin.OPlugin;
 import net.oceanias.opal.utility.extension.OStringExtension;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -24,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 public final class OMessage {
     private final OPlugin plugin;
 
-    private List<String> lines;
+    private final List<String> lines;
 
     @Setter
     private boolean prefix;
@@ -34,6 +33,18 @@ public final class OMessage {
 
     @Setter
     private boolean blanks;
+
+    public OMessage line(final String line) {
+        lines.add(line);
+
+        return this;
+    }
+
+    public OMessage lines(final List<String> lines) {
+        this.lines.addAll(lines);
+
+        return this;
+    }
 
     public @NotNull Component component() {
         final String addDividers = dividers ? OStringExtension.CHAT_DIVIDER_LONG : null;
@@ -95,7 +106,7 @@ public final class OMessage {
             return this;
         }
 
-        public OMessageBuilder lines(final Collection<String> lines) {
+        public OMessageBuilder lines(final List<String> lines) {
             this.lines.addAll(lines);
 
             return this;
