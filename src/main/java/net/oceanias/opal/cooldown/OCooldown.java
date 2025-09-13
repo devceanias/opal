@@ -2,9 +2,9 @@ package net.oceanias.opal.cooldown;
 
 import net.oceanias.opal.plugin.OPlugin;
 import net.oceanias.opal.utility.extension.OCommandSenderExtension;
+import net.oceanias.opal.utility.helper.ODurationHelper;
 import net.oceanias.opal.utility.helper.OTaskHelper;
 import java.time.Duration;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.bukkit.Sound;
@@ -63,7 +63,7 @@ public final class OCooldown {
     }
 
     public void showReminder(@NotNull final CommandSender sender) {
-        final String message = "&fPlease wait &6" + formatDuration(getRemaining(sender)) + "&f.";
+        final String message = "&fPlease wait &6" + ODurationHelper.formatFullDuration(getRemaining(sender)) + "&f.";
 
         if (sender instanceof ConsoleCommandSender) {
             sender.messageDSR(message);
@@ -111,32 +111,5 @@ public final class OCooldown {
         }
 
         showReminder(sender);
-    }
-
-    private static String formatDuration(@NotNull final Duration duration) {
-        final List<Pair<String, Long>> units = List.of(
-            Pair.of("day", duration.toDays()),
-            Pair.of("hour", duration.toHours() % 24),
-            Pair.of("minute", duration.toMinutes() % 60),
-            Pair.of("second", duration.toSeconds() % 60)
-        );
-
-        final List<String> parts = units.stream()
-            .filter(unit -> unit.getRight() > 0)
-            .map(unit -> {
-                final String extension = (unit.getRight() == 1L)
-                    ? ""
-                    : "s";
-
-                return unit.getRight() + " " + unit.getLeft() + extension;
-            })
-            .toList();
-
-        return switch (parts.size()) {
-            case 0 -> "less than a second";
-            case 1 -> parts.get(0);
-            case 2 -> parts.get(0) + " and " + parts.get(1);
-            default -> String.join(", ", parts.subList(0, parts.size() - 1)) + ", and " + parts.getLast();
-        };
     }
 }
