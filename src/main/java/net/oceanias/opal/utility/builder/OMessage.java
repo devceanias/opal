@@ -1,12 +1,15 @@
 package net.oceanias.opal.utility.builder;
 
 import net.oceanias.opal.plugin.OPlugin;
+import net.oceanias.opal.utility.constant.OFeedbackSound;
+import net.oceanias.opal.utility.extension.OCommandSenderExtension;
 import net.oceanias.opal.utility.extension.OStringExtension;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import net.kyori.adventure.text.Component;
@@ -19,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings("unused")
 @Getter
 @Accessors(fluent = true)
-@ExtensionMethod(OStringExtension.class)
+@ExtensionMethod({ OStringExtension.class, OCommandSenderExtension.class })
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public final class OMessage {
     private final OPlugin plugin;
@@ -35,6 +38,8 @@ public final class OMessage {
     @Setter
     private boolean blanks;
 
+    private Sound sound;
+
     public OMessage line(final String line) {
         lines.add(line);
 
@@ -43,6 +48,18 @@ public final class OMessage {
 
     public OMessage lines(final List<String> lines) {
         this.lines.addAll(lines);
+
+        return this;
+    }
+
+    public OMessage sound(final @NotNull OFeedbackSound sound) {
+        this.sound = sound.getDelegate();
+
+        return this;
+    }
+
+    public OMessage sound(final Sound sound) {
+        this.sound = sound;
 
         return this;
     }
@@ -61,6 +78,12 @@ public final class OMessage {
 
     public void send(final @NotNull CommandSender sender) {
         sender.sendMessage(component());
+
+        if (sound == null) {
+            return;
+        }
+
+        sender.soundDSR(sound);
     }
 
     public void send(final @NotNull Iterable<? extends CommandSender> senders) {
@@ -68,12 +91,26 @@ public final class OMessage {
 
         for (final CommandSender sender : senders) {
             sender.sendMessage(message);
+
+            if (sound == null) {
+                continue;
+            }
+
+            sender.soundDSR(sound);
         }
     }
 
     public void broadcast() {
+        final Component message = component();
+
         for (final Player sender : plugin.getServer().getOnlinePlayers()) {
-            send(sender);
+            sender.sendMessage(message);
+
+            if (sound == null) {
+                continue;
+            }
+
+            sender.soundDSR(sound);
         }
     }
 
@@ -97,6 +134,8 @@ public final class OMessage {
         @Setter
         private boolean blanks = false;
 
+        private Sound sound;
+
         public OMessageBuilder(final OPlugin plugin) {
             this.plugin = plugin;
         }
@@ -113,8 +152,20 @@ public final class OMessage {
             return this;
         }
 
+        public OMessageBuilder sound(final @NotNull OFeedbackSound sound) {
+            this.sound = sound.getDelegate();
+
+            return this;
+        }
+
+        public OMessageBuilder sound(final Sound sound) {
+            this.sound = sound;
+
+            return this;
+        }
+
         public OMessage build() {
-            return new OMessage(plugin, lines, prefix, dividers, blanks);
+            return new OMessage(plugin, lines, prefix, dividers, blanks, sound);
         }
     }
 }
