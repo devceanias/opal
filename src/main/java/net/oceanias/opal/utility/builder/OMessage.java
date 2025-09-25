@@ -67,10 +67,10 @@ public final class OMessage {
     public @NotNull Component component() {
         final String addDividers = dividers ? OStringExtension.CHAT_DIVIDER_LONG : null;
         final String addBlanks = blanks ? "" : null;
-        final String addPrefix = prefix ? plugin.getPrefix() : "";
+        final String addPrefix = prefix ? plugin.getPrefix() + " ": "";
         final String joinedText = lines != null ? String.join("\n", lines) : "";
 
-        return Stream.of(addDividers, addBlanks, addPrefix + " " + joinedText, addBlanks, addDividers)
+        return Stream.of(addDividers, addBlanks, addPrefix + joinedText, addBlanks, addDividers)
             .filter(Objects::nonNull)
             .collect(Collectors.joining("\n"))
             .deserialize();
