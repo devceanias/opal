@@ -1,6 +1,6 @@
-package net.oceanias.opal.option.impl;
+package net.oceanias.opal.setting.impl;
 
-import net.oceanias.opal.option.Option;
+import net.oceanias.opal.setting.OSetting;
 import net.oceanias.opal.utility.builder.OItemBuilder;
 import net.oceanias.opal.utility.extension.OCommandSenderExtension;
 import java.util.ArrayList;
@@ -18,8 +18,8 @@ import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
 @ExtensionMethod(OCommandSenderExtension.class)
-public final class BooleanOption extends Option<Boolean> {
-    public BooleanOption(final String pretty, final boolean initial) {
+public final class OBooleanSetting extends OSetting<Boolean> {
+    public OBooleanSetting(final String pretty, final boolean initial) {
         super(pretty, initial);
     }
 
@@ -30,15 +30,15 @@ public final class BooleanOption extends Option<Boolean> {
 
     @RequiredArgsConstructor
     public static final class Item extends AbstractItem {
-        private final BooleanOption option;
+        private final OBooleanSetting setting;
 
         @Override
         public ItemProvider getItemProvider(final Player viewer) {
-            final Boolean value = option.value;
-            final Material material = option.material;
+            final Boolean value = setting.value;
+            final Material material = setting.material;
             final String state = value ? "&aEnabled" : "&cDisabled";
 
-            final List<String> description = option.description;
+            final List<String> description = setting.description;
             final List<String> lore = new ArrayList<>();
 
             final Material type = material != null
@@ -56,7 +56,7 @@ public final class BooleanOption extends Option<Boolean> {
             lore.add("&eClick &7to toggle!");
 
             return new OItemBuilder(type)
-                .setName("&e" + option.pretty)
+                .setName("&e" + setting.pretty)
                 .addLore(lore);
         }
 
@@ -64,7 +64,7 @@ public final class BooleanOption extends Option<Boolean> {
         public void handleClick(
             @NotNull final ClickType click, @NotNull final Player player, @NotNull final InventoryClickEvent event
         ) {
-            option.value(!option.value);
+            setting.value(!setting.value);
 
             player.soundDSR(Sound.BLOCK_NOTE_BLOCK_PLING);
 

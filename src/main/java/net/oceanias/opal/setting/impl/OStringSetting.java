@@ -1,9 +1,9 @@
-package net.oceanias.opal.option.impl;
+package net.oceanias.opal.setting.impl;
 
 import net.oceanias.opal.Opal;
 import net.oceanias.opal.listener.OListener;
 import net.oceanias.opal.menu.OMenu;
-import net.oceanias.opal.option.Option;
+import net.oceanias.opal.setting.OSetting;
 import net.oceanias.opal.plugin.OPlugin;
 import net.oceanias.opal.utility.builder.OItemBuilder;
 import net.oceanias.opal.utility.builder.OMessage;
@@ -40,14 +40,14 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings("unused")
 @ExtensionMethod({ OComponentExtension.class, OCommandSenderExtension.class })
 @Getter
-public final class StringOption extends Option<String> {
+public final class OStringSetting extends OSetting<String> {
     private final Integer limit;
 
-    public StringOption(final String pretty, final String initial) {
+    public OStringSetting(final String pretty, final String initial) {
         this(pretty, initial, null);
     }
 
-    public StringOption(final String pretty, final String initial, final Integer limit) {
+    public OStringSetting(final String pretty, final String initial, final Integer limit) {
         super(pretty, initial);
 
         this.limit = limit;
@@ -69,16 +69,16 @@ public final class StringOption extends Option<String> {
 
     @RequiredArgsConstructor
     public static final class Item extends AbstractItem {
-        private final StringOption option;
+        private final OStringSetting setting;
 
         @Override
         public ItemProvider getItemProvider(final Player viewer) {
-            final Material material = option.material;
+            final Material material = setting.material;
 
-            final List<String> description = option.description;
+            final List<String> description = setting.description;
             final List<String> lore = new ArrayList<>();
 
-            final Integer limit = option.limit;
+            final Integer limit = setting.limit;
 
             final Material type = material != null
                 ? material
@@ -89,7 +89,7 @@ public final class StringOption extends Option<String> {
                 lore.add("");
             }
 
-            addCurrentLore(lore, option.value);
+            addCurrentLore(lore, setting.value);
 
             if (limit != null) {
                 lore.add("");
@@ -100,7 +100,7 @@ public final class StringOption extends Option<String> {
             lore.add("&eClick &7to change!");
 
             return new OItemBuilder(type)
-                .setName("&e" + option.pretty)
+                .setName("&e" + setting.pretty)
                 .addLore(lore);
         }
 
@@ -128,7 +128,7 @@ public final class StringOption extends Option<String> {
                 .build()
                 .send(player);
 
-            Listener.get().awaitInput(player, option, menu);
+            Listener.get().awaitInput(player, setting, menu);
         }
 
         private void addCurrentLore(final @NotNull List<String> lore, final @NotNull String value) {
@@ -185,7 +185,7 @@ public final class StringOption extends Option<String> {
         private static final Duration TIMEOUT_DURATION = Duration.ofSeconds(45);
         private static final String CANCEL_KEYWORD = "cancel";
 
-        private static final Map<UUID, StringOption> AWAITING_INPUT = new ConcurrentHashMap<>();
+        private static final Map<UUID, OStringSetting> AWAITING_INPUT = new ConcurrentHashMap<>();
         private static final Map<UUID, BukkitTask> TIMEOUT_TASKS = new ConcurrentHashMap<>();
         private static final Map<UUID, OMenu> PREVIOUS_MENUS = new ConcurrentHashMap<>();
 
@@ -196,12 +196,12 @@ public final class StringOption extends Option<String> {
             return plugin;
         }
 
-        public void awaitInput(final @NotNull Player player, final StringOption option, final OMenu menu) {
+        public void awaitInput(final @NotNull Player player, final OStringSetting setting, final OMenu menu) {
             final UUID uuid = player.getUniqueId();
 
             cancelTimeout(player);
 
-            AWAITING_INPUT.put(uuid, option);
+            AWAITING_INPUT.put(uuid, setting);
 
             final BukkitTask task = OTaskHelper.runTaskLater(() -> {
                 if (AWAITING_INPUT.remove(uuid) == null) {
@@ -252,8 +252,9 @@ public final class StringOption extends Option<String> {
                 return;
             }
 
-            final StringOption option = AWAITING_INPUT.get(uuid);
-            final Integer limit = option.limit;
+            final OStringSetting setting = AWAITING_INPUT.get(uuid);
+
+            final Integer limit = setting.limit;
             final String message = event.message().serialize();
 
             event.setCancelled(true);
@@ -288,7 +289,7 @@ public final class StringOption extends Option<String> {
                 return;
             }
 
-            option.value(message);
+            setting.value(message);
 
             player.soundDSR(Sound.BLOCK_NOTE_BLOCK_HARP);
 

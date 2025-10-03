@@ -1,6 +1,6 @@
-package net.oceanias.opal.option.impl;
+package net.oceanias.opal.setting.impl;
 
-import net.oceanias.opal.option.Option;
+import net.oceanias.opal.setting.OSetting;
 import net.oceanias.opal.utility.builder.OItemBuilder;
 import net.oceanias.opal.utility.extension.OCommandSenderExtension;
 import java.util.ArrayList;
@@ -19,15 +19,15 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings("unused")
 @ExtensionMethod(OCommandSenderExtension.class)
 @Getter
-public final class DoubleOption extends Option<Double> {
+public final class ODoubleSetting extends OSetting<Double> {
     private final Double min;
     private final Double max;
 
-    public DoubleOption(final String pretty, final double initial) {
+    public ODoubleSetting(final String pretty, final double initial) {
         this(pretty, initial, null, null);
     }
 
-    public DoubleOption(final String pretty, final double initial, final Double min, final Double max) {
+    public ODoubleSetting(final String pretty, final double initial, final Double min, final Double max) {
         super(pretty, initial);
 
         this.min = min;
@@ -53,27 +53,27 @@ public final class DoubleOption extends Option<Double> {
     }
 
     public class Item extends AbstractItem {
-        private final DoubleOption option;
+        private final ODoubleSetting setting;
         private final double change;
 
-        public Item(final DoubleOption option) {
-            this(option, 0.5);
+        public Item(final ODoubleSetting setting) {
+            this(setting, 0.5);
         }
 
-        public Item(final DoubleOption option, final double change) {
-            this.option = option;
+        public Item(final ODoubleSetting setting, final double change) {
+            this.setting = setting;
             this.change = Math.round(change * 10000.0) / 10000.0;
         }
 
         @Override
         public ItemProvider getItemProvider(final Player viewer) {
-            final Material material = option.material;
+            final Material material = setting.material;
 
-            final List<String> description = option.description;
+            final List<String> description = setting.description;
             final List<String> lore = new ArrayList<>();
 
-            final Double min = option.min;
-            final Double max = option.max;
+            final Double min = setting.min;
+            final Double max = setting.max;
 
             final Material type = material != null
                 ? material
@@ -84,7 +84,7 @@ public final class DoubleOption extends Option<Double> {
                 lore.add("");
             }
 
-            lore.add("&fCurrent: &6" + String.format("%.2f", option.value));
+            lore.add("&fCurrent: &6" + String.format("%.2f", setting.value));
 
             if (min != null) {
                 lore.add("&fMinimum: &c" + String.format("%.2f", min));
@@ -100,7 +100,7 @@ public final class DoubleOption extends Option<Double> {
             lore.add("&eShift-click &7to change by &n" + (change * 10.0) + "&7.");
 
             return new OItemBuilder(type)
-                .setName("&e" + option.pretty)
+                .setName("&e" + setting.pretty)
                 .addLore(lore);
         }
 
@@ -108,7 +108,7 @@ public final class DoubleOption extends Option<Double> {
         public void handleClick(
             @NotNull final ClickType click, @NotNull final Player player, @NotNull final InventoryClickEvent event
         ) {
-            final double current = option.value;
+            final double current = setting.value;
 
             double change = this.change;
 
@@ -117,9 +117,9 @@ public final class DoubleOption extends Option<Double> {
             }
 
             if (click.isLeftClick()) {
-                option.value(current + change);
+                setting.value(current + change);
             } else if (click.isRightClick()) {
-                option.value(current - change);
+                setting.value(current - change);
             }
 
             player.soundDSR(Sound.BLOCK_NOTE_BLOCK_CHIME);

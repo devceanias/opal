@@ -1,6 +1,6 @@
-package net.oceanias.opal.option.impl;
+package net.oceanias.opal.setting.impl;
 
-import net.oceanias.opal.option.Option;
+import net.oceanias.opal.setting.OSetting;
 import net.oceanias.opal.utility.builder.OItemBuilder;
 import net.oceanias.opal.utility.extension.OCommandSenderExtension;
 import java.util.ArrayList;
@@ -19,15 +19,15 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings("unused")
 @ExtensionMethod(OCommandSenderExtension.class)
 @Getter
-public final class IntegerOption extends Option<Integer> {
+public final class OIntegerSetting extends OSetting<Integer> {
     private final Integer min;
     private final Integer max;
 
-    public IntegerOption(final String pretty, final int initial) {
+    public OIntegerSetting(final String pretty, final int initial) {
         this(pretty, initial, null, null);
     }
 
-    public IntegerOption(final String pretty, final int initial, final Integer min, final Integer max) {
+    public OIntegerSetting(final String pretty, final int initial, final Integer min, final Integer max) {
         super(pretty, initial);
 
         this.min = min;
@@ -53,27 +53,27 @@ public final class IntegerOption extends Option<Integer> {
     }
 
     public class Item extends AbstractItem {
-        private final IntegerOption option;
+        private final OIntegerSetting setting;
         private final int change;
 
-        public Item(final IntegerOption option) {
-            this(option, 1);
+        public Item(final OIntegerSetting setting) {
+            this(setting, 1);
         }
 
-        public Item(final IntegerOption option, final int change) {
-            this.option = option;
+        public Item(final OIntegerSetting setting, final int change) {
+            this.setting = setting;
             this.change = change;
         }
 
         @Override
         public ItemProvider getItemProvider(final Player viewer) {
-            final Material material = option.material;
+            final Material material = setting.material;
 
-            final List<String> description = option.description;
+            final List<String> description = setting.description;
             final List<String> lore = new ArrayList<>();
 
-            final Integer min = option.min;
-            final Integer max = option.max;
+            final Integer min = setting.min;
+            final Integer max = setting.max;
 
             final Material type = material != null
                 ? material
@@ -84,7 +84,7 @@ public final class IntegerOption extends Option<Integer> {
                 lore.add("");
             }
 
-            lore.add("&fCurrent: &6" + option.value);
+            lore.add("&fCurrent: &6" + setting.value);
 
             if (min != null) {
                 lore.add("&fMinimum: &c" + min);
@@ -100,7 +100,7 @@ public final class IntegerOption extends Option<Integer> {
             lore.add("&eShift-click &7to change by &n" + (change * 10) + "&7.");
 
             return new OItemBuilder(type)
-                .setName("&e" + option.pretty)
+                .setName("&e" + setting.pretty)
                 .addLore(lore);
         }
 
@@ -108,7 +108,7 @@ public final class IntegerOption extends Option<Integer> {
         public void handleClick(
             @NotNull final ClickType click, @NotNull final Player player, @NotNull final InventoryClickEvent event
         ) {
-            final int current = option.value;
+            final int current = setting.value;
 
             int change = this.change;
 
@@ -117,9 +117,9 @@ public final class IntegerOption extends Option<Integer> {
             }
 
             if (click.isLeftClick()) {
-                option.value(current + change);
+                setting.value(current + change);
             } else if (click.isRightClick()) {
-                option.value(current - change);
+                setting.value(current - change);
             }
 
             player.soundDSR(Sound.BLOCK_NOTE_BLOCK_CHIME);

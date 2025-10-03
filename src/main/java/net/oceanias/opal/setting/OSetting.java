@@ -1,4 +1,4 @@
-package net.oceanias.opal.option;
+package net.oceanias.opal.setting;
 
 import java.util.List;
 import org.bukkit.Material;
@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 @SuppressWarnings("unused")
 @Getter
 @Accessors(fluent = true, chain = false)
-public abstract class Option<T> {
+public abstract class OSetting<T> {
     protected final String pretty;
     protected final T initial;
 
@@ -22,7 +22,7 @@ public abstract class Option<T> {
     @Setter
     protected T value;
 
-    protected Option(final String pretty, final T initial) {
+    protected OSetting(final String pretty, final T initial) {
         this.pretty = pretty;
         this.initial = initial;
 
