@@ -32,13 +32,13 @@ public final class OChoiceSetting<T> extends OSetting<T> {
             return;
         }
 
-        throw new IllegalArgumentException("Error creating setting; initial value must be in choices.");
+        throw new IllegalArgumentException("Error creating setting; initial value must be in choices list.");
     }
 
     @Override
     public void value(final T value) {
         if (!choices.contains(value)) {
-            return;
+            throw new IllegalArgumentException("Error updating setting; new value must be in choices list.");
         }
 
         this.value = value;

@@ -23,6 +23,10 @@ public abstract class OSetting<T> {
     protected T value;
 
     protected OSetting(final String pretty, final T initial) {
+        if (initial == null) {
+            throw new IllegalArgumentException("Error creating setting; initial value must not be null.");
+        }
+
         this.pretty = pretty;
         this.initial = initial;
 
