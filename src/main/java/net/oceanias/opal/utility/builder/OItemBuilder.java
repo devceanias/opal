@@ -2,6 +2,7 @@ package net.oceanias.opal.utility.builder;
 
 import net.oceanias.opal.utility.extension.OComponentExtension;
 import net.oceanias.opal.utility.extension.OStringExtension;
+import net.oceanias.opal.utility.helper.OTextHelper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -83,7 +84,7 @@ public final class OItemBuilder implements ItemProvider {
                 : new ArrayList<>();
 
             if (divider) {
-                lore.add(OStringExtension.LORE_DIVIDER.deserialize());
+                lore.add(OTextHelper.LORE_DIVIDER_LONG.deserialize());
             }
 
             for (final String line : lines) {

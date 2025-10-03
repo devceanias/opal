@@ -10,15 +10,6 @@ import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
 public final class OStringExtension {
-    public static final String CHAT_DIVIDER_SHORT =
-        "&7&m                                                            ";
-
-    public static final String CHAT_DIVIDER_LONG =
-        "&7&m                                                                              ";
-
-    public static final String LORE_DIVIDER =
-        "&8&m                                              ";
-
     private static final Map<String, String> REPLACEMENTS_MAP = Map.ofEntries(
         Map.entry("&1", "&#0000E7"), Map.entry("[dark_blue]", "&#0000E7"),
         Map.entry("&2", "&#2BB02B"), Map.entry("[dark_green]", "&#2BB02B"),

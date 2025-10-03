@@ -4,6 +4,7 @@ import net.oceanias.opal.plugin.OPlugin;
 import net.oceanias.opal.utility.constant.OFeedbackSound;
 import net.oceanias.opal.utility.extension.OCommandSenderExtension;
 import net.oceanias.opal.utility.extension.OStringExtension;
+import net.oceanias.opal.utility.helper.OTextHelper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -65,7 +66,7 @@ public final class OMessage {
     }
 
     public @NotNull Component component() {
-        final String addDividers = dividers ? OStringExtension.CHAT_DIVIDER_LONG : null;
+        final String addDividers = dividers ? OTextHelper.CHAT_DIVIDER_LONG : null;
         final String addBlanks = blanks ? "" : null;
         final String addPrefix = prefix ? plugin.getPrefix() + " ": "";
         final String joinedText = lines != null ? String.join("\n", lines) : "";

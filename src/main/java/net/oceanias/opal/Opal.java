@@ -5,6 +5,7 @@ import net.oceanias.opal.configuration.impl.OPrimaryConfig;
 import net.oceanias.opal.database.ODatabase;
 import net.oceanias.opal.component.impl.OModule;
 import net.oceanias.opal.module.admin.OAdminModule;
+import net.oceanias.opal.option.impl.StringOption;
 import net.oceanias.opal.plugin.OPlugin;
 import net.oceanias.opal.utility.helper.OTeleportHelper;
 import java.util.List;
@@ -61,6 +62,7 @@ public final class Opal extends OPlugin {
 
     @Override
     protected void enablePlugin() {
+        new StringOption.Listener(this).registerInternally();
         new OTeleportHelper(this).registerInternally();
     }
 }

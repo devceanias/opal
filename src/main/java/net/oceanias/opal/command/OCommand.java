@@ -4,6 +4,7 @@ import net.oceanias.opal.component.impl.OProvider;
 import net.oceanias.opal.plugin.OPlugin;
 import net.oceanias.opal.utility.extension.OCommandSenderExtension;
 import net.oceanias.opal.utility.extension.OStringExtension;
+import net.oceanias.opal.utility.helper.OTextHelper;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -124,7 +125,7 @@ public abstract class OCommand implements OExecutable, OProvider {
 
     private void sendHelp(final CommandSender sender, final CommandArguments args) {
         final List<Component> lines = new ArrayList<>(List.of(
-            OStringExtension.CHAT_DIVIDER_LONG.deserialize(),
+            OTextHelper.CHAT_DIVIDER_LONG.deserialize(),
             (getPlugin().getColour() + WordUtils.capitalize(getLabel()) + " Commands:").deserialize()
         ));
 
@@ -162,7 +163,7 @@ public abstract class OCommand implements OExecutable, OProvider {
             lines.add(component);
         }
 
-        lines.add(OStringExtension.CHAT_DIVIDER_LONG.deserialize());
+        lines.add(OTextHelper.CHAT_DIVIDER_LONG.deserialize());
 
         sender.sendMessage(Component.join(JoinConfiguration.separator(Component.newline()), lines));
         sender.soundDSR(Sound.BLOCK_NOTE_BLOCK_CHIME);
