@@ -3,7 +3,7 @@ package net.oceanias.opal.module.admin.command.admin;
 import net.oceanias.opal.Opal;
 import net.oceanias.opal.command.OCommand;
 import net.oceanias.opal.command.OSubcommand;
-import net.oceanias.opal.module.admin.command.admin.subcommand.OReloadSubcommand;
+import net.oceanias.opal.module.admin.command.admin.sub.OReloadSubcommand;
 import net.oceanias.opal.plugin.OPlugin;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package net.oceanias.opal.module.admin.command.admin.subcommand;
+package net.oceanias.opal.module.admin.command.admin.sub;
 
 import net.oceanias.opal.Opal;
 import net.oceanias.opal.command.OCommand;
