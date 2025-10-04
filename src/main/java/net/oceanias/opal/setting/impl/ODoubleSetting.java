@@ -47,12 +47,7 @@ public final class ODoubleSetting extends OSetting<Double> {
         this.value = value;
     }
 
-    @Override
-    public Type type() {
-        return Type.DOUBLE;
-    }
-
-    public class Item extends AbstractItem {
+    public static class Item extends AbstractItem {
         private final ODoubleSetting setting;
         private final double change;
 

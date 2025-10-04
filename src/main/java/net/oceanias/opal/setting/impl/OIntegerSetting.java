@@ -47,12 +47,7 @@ public final class OIntegerSetting extends OSetting<Integer> {
         this.value = value;
     }
 
-    @Override
-    public Type type() {
-        return Type.INTEGER;
-    }
-
-    public class Item extends AbstractItem {
+    public static class Item extends AbstractItem {
         private final OIntegerSetting setting;
         private final int change;
 

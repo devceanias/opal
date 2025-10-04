@@ -62,13 +62,8 @@ public final class OStringSetting extends OSetting<String> {
         this.value = value;
     }
 
-    @Override
-    public Type type() {
-        return Type.STRING;
-    }
-
     @RequiredArgsConstructor
-    public static final class Item extends AbstractItem {
+    public static class Item extends AbstractItem {
         private final OStringSetting setting;
 
         @Override

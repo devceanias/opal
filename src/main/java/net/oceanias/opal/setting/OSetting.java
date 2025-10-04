@@ -36,14 +36,4 @@ public abstract class OSetting<T> {
     public void reset() {
         this.value = initial;
     }
-
-    public abstract Type type();
-
-    public enum Type {
-        BOOLEAN,
-        CHOICE,
-        DOUBLE,
-        INTEGER,
-        STRING,
-    }
 }

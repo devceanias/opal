@@ -23,13 +23,8 @@ public final class OBooleanSetting extends OSetting<Boolean> {
         super(pretty, initial);
     }
 
-    @Override
-    public Type type() {
-        return Type.BOOLEAN;
-    }
-
     @RequiredArgsConstructor
-    public static final class Item extends AbstractItem {
+    public static class Item extends AbstractItem {
         private final OBooleanSetting setting;
 
         @Override

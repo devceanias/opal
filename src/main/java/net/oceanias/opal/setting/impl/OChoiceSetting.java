@@ -44,13 +44,8 @@ public final class OChoiceSetting<T> extends OSetting<T> {
         this.value = value;
     }
 
-    @Override
-    public Type type() {
-        return Type.CHOICE;
-    }
-
     @RequiredArgsConstructor
-    public static final class Item<T> extends AbstractItem {
+    public static class Item<T> extends AbstractItem {
         private final OChoiceSetting<T> setting;
 
         @Override
@@ -71,7 +66,7 @@ public final class OChoiceSetting<T> extends OSetting<T> {
 
             lore.add("&fCurrent: &6" + setting.value);
             lore.add("");
-            lore.add("&fChoices:");
+            lore.add("&eChoices:");
 
             for (final T choice : setting.choices) {
                 final String colour = choice.equals(setting.value) ? "&a" : "&7";
