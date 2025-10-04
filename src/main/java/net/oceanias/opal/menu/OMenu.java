@@ -54,8 +54,18 @@ public abstract class OMenu {
     }
 
     public static final class Previous extends PageItem {
+        private final OMenu back;
+
         public Previous() {
             super(false);
+
+            this.back = null;
+        }
+
+        public Previous(final OMenu back) {
+            super(false);
+
+            this.back = back;
         }
 
         @Override
@@ -65,12 +75,24 @@ public abstract class OMenu {
 
             if (gui.hasPreviousPage()) {
                 return new OItemBuilder(Material.TIPPED_ARROW)
-                    .setPotionType(PotionType.LONG_LEAPING)
+                    .setPotionType(PotionType.SWIFTNESS)
                     .setName(Opal.get().getColour() + "Previous Page")
                     .addLore(List.of(
-                        "&7• &fTransition: &e" + now + " &7/ &e" + max + " &7» &6" + (now + 1) + " &7/ &6" + max,
+                        "&fPage: &e" + now + "&7/&e" + max + " &7» &a" + (now + 1) + "&7/&a" + max,
                         "",
-                        Opal.get().getColour() + "Click &7to show!"
+                        Opal.get().getColour() + "Click &7to turn!"
+                    ))
+                    .addGlint()
+                    .hideFlags();
+            }
+
+            if (back != null) {
+                return new OItemBuilder(Material.SPECTRAL_ARROW)
+                    .setName(Opal.get().getColour() + "Go Back")
+                    .addLore(List.of(
+                        "&fMenu: &6" + back.getWindow(back.getGui(null), null),
+                        "",
+                        Opal.get().getColour() + "Click &7to use!"
                     ))
                     .addGlint()
                     .hideFlags();
@@ -85,13 +107,17 @@ public abstract class OMenu {
             final @NotNull Player player,
             final @NotNull InventoryClickEvent event
         ) {
-            if (!getGui().hasNextPage()) {
+            if (getGui().hasPreviousPage()) {
+                super.handleClick(click, player, event);
+
+                player.soundDSR(Sound.ITEM_BOOK_PAGE_TURN);
+            }
+
+            if (back == null) {
                 return;
             }
 
-            super.handleClick(click, player, event);
-
-            player.soundDSR(Sound.ITEM_BOOK_PAGE_TURN);
+            back.openMenu(player);
         }
     }
 
@@ -107,12 +133,12 @@ public abstract class OMenu {
 
             if (gui.hasNextPage()) {
                 return new OItemBuilder(Material.TIPPED_ARROW)
-                    .setPotionType(PotionType.LONG_FIRE_RESISTANCE)
+                    .setPotionType(PotionType.SWIFTNESS)
                     .setName(Opal.get().getColour() + "Next Page")
                     .addLore(List.of(
-                        "&7• &fTransition: &6" + now + " &7/ &6" + max + " &7» &e" + (now - 1) + " &7/ &e" + max,
+                        "&fPage: &e" + now + "&7/&e" + max + " &7» &a" + (now - 1) + "&7/&a" + max,
                         "",
-                        Opal.get().getColour() + "Click &7to show!"
+                        Opal.get().getColour() + "Click &7to turn!"
                     ))
                     .addGlint()
                     .hideFlags();

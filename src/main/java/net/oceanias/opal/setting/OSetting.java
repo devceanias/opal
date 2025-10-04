@@ -2,24 +2,29 @@ package net.oceanias.opal.setting;
 
 import java.util.List;
 import org.bukkit.Material;
+import xyz.xenondevs.invui.item.Item;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({ "unused", "unchecked" })
 @Getter
-@Accessors(fluent = true, chain = false)
-public abstract class OSetting<T> {
+public abstract class OSetting<T, S extends OSetting<T, S>> {
+    @Accessors(fluent = true)
     protected final String pretty;
+
+    @Accessors(fluent = true)
+
     protected final T initial;
 
-    @Setter
+    @Accessors(fluent = true)
     protected List<String> description;
 
-    @Setter
+    @Accessors(fluent = true)
     protected Material material;
 
     @Setter
+    @Accessors(fluent = true, chain = false)
     protected T value;
 
     protected OSetting(final String pretty, final T initial) {
@@ -33,7 +38,25 @@ public abstract class OSetting<T> {
         value = initial;
     }
 
-    public void reset() {
-        this.value = initial;
+    protected S self() {
+        return (S) this;
     }
+
+    public S description(final List<String> description) {
+        this.description = description;
+
+        return self();
+    }
+
+    public S material(final Material material) {
+        this.material = material;
+
+        return self();
+    }
+
+    public final void reset() {
+        value = initial;
+    }
+
+    public abstract Item item();
 }

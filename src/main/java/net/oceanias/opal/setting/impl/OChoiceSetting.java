@@ -15,12 +15,13 @@ import xyz.xenondevs.invui.item.impl.AbstractItem;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.ExtensionMethod;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 @ExtensionMethod(OCommandSenderExtension.class)
 @SuppressWarnings("unused")
 @Getter
-public final class OChoiceSetting<T> extends OSetting<T> {
+public final class OChoiceSetting<T> extends OSetting<T, OChoiceSetting<T>> {
     private final List<T> choices;
 
     public OChoiceSetting(final String pretty, final T initial, final @NotNull List<T> choices) {
@@ -42,6 +43,12 @@ public final class OChoiceSetting<T> extends OSetting<T> {
         }
 
         this.value = value;
+    }
+
+    @Contract(" -> new")
+    @Override
+    public @NotNull xyz.xenondevs.invui.item.Item item() {
+        return new Item<>(this);
     }
 
     @RequiredArgsConstructor
@@ -80,7 +87,8 @@ public final class OChoiceSetting<T> extends OSetting<T> {
 
             return new OItemBuilder(type)
                 .setName("&e" + setting.pretty)
-                .addLore(lore);
+                .addLore(lore)
+                .hideFlags();
         }
 
         @Override

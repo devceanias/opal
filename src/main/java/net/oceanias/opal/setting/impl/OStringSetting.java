@@ -35,12 +35,13 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import lombok.experimental.ExtensionMethod;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
 @ExtensionMethod({ OComponentExtension.class, OCommandSenderExtension.class })
 @Getter
-public final class OStringSetting extends OSetting<String> {
+public final class OStringSetting extends OSetting<String, OStringSetting> {
     private final Integer limit;
 
     public OStringSetting(final String pretty, final String initial) {
@@ -60,6 +61,12 @@ public final class OStringSetting extends OSetting<String> {
         }
 
         this.value = value;
+    }
+
+    @Contract(" -> new")
+    @Override
+    public @NotNull xyz.xenondevs.invui.item.Item item() {
+        return new Item(this);
     }
 
     @RequiredArgsConstructor
@@ -96,7 +103,8 @@ public final class OStringSetting extends OSetting<String> {
 
             return new OItemBuilder(type)
                 .setName("&e" + setting.pretty)
-                .addLore(lore);
+                .addLore(lore)
+                .hideFlags();
         }
 
         @Override

@@ -14,13 +14,20 @@ import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.impl.AbstractItem;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.ExtensionMethod;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
 @ExtensionMethod(OCommandSenderExtension.class)
-public final class OBooleanSetting extends OSetting<Boolean> {
+public final class OBooleanSetting extends OSetting<Boolean, OBooleanSetting> {
     public OBooleanSetting(final String pretty, final boolean initial) {
         super(pretty, initial);
+    }
+
+    @Contract(" -> new")
+    @Override
+    public @NotNull xyz.xenondevs.invui.item.Item item() {
+        return new Item(this);
     }
 
     @RequiredArgsConstructor
@@ -52,7 +59,8 @@ public final class OBooleanSetting extends OSetting<Boolean> {
 
             return new OItemBuilder(type)
                 .setName("&e" + setting.pretty)
-                .addLore(lore);
+                .addLore(lore)
+                .hideFlags();
         }
 
         @Override

@@ -10,16 +10,18 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import xyz.xenondevs.invui.item.Item;
 import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.impl.AbstractItem;
 import lombok.Getter;
 import lombok.experimental.ExtensionMethod;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
 @ExtensionMethod(OCommandSenderExtension.class)
 @Getter
-public final class OIntegerSetting extends OSetting<Integer> {
+public final class OIntegerSetting extends OSetting<Integer, OIntegerSetting> {
     private final Integer min;
     private final Integer max;
 
@@ -45,6 +47,12 @@ public final class OIntegerSetting extends OSetting<Integer> {
         }
 
         this.value = value;
+    }
+
+    @Contract(" -> new")
+    @Override
+    public @NotNull xyz.xenondevs.invui.item.Item item() {
+        return new Item(this);
     }
 
     public static class Item extends AbstractItem {
@@ -96,7 +104,8 @@ public final class OIntegerSetting extends OSetting<Integer> {
 
             return new OItemBuilder(type)
                 .setName("&e" + setting.pretty)
-                .addLore(lore);
+                .addLore(lore)
+                .hideFlags();
         }
 
         @Override

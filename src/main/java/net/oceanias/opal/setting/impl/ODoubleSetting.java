@@ -14,12 +14,13 @@ import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.impl.AbstractItem;
 import lombok.Getter;
 import lombok.experimental.ExtensionMethod;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
 @ExtensionMethod(OCommandSenderExtension.class)
 @Getter
-public final class ODoubleSetting extends OSetting<Double> {
+public final class ODoubleSetting extends OSetting<Double, ODoubleSetting> {
     private final Double min;
     private final Double max;
 
@@ -45,6 +46,12 @@ public final class ODoubleSetting extends OSetting<Double> {
         }
 
         this.value = value;
+    }
+
+    @Contract(" -> new")
+    @Override
+    public @NotNull xyz.xenondevs.invui.item.Item item() {
+        return new Item(this);
     }
 
     public static class Item extends AbstractItem {
@@ -96,7 +103,8 @@ public final class ODoubleSetting extends OSetting<Double> {
 
             return new OItemBuilder(type)
                 .setName("&e" + setting.pretty)
-                .addLore(lore);
+                .addLore(lore)
+                .hideFlags();
         }
 
         @Override
