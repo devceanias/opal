@@ -1,6 +1,6 @@
 package net.oceanias.opal.cooldown;
 
-import net.oceanias.opal.plugin.OPlugin;
+import net.oceanias.opal.OPlugin;
 import net.oceanias.opal.utility.extension.OCommandSenderExtension;
 import net.oceanias.opal.utility.helper.ODurationHelper;
 import net.oceanias.opal.utility.helper.OTaskHelper;
@@ -20,7 +20,6 @@ import org.jetbrains.annotations.NotNull;
 @RequiredArgsConstructor
 @ExtensionMethod(OCommandSenderExtension.class)
 public final class OCooldown {
-    private final OPlugin plugin;
     private final String label;
     private final Duration length;
 
@@ -39,7 +38,7 @@ public final class OCooldown {
     }
 
     private String getBypass() {
-        return plugin.getPermission("cooldown." + label.replace(" ", ".") + ".bypass");
+        return OPlugin.get().getPermission("cooldown." + label.replace(" ", ".") + ".bypass");
     }
 
     public void setCooldown(@NotNull final CommandSender sender, final boolean cooldown) {

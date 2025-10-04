@@ -1,7 +1,6 @@
 package net.oceanias.opal.menu;
 
-import net.oceanias.opal.Opal;
-import net.oceanias.opal.configuration.impl.OPrimaryConfig;
+import net.oceanias.opal.OPlugin;
 import net.oceanias.opal.utility.builder.OItemBuilder;
 import net.oceanias.opal.utility.extension.OCommandSenderExtension;
 import net.oceanias.opal.utility.extension.OStringExtension;
@@ -40,17 +39,9 @@ public abstract class OMenu {
     }
 
     public static void addIngredients() {
-        Structure.addGlobalIngredient(
-            OPrimaryConfig.get().menu().ingredients().fillerItem(), OItemBuilder.getFiller()
-        );
-
-        Structure.addGlobalIngredient(
-            OPrimaryConfig.get().menu().ingredients().nextPage(), new OMenu.Next()
-        );
-
-        Structure.addGlobalIngredient(
-            OPrimaryConfig.get().menu().ingredients().previousPage(), new OMenu.Previous()
-        );
+        Structure.addGlobalIngredient('#', OItemBuilder.getFiller());
+        Structure.addGlobalIngredient('<', new OMenu.Previous());
+        Structure.addGlobalIngredient('>', new OMenu.Next());
     }
 
     public static final class Previous extends PageItem {
@@ -75,12 +66,12 @@ public abstract class OMenu {
 
             if (gui.hasPreviousPage()) {
                 return new OItemBuilder(Material.TIPPED_ARROW)
-                    .setPotionType(PotionType.SWIFTNESS)
-                    .setName(Opal.get().getColour() + "Previous Page")
+                    .setPotionType(PotionType.SLOW_FALLING)
+                    .setName(OPlugin.get().getColour() + "Previous Page")
                     .addLore(List.of(
                         "&fPage: &e" + now + "&7/&e" + max + " &7» &a" + (now + 1) + "&7/&a" + max,
                         "",
-                        Opal.get().getColour() + "Click &7to turn!"
+                        OPlugin.get().getColour() + "Click &7to turn!"
                     ))
                     .addGlint()
                     .hideFlags();
@@ -88,11 +79,11 @@ public abstract class OMenu {
 
             if (back != null) {
                 return new OItemBuilder(Material.SPECTRAL_ARROW)
-                    .setName(Opal.get().getColour() + "Go Back")
+                    .setName(OPlugin.get().getColour() + "Go Back")
                     .addLore(List.of(
                         "&fMenu: &6" + back.getWindow(back.getGui(null), null),
                         "",
-                        Opal.get().getColour() + "Click &7to use!"
+                        OPlugin.get().getColour() + "Click &7to use!"
                     ))
                     .addGlint()
                     .hideFlags();
@@ -133,12 +124,12 @@ public abstract class OMenu {
 
             if (gui.hasNextPage()) {
                 return new OItemBuilder(Material.TIPPED_ARROW)
-                    .setPotionType(PotionType.SWIFTNESS)
-                    .setName(Opal.get().getColour() + "Next Page")
+                    .setPotionType(PotionType.SLOW_FALLING)
+                    .setName(OPlugin.get().getColour() + "Next Page")
                     .addLore(List.of(
                         "&fPage: &e" + now + "&7/&e" + max + " &7» &a" + (now - 1) + "&7/&a" + max,
                         "",
-                        Opal.get().getColour() + "Click &7to turn!"
+                        OPlugin.get().getColour() + "Click &7to turn!"
                     ))
                     .addGlint()
                     .hideFlags();

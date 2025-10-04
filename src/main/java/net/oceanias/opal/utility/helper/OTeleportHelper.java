@@ -1,8 +1,7 @@
 package net.oceanias.opal.utility.helper;
 
-import net.oceanias.opal.Opal;
 import net.oceanias.opal.listener.OListener;
-import net.oceanias.opal.plugin.OPlugin;
+import net.oceanias.opal.OPlugin;
 import net.oceanias.opal.utility.extension.OCommandSenderExtension;
 import java.time.Duration;
 import java.util.*;
@@ -26,13 +25,6 @@ import org.jetbrains.annotations.NotNull;
 public final class OTeleportHelper extends OListener.Bukkit {
     private static final Map<UUID, List<BukkitTask>> pending = new ConcurrentHashMap<>();
     private static final Map<UUID, Location> locations = new ConcurrentHashMap<>();
-
-    private final Opal plugin;
-
-    @Override
-    protected OPlugin getPlugin() {
-        return plugin;
-    }
 
     public static void createTeleportTimer(
         final @NotNull Player player, final Location destination, final Duration duration
@@ -74,7 +66,7 @@ public final class OTeleportHelper extends OListener.Bukkit {
             player.teleport(destination);
 
             player.actionDSR(
-                Opal.get().getColour() +
+                OPlugin.get().getColour() +
                 "&fThe &6teleportation &fhas &acommenced&f."
             );
 

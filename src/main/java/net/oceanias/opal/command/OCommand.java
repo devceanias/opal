@@ -1,7 +1,7 @@
 package net.oceanias.opal.command;
 
 import net.oceanias.opal.component.impl.OProvider;
-import net.oceanias.opal.plugin.OPlugin;
+import net.oceanias.opal.OPlugin;
 import net.oceanias.opal.utility.extension.OCommandSenderExtension;
 import net.oceanias.opal.utility.extension.OStringExtension;
 import net.oceanias.opal.utility.helper.OTextHelper;
@@ -10,7 +10,6 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -20,7 +19,6 @@ import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import dev.jorel.commandapi.executors.CommandArguments;
 import lombok.experimental.ExtensionMethod;
 import org.apache.commons.text.WordUtils;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
@@ -30,8 +28,6 @@ public abstract class OCommand implements OExecutable, OProvider {
     private final Map<List<String>, List<String>> descriptions = new ConcurrentHashMap<>();
 
     private CommandTree base;
-
-    protected abstract OPlugin getPlugin();
 
     public abstract String getLabel();
 
@@ -48,7 +44,7 @@ public abstract class OCommand implements OExecutable, OProvider {
     }
 
     public CommandPermission getPermission() {
-        return ofPermission(getPlugin(), getLabel());
+        return ofPermission(getLabel());
     }
 
     public CommandTree getCommand() {
@@ -84,7 +80,7 @@ public abstract class OCommand implements OExecutable, OProvider {
             );
         }
 
-        tree.register(getPlugin().getLabel());
+        tree.register();
 
         OProvider.super.registerInternally();
     }
@@ -126,7 +122,7 @@ public abstract class OCommand implements OExecutable, OProvider {
     private void sendHelp(final CommandSender sender, final CommandArguments args) {
         final List<Component> lines = new ArrayList<>(List.of(
             OTextHelper.CHAT_DIVIDER_LONG.deserialize(),
-            (getPlugin().getColour() + WordUtils.capitalize(getLabel()) + " Commands:").deserialize()
+            (OPlugin.get().getColour() + WordUtils.capitalize(getLabel()) + " Commands:").deserialize()
         ));
 
         for (final HelpLine line : getUsages()) {
@@ -156,7 +152,7 @@ public abstract class OCommand implements OExecutable, OProvider {
 
             if (description != null) {
                 component = component.hoverEvent(HoverEvent.showText(
-                    String.join("\n", getPlugin().getColour() + description).deserialize()
+                    String.join("\n", OPlugin.get().getColour() + description).deserialize()
                 ));
             }
 
@@ -257,9 +253,8 @@ public abstract class OCommand implements OExecutable, OProvider {
         );
     }
 
-    @Contract("_, _ -> new")
-    public static @NotNull CommandPermission ofPermission(final @NotNull OPlugin plugin, final String name) {
-        return CommandPermission.fromString(plugin.getLabel() + ".command." + name);
+    public static @NotNull CommandPermission ofPermission(final String name) {
+        return CommandPermission.fromString(OPlugin.get().getLabel() + ".command." + name);
     }
 
     private record HelpLine(List<HelpSegment> segments, List<String> description) {}

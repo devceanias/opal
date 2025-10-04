@@ -1,24 +1,29 @@
-package net.oceanias.opal.plugin;
+package net.oceanias.opal;
 
-import net.oceanias.opal.Opal;
 import net.oceanias.opal.configuration.OConfiguration;
-import net.oceanias.opal.configuration.impl.OPrimaryConfig;
 import net.oceanias.opal.database.ODatabase;
 import net.oceanias.opal.component.impl.OModule;
 import net.oceanias.opal.menu.OMenu;
-import net.oceanias.opal.utility.builder.OItemBuilder;
+import net.oceanias.opal.setting.impl.OStringSetting;
+import net.oceanias.opal.utility.helper.OTeleportHelper;
 import java.util.List;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import xyz.xenondevs.invui.InvUI;
-import xyz.xenondevs.invui.gui.structure.Structure;
 import lombok.Getter;
+import lombok.experimental.Accessors;
+import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings({ "unused", "deprecation" })
 @Getter
+//public abstract class OPlugin extends ZapperJavaPlugin {
 public abstract class OPlugin extends JavaPlugin {
+    @Getter
+    @Accessors(fluent = true)
+    private static OPlugin get;
+
     private BukkitScheduler scheduler;
 
     public String getLabel() {
@@ -39,6 +44,9 @@ public abstract class OPlugin extends JavaPlugin {
 
     public abstract String getPrefix();
 
+    // This ensures that the user provides their own loader for paper-plugin.yml.
+    public abstract OLoader getLoader();
+
     protected abstract void setInstance();
 
     public boolean reloadsDatapacks() {
@@ -53,13 +61,20 @@ public abstract class OPlugin extends JavaPlugin {
 
     @Override
     public final void onLoad() {
-        if (isOpal()) {
-            CommandAPI.onLoad(new CommandAPIBukkitConfig(this)
-                .skipReloadDatapacks(!reloadsDatapacks())
-                .missingExecutorImplementationMessage("This command does not support %s.")
-            );
+        if (get != null) {
+            throw new IllegalStateException("Error loading plugin; only one OPlugin is allowed.");
         }
 
+        if (getLoader() == null) {
+            throw new IllegalStateException("Error loading plugin; getLoader() returned null.");
+        }
+
+        CommandAPI.onLoad(new CommandAPIBukkitConfig(this)
+            .skipReloadDatapacks(!reloadsDatapacks())
+            .missingExecutorImplementationMessage("This command does not support %s.")
+        );
+
+        get = this;
         scheduler = getServer().getScheduler();
 
         setInstance();
@@ -68,28 +83,15 @@ public abstract class OPlugin extends JavaPlugin {
 
     @Override
     public final void onEnable() {
-        if (!isOpal() &&
-            !getServer().getPluginManager().isPluginEnabled(Opal.get().getDescription().getName())
-        ) {
-            getLogger().severe("Opal is missing or not enabled — this plugin will be disabled.");
-            getServer().getPluginManager().disablePlugin(this);
+        CommandAPI.onEnable();
 
-            return;
-        }
-
-        if (isOpal()) {
-            CommandAPI.onEnable();
-
-            InvUI.getInstance().setPlugin(this);
-        }
+        InvUI.getInstance().setPlugin(this);
 
         for (final OConfiguration<?> config : getConfigurations()) {
             config.registerInternally();
         }
 
-        if (isOpal()) {
-            OMenu.addIngredients();
-        }
+        OMenu.addIngredients();
 
         if (getDatabase() != null) {
             getDatabase().registerInternally();
@@ -98,6 +100,9 @@ public abstract class OPlugin extends JavaPlugin {
         for (final OModule module : getModules()) {
             module.registerInternally();
         }
+
+        new OStringSetting.Listener().registerInternally();
+        new OTeleportHelper().registerInternally();
 
         enablePlugin();
     }
@@ -118,16 +123,10 @@ public abstract class OPlugin extends JavaPlugin {
             config.unregisterInternally();
         }
 
-        if (getClass() == Opal.class) {
-            CommandAPI.onDisable();
-        }
+        CommandAPI.onDisable();
     }
 
     public String getPermission(final String permission) {
         return getLabel() + "." + permission;
-    }
-
-    private boolean isOpal() {
-        return getClass() == Opal.class;
     }
 }

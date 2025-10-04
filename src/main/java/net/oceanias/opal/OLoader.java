@@ -1,4 +1,4 @@
-package net.oceanias.opal.plugin;
+package net.oceanias.opal;
 
 import io.papermc.paper.plugin.loader.PluginClasspathBuilder;
 import io.papermc.paper.plugin.loader.PluginLoader;
@@ -9,11 +9,11 @@ import org.eclipse.aether.repository.RemoteRepository;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings({ "unused", "UnstableApiUsage" })
-public final class OLoader implements PluginLoader {
+public abstract class OLoader implements PluginLoader {
     private static final String INVUI_VERSION = "1.46";
 
     @Override
-    public void classloader(@NotNull final PluginClasspathBuilder builder) {
+    public final void classloader(@NotNull final PluginClasspathBuilder builder) {
         final MavenLibraryResolver resolver = new MavenLibraryResolver();
 
         resolver.addRepository(new RemoteRepository.Builder(

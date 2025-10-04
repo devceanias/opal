@@ -1,11 +1,10 @@
 package net.oceanias.opal.utility.builder;
 
-import net.oceanias.opal.plugin.OPlugin;
+import net.oceanias.opal.OPlugin;
 import net.oceanias.opal.utility.constant.OFeedbackSound;
 import net.oceanias.opal.utility.extension.OCommandSenderExtension;
 import net.oceanias.opal.utility.extension.OStringExtension;
 import net.oceanias.opal.utility.helper.OTextHelper;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -23,11 +22,11 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings("unused")
 @Getter
 @Accessors(fluent = true)
+@Builder
 @ExtensionMethod({ OStringExtension.class, OCommandSenderExtension.class })
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public final class OMessage {
-    private final OPlugin plugin;
-
+    @Singular
     private final List<String> lines;
 
     @Setter
@@ -41,34 +40,10 @@ public final class OMessage {
 
     private Sound sound;
 
-    public OMessage line(final String line) {
-        lines.add(line);
-
-        return this;
-    }
-
-    public OMessage lines(final List<String> lines) {
-        this.lines.addAll(lines);
-
-        return this;
-    }
-
-    public OMessage sound(final @NotNull OFeedbackSound sound) {
-        this.sound = sound.getDelegate();
-
-        return this;
-    }
-
-    public OMessage sound(final Sound sound) {
-        this.sound = sound;
-
-        return this;
-    }
-
     public @NotNull Component component() {
         final String addDividers = dividers ? OTextHelper.CHAT_DIVIDER_LONG : null;
         final String addBlanks = blanks ? "" : null;
-        final String addPrefix = prefix ? plugin.getPrefix() + " ": "";
+        final String addPrefix = prefix ? OPlugin.get().getPrefix() + " ": "";
         final String joinedText = lines != null ? String.join("\n", lines) : "";
 
         return Stream.of(addDividers, addBlanks, addPrefix + joinedText, addBlanks, addDividers)
@@ -104,7 +79,7 @@ public final class OMessage {
     public void broadcast() {
         final Component message = component();
 
-        for (final Player sender : plugin.getServer().getOnlinePlayers()) {
+        for (final Player sender : OPlugin.get().getServer().getOnlinePlayers()) {
             sender.sendMessage(message);
 
             if (sound == null) {
@@ -115,58 +90,12 @@ public final class OMessage {
         }
     }
 
-    @Contract(value = "_ -> new", pure = true)
-    public static @NotNull OMessageBuilder builder(final OPlugin plugin) {
-        return new OMessageBuilder(plugin);
-    }
-
-    @Getter
-    public static class OMessageBuilder {
-        private final OPlugin plugin;
-
-        private final List<String> lines = new ArrayList<>();
-
-        @Setter
-        private boolean prefix = true;
-
-        @Setter
-        private boolean dividers = false;
-
-        @Setter
-        private boolean blanks = false;
-
-        private Sound sound;
-
-        public OMessageBuilder(final OPlugin plugin) {
-            this.plugin = plugin;
-        }
-
-        public OMessageBuilder line(final String line) {
-            lines.add(line);
-
-            return this;
-        }
-
-        public OMessageBuilder lines(final List<String> lines) {
-            this.lines.addAll(lines);
-
-            return this;
-        }
-
+    public static final class OMessageBuilder {
+        @Contract("_ -> this")
         public OMessageBuilder sound(final @NotNull OFeedbackSound sound) {
             this.sound = sound.getDelegate();
 
             return this;
-        }
-
-        public OMessageBuilder sound(final Sound sound) {
-            this.sound = sound;
-
-            return this;
-        }
-
-        public OMessage build() {
-            return new OMessage(plugin, lines, prefix, dividers, blanks, sound);
         }
     }
 }

@@ -1,10 +1,8 @@
 package net.oceanias.opal.setting.impl;
 
-import net.oceanias.opal.Opal;
 import net.oceanias.opal.listener.OListener;
 import net.oceanias.opal.menu.OMenu;
 import net.oceanias.opal.setting.OSetting;
-import net.oceanias.opal.plugin.OPlugin;
 import net.oceanias.opal.utility.builder.OItemBuilder;
 import net.oceanias.opal.utility.builder.OMessage;
 import net.oceanias.opal.utility.constant.OFeedbackSound;
@@ -41,8 +39,8 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings("unused")
 @ExtensionMethod({ OComponentExtension.class, OCommandSenderExtension.class })
 @Getter
-public final class OStringSetting extends OSetting<String, OStringSetting> {
-    private final Integer limit;
+public final class OStringSetting extends OSetting<String> {
+    private transient final Integer limit;
 
     public OStringSetting(final String pretty, final String initial) {
         this(pretty, initial, null);
@@ -55,12 +53,28 @@ public final class OStringSetting extends OSetting<String, OStringSetting> {
     }
 
     @Override
-    public void value(String value) {
+    public OStringSetting description(final List<String> description) {
+        super.description(description);
+
+        return this;
+    }
+
+    @Override
+    public OStringSetting material(final Material material) {
+        super.material(material);
+
+        return this;
+    }
+
+    @Override
+    public OStringSetting value(String value) {
         if (limit != null && value.length() > limit) {
             value = value.substring(0, limit);
         }
 
         this.value = value;
+
+        return this;
     }
 
     @Contract(" -> new")
@@ -123,7 +137,7 @@ public final class OStringSetting extends OSetting<String, OStringSetting> {
                 player.closeInventory();
             }
 
-            OMessage.builder(Opal.get())
+            OMessage.builder()
                 .line("&aEnter a new value in the chat!")
                 .line("&7→ &fType &ccancel &fto cancel.")
                 .blanks(true)
@@ -183,7 +197,7 @@ public final class OStringSetting extends OSetting<String, OStringSetting> {
     public static final class Listener extends OListener.Bukkit {
         @Getter
         @Accessors(fluent = true)
-        private static final Listener get = new Listener(Opal.get());
+        private static final Listener get = new Listener();
 
         private static final Duration TIMEOUT_DURATION = Duration.ofSeconds(45);
         private static final String CANCEL_KEYWORD = "cancel";
@@ -191,13 +205,6 @@ public final class OStringSetting extends OSetting<String, OStringSetting> {
         private static final Map<UUID, OStringSetting> AWAITING_INPUT = new ConcurrentHashMap<>();
         private static final Map<UUID, BukkitTask> TIMEOUT_TASKS = new ConcurrentHashMap<>();
         private static final Map<UUID, OMenu> PREVIOUS_MENUS = new ConcurrentHashMap<>();
-
-        private final Opal plugin;
-
-        @Override
-        protected OPlugin getPlugin() {
-            return plugin;
-        }
 
         public void awaitInput(final @NotNull Player player, final OStringSetting setting, final OMenu menu) {
             final UUID uuid = player.getUniqueId();
@@ -214,7 +221,7 @@ public final class OStringSetting extends OSetting<String, OStringSetting> {
                 TIMEOUT_TASKS.remove(uuid);
                 PREVIOUS_MENUS.remove(uuid);
 
-                OMessage.builder(plugin)
+                OMessage.builder()
                     .line("&fThe input has &ctimed out&f!")
                     .blanks(true)
                     .sound(OFeedbackSound.ERROR)
@@ -263,7 +270,7 @@ public final class OStringSetting extends OSetting<String, OStringSetting> {
             event.setCancelled(true);
 
             if (limit != null && !message.equalsIgnoreCase(CANCEL_KEYWORD) && message.length() > limit) {
-                OMessage.builder(plugin)
+                OMessage.builder()
                     .line("&fYour input is &ctoo long&f! The limit is &6" + limit + " characters&f.")
                     .blanks(true)
                     .sound(OFeedbackSound.ERROR)
@@ -280,7 +287,7 @@ public final class OStringSetting extends OSetting<String, OStringSetting> {
             }
 
             if (message.equalsIgnoreCase(CANCEL_KEYWORD)) {
-                OMessage.builder(plugin)
+                OMessage.builder()
                     .line("&fYou have &ccancelled &fthe input!")
                     .blanks(true)
                     .sound(OFeedbackSound.ERROR)

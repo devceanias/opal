@@ -7,6 +7,7 @@ lombok = "1.18.42"
 paper = "1.21.4-R0.1-SNAPSHOT"
 commons-text = "1.14.0"
 minitext = "v1.0.1"
+zapper = "1.0.6"
 
 [libraries]
 invui = { group = "xyz.xenondevs.invui", name = "invui-core", version.ref = "invui" }
@@ -22,3 +23,4 @@ minitext = { group = "com.github.Bruhdows", name = "MiniText", version.ref = "mi
 
 [plugins]
 shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
+zapper = { id = "net.oceanias.zapper", version.ref = "zapper" }

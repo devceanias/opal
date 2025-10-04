@@ -1,28 +1,3 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-
-private val jars = object {
-    val api = tasks.register<ShadowJar>("api") {
-        archiveClassifier.set("api")
-
-        from(sourceSets.main.get().output)
-
-        configurations = listOf(project.configurations.runtimeClasspath.get())
-    }
-
-    val server = tasks.register<ShadowJar>("server") {
-        archiveClassifier.set("server")
-
-        from(sourceSets.main.get().output)
-
-        configurations = listOf(project.configurations.runtimeClasspath.get())
-
-        dependencies {
-            exclude(dependency("xyz.xenondevs.invui:invui-core"))
-            exclude(dependency("xyz.xenondevs.invui:inventory-access-r23"))
-        }
-    }
-}
-
 project.group = "net.oceanias"
 project.version = "1.0.17"
 
@@ -31,6 +6,9 @@ plugins {
     id("maven-publish")
 
     alias(libs.plugins.shadow)
+
+    // TODO: Use this plugin for runtime library downloads and relocations after publication is finished.
+//    alias(libs.plugins.zapper)
 }
 
 java {
@@ -55,39 +33,7 @@ repositories {
 publishing {
     publications {
         create<MavenPublication>("jitpack") {
-            artifact(jars.api.get()) {
-                classifier = null
-            }
-
-            artifact(tasks.named<Jar>("sourcesJar").get())
-            artifact(tasks.named<Jar>("javadocJar").get())
-
-            pom {
-                withXml {
-                    asNode().appendNode("repositories").apply {
-                        appendNode("repository").apply {
-                            appendNode("id", "codemc")
-                            appendNode("url", "https://repo.codemc.io/repository/maven-public/")
-                        }
-                        appendNode("repository").apply {
-                            appendNode("id", "papermc")
-                            appendNode("url", "https://repo.papermc.io/repository/maven-public/")
-                        }
-                        appendNode("repository").apply {
-                            appendNode("id", "sonatype")
-                            appendNode("url", "https://oss.sonatype.org/content/groups/public/")
-                        }
-                        appendNode("repository").apply {
-                            appendNode("id", "xenondevs")
-                            appendNode("url", "https://repo.xenondevs.xyz/releases")
-                        }
-                        appendNode("repository").apply {
-                            appendNode("id", "jitpack")
-                            appendNode("url", "https://jitpack.io")
-                        }
-                    }
-                }
-            }
+            from(components["java"])
         }
     }
 }
@@ -96,37 +42,54 @@ dependencies {
     annotationProcessor(libs.lombok)
 
     api(libs.commandapi)
-    api(libs.invui)
     api(libs.configlib)
+    api(libs.commons.text)
+    api(libs.minitext)
 
-    compileOnly(variantOf(libs.inventoryaccess) { classifier("remapped-mojang") })
+//    zap(libs.commandapi)
+//    zap(libs.invui)
+//    zap(libs.configlib)
+//    zap(libs.commons.text)
+//    zap(libs.minitext)
+
     compileOnly(libs.lombok)
     compileOnly(libs.paper)
+    compileOnly(variantOf(libs.inventoryaccess) { classifier("remapped-mojang") })
 
-    implementation(libs.commons.text)
-    implementation(libs.minitext)
+    compileOnlyApi(libs.invui)
 }
+
+//zapper {
+//    libsFolder = "libraries"
+//    relocationPrefix = "$group.$name.libraries"
+//
+//    repositories {
+//        includeProjectRepositories()
+//    }
+//
+//    relocate("com.bruhdows", "bruhdows")
+//    relocate("de.exlll", "exlll")
+//    relocate("dev.jorel", "jorel")
+//    relocate("net.kyori", "kyori")
+//    relocate("org.apache", "apache")
+//    relocate("org.intellij", "intellij")
+//    relocate("org.jetbrains", "jetbrains")
+//    relocate("org.snakeyaml", "snakeyaml")
+//    relocate("xyz.xenondevs", "xenondevs")
+//}
 
 defaultTasks("build")
 
 tasks {
     processResources {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-
-        filesMatching("paper-plugin.yml") {
-            expand("version" to project.version)
-        }
     }
 
     withType<Jar>().configureEach {
         archiveBaseName.set(rootProject.name.replaceFirstChar { char -> char.uppercase() })
     }
 
-    jar {
-        enabled = false
-    }
-
     build {
-        dependsOn(jars.api, jars.server)
+        dependsOn(jar)
     }
 }

@@ -7,24 +7,23 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-@SuppressWarnings({ "unused", "unchecked" })
+@SuppressWarnings({ "unused", "UnusedReturnValue" })
 @Getter
-public abstract class OSetting<T, S extends OSetting<T, S>> {
+public abstract class OSetting<T> {
     @Accessors(fluent = true)
-    protected final String pretty;
+    protected transient final String pretty;
 
     @Accessors(fluent = true)
-
-    protected final T initial;
-
-    @Accessors(fluent = true)
-    protected List<String> description;
+    protected transient final T initial;
 
     @Accessors(fluent = true)
-    protected Material material;
+    protected transient List<String> description;
+
+    @Accessors(fluent = true)
+    protected transient Material material;
 
     @Setter
-    @Accessors(fluent = true, chain = false)
+    @Accessors(fluent = true)
     protected T value;
 
     protected OSetting(final String pretty, final T initial) {
@@ -38,20 +37,16 @@ public abstract class OSetting<T, S extends OSetting<T, S>> {
         value = initial;
     }
 
-    protected S self() {
-        return (S) this;
-    }
-
-    public S description(final List<String> description) {
+    public OSetting<T> description(final List<String> description) {
         this.description = description;
 
-        return self();
+        return this;
     }
 
-    public S material(final Material material) {
+    public OSetting<T> material(final Material material) {
         this.material = material;
 
-        return self();
+        return this;
     }
 
     public final void reset() {

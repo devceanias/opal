@@ -3,6 +3,7 @@ package net.oceanias.opal.setting.impl;
 import net.oceanias.opal.setting.OSetting;
 import net.oceanias.opal.utility.builder.OItemBuilder;
 import net.oceanias.opal.utility.extension.OCommandSenderExtension;
+import java.beans.Transient;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Material;
@@ -10,7 +11,6 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import xyz.xenondevs.invui.item.Item;
 import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.impl.AbstractItem;
 import lombok.Getter;
@@ -21,9 +21,9 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings("unused")
 @ExtensionMethod(OCommandSenderExtension.class)
 @Getter
-public final class OIntegerSetting extends OSetting<Integer, OIntegerSetting> {
-    private final Integer min;
-    private final Integer max;
+public final class OIntegerSetting extends OSetting<Integer> {
+    private transient final Integer min;
+    private transient final Integer max;
 
     public OIntegerSetting(final String pretty, final int initial) {
         this(pretty, initial, null, null);
@@ -37,7 +37,21 @@ public final class OIntegerSetting extends OSetting<Integer, OIntegerSetting> {
     }
 
     @Override
-    public void value(Integer value) {
+    public OIntegerSetting description(final List<String> description) {
+        super.description(description);
+
+        return this;
+    }
+
+    @Override
+    public OIntegerSetting material(final Material material) {
+        super.material(material);
+
+        return this;
+    }
+
+    @Override
+    public OIntegerSetting value(Integer value) {
         if (min != null && value < min) {
             value = min;
         }
@@ -47,6 +61,8 @@ public final class OIntegerSetting extends OSetting<Integer, OIntegerSetting> {
         }
 
         this.value = value;
+
+        return this;
     }
 
     @Contract(" -> new")
@@ -90,11 +106,16 @@ public final class OIntegerSetting extends OSetting<Integer, OIntegerSetting> {
             lore.add("&fCurrent: &6" + setting.value);
 
             if (min != null) {
+                lore.add("");
                 lore.add("&fMinimum: &c" + min);
             }
 
             if (max != null) {
-                lore.add("&fMaximum: &c" + max);
+                if (min == null) {
+                    lore.add("");
+                }
+
+                lore.add("&fMaximum: &c" + (max == Integer.MAX_VALUE ? "None" : max));
             }
 
             lore.add("");

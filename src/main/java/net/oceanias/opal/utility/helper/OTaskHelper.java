@@ -1,6 +1,6 @@
 package net.oceanias.opal.utility.helper;
 
-import net.oceanias.opal.Opal;
+import net.oceanias.opal.OPlugin;
 import java.time.Duration;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -9,15 +9,15 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings({ "unused", "UnusedReturnValue" })
 public final class OTaskHelper {
     public static @NotNull BukkitTask runTask(final Runnable task) {
-        return Opal.get().getScheduler().runTask(Opal.get(), task);
+        return OPlugin.get().getScheduler().runTask(OPlugin.get(), task);
     }
 
     public static @NotNull BukkitTask runTaskAsync(final Runnable task) {
-        return Opal.get().getScheduler().runTaskAsynchronously(Opal.get(), task);
+        return OPlugin.get().getScheduler().runTaskAsynchronously(OPlugin.get(), task);
     }
 
     public static @NotNull BukkitTask runTaskLater(final Runnable task, final long delayTicks) {
-        return Opal.get().getScheduler().runTaskLater(Opal.get(), task, delayTicks);
+        return OPlugin.get().getScheduler().runTaskLater(OPlugin.get(), task, delayTicks);
     }
 
     public static @NotNull BukkitTask runTaskLater(final Runnable task, final @NotNull Duration delay) {
@@ -25,7 +25,7 @@ public final class OTaskHelper {
     }
 
     public static @NotNull BukkitTask runTaskLaterAsync(final Runnable task, final long delayTicks) {
-        return Opal.get().getScheduler().runTaskLaterAsynchronously(Opal.get(), task, delayTicks);
+        return OPlugin.get().getScheduler().runTaskLaterAsynchronously(OPlugin.get(), task, delayTicks);
     }
 
     public static @NotNull BukkitTask runTaskLaterAsync(final Runnable task, @NotNull final Duration delay) {
@@ -35,7 +35,7 @@ public final class OTaskHelper {
     public static @NotNull BukkitTask runTaskTimer(
         final Runnable task, final long delayTicks, final long periodTicks
     ) {
-        return Opal.get().getScheduler().runTaskTimer(Opal.get(), task, delayTicks, periodTicks);
+        return OPlugin.get().getScheduler().runTaskTimer(OPlugin.get(), task, delayTicks, periodTicks);
     }
 
     public static @NotNull BukkitTask runTaskTimer(
@@ -47,7 +47,7 @@ public final class OTaskHelper {
     public static @NotNull BukkitTask runTaskTimerAsync(
         final Runnable task, final long delayTicks, final long periodTicks
     ) {
-        return Opal.get().getScheduler().runTaskTimerAsynchronously(Opal.get(), task, delayTicks, periodTicks);
+        return OPlugin.get().getScheduler().runTaskTimerAsynchronously(OPlugin.get(), task, delayTicks, periodTicks);
     }
 
     public static @NotNull BukkitTask runTaskTimerAsync(
@@ -57,15 +57,15 @@ public final class OTaskHelper {
     }
 
     public static void runTask(final @NotNull BukkitRunnable runnable) {
-        runnable.runTask(Opal.get());
+        runnable.runTask(OPlugin.get());
     }
 
     public static void runTaskAsync(final @NotNull BukkitRunnable runnable) {
-        runnable.runTaskAsynchronously(Opal.get());
+        runnable.runTaskAsynchronously(OPlugin.get());
     }
 
     public static void runTaskLater(final @NotNull BukkitRunnable runnable, final long delayTicks) {
-        runnable.runTaskLater(Opal.get(), delayTicks);
+        runnable.runTaskLater(OPlugin.get(), delayTicks);
     }
 
     public static void runTaskLater(final BukkitRunnable runnable, @NotNull final Duration delay) {
@@ -73,7 +73,7 @@ public final class OTaskHelper {
     }
 
     public static void runTaskLaterAsync(final @NotNull BukkitRunnable runnable, final long delayTicks) {
-        runnable.runTaskLaterAsynchronously(Opal.get(), delayTicks);
+        runnable.runTaskLaterAsynchronously(OPlugin.get(), delayTicks);
     }
 
     public static void runTaskLaterAsync(final BukkitRunnable runnable, @NotNull final Duration delay) {
@@ -83,7 +83,7 @@ public final class OTaskHelper {
     public static void runTaskTimer(
         final @NotNull BukkitRunnable runnable, final long delayTicks, final long periodTicks
     ) {
-        runnable.runTaskTimer(Opal.get(), delayTicks, periodTicks);
+        runnable.runTaskTimer(OPlugin.get(), delayTicks, periodTicks);
     }
 
     public static void runTaskTimer(
@@ -95,7 +95,7 @@ public final class OTaskHelper {
     public static void runTaskTimerAsync(
         final @NotNull BukkitRunnable runnable, final long delayTicks, final long periodTicks
     ) {
-        runnable.runTaskTimerAsynchronously(Opal.get(), delayTicks, periodTicks);
+        runnable.runTaskTimerAsynchronously(OPlugin.get(), delayTicks, periodTicks);
     }
 
     public static void runTaskTimerAsync(

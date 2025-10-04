@@ -20,9 +20,9 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings("unused")
 @ExtensionMethod(OCommandSenderExtension.class)
 @Getter
-public final class ODoubleSetting extends OSetting<Double, ODoubleSetting> {
-    private final Double min;
-    private final Double max;
+public final class ODoubleSetting extends OSetting<Double> {
+    private transient final Double min;
+    private transient final Double max;
 
     public ODoubleSetting(final String pretty, final double initial) {
         this(pretty, initial, null, null);
@@ -36,7 +36,21 @@ public final class ODoubleSetting extends OSetting<Double, ODoubleSetting> {
     }
 
     @Override
-    public void value(Double value) {
+    public ODoubleSetting description(final List<String> description) {
+        super.description(description);
+
+        return this;
+    }
+
+    @Override
+    public ODoubleSetting material(final Material material) {
+        super.material(material);
+
+        return this;
+    }
+
+    @Override
+    public ODoubleSetting value(Double value) {
         if (min != null && value < min) {
             value = min;
         }
@@ -46,6 +60,8 @@ public final class ODoubleSetting extends OSetting<Double, ODoubleSetting> {
         }
 
         this.value = value;
+
+        return this;
     }
 
     @Contract(" -> new")
@@ -89,11 +105,16 @@ public final class ODoubleSetting extends OSetting<Double, ODoubleSetting> {
             lore.add("&fCurrent: &6" + String.format("%.2f", setting.value));
 
             if (min != null) {
+                lore.add("");
                 lore.add("&fMinimum: &c" + String.format("%.2f", min));
             }
 
             if (max != null) {
-                lore.add("&fMaximum: &c" + String.format("%.2f", max));
+                if (min == null) {
+                    lore.add("");
+                }
+
+                lore.add("&fMaximum: &c" + (max == Double.MAX_VALUE ? "None" : String.format("%.2f", max)));
             }
 
             lore.add("");

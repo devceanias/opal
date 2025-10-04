@@ -21,10 +21,10 @@ import org.jetbrains.annotations.NotNull;
 @ExtensionMethod(OCommandSenderExtension.class)
 @SuppressWarnings("unused")
 @Getter
-public final class OChoiceSetting<T> extends OSetting<T, OChoiceSetting<T>> {
-    private final List<T> choices;
+public final class OChoiceSetting extends OSetting<String> {
+    private transient final List<String> choices;
 
-    public OChoiceSetting(final String pretty, final T initial, final @NotNull List<T> choices) {
+    public OChoiceSetting(final String pretty, final String initial, final @NotNull List<String> choices) {
         super(pretty, initial);
 
         this.choices = choices;
@@ -37,23 +37,39 @@ public final class OChoiceSetting<T> extends OSetting<T, OChoiceSetting<T>> {
     }
 
     @Override
-    public void value(final T value) {
+    public OChoiceSetting description(final List<String> description) {
+        super.description(description);
+
+        return this;
+    }
+
+    @Override
+    public OChoiceSetting material(final Material material) {
+        super.material(material);
+
+        return this;
+    }
+
+    @Override
+    public OChoiceSetting value(final String value) {
         if (!choices.contains(value)) {
             throw new IllegalArgumentException("Error updating setting; new value must be in choices list.");
         }
 
         this.value = value;
+
+        return this;
     }
 
     @Contract(" -> new")
     @Override
     public @NotNull xyz.xenondevs.invui.item.Item item() {
-        return new Item<>(this);
+        return new Item(this);
     }
 
     @RequiredArgsConstructor
-    public static class Item<T> extends AbstractItem {
-        private final OChoiceSetting<T> setting;
+    public static class Item extends AbstractItem {
+        private final OChoiceSetting setting;
 
         @Override
         public ItemProvider getItemProvider(final Player viewer) {
@@ -75,7 +91,7 @@ public final class OChoiceSetting<T> extends OSetting<T, OChoiceSetting<T>> {
             lore.add("");
             lore.add("&eChoices:");
 
-            for (final T choice : setting.choices) {
+            for (final String choice : setting.choices) {
                 final String colour = choice.equals(setting.value) ? "&a" : "&7";
 
                 lore.add(colour + "• " + choice);
@@ -95,7 +111,7 @@ public final class OChoiceSetting<T> extends OSetting<T, OChoiceSetting<T>> {
         public void handleClick(
             @NotNull final ClickType click, @NotNull final Player player, @NotNull final InventoryClickEvent event
         ) {
-            final List<T> choices = setting.choices;
+            final List<String> choices = setting.choices;
 
             final int current = choices.indexOf(setting.value);
             final int size = choices.size();

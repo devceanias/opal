@@ -1,6 +1,6 @@
 package net.oceanias.opal.utility.extension;
 
-import net.oceanias.opal.Opal;
+import net.oceanias.opal.OPlugin;
 import net.oceanias.opal.utility.helper.OTextHelper;
 import java.time.Duration;
 import java.util.Objects;
@@ -25,7 +25,7 @@ public final class OCommandSenderExtension {
     ) {
         final String line = lines ? OTextHelper.CHAT_DIVIDER_LONG : null;
         final String blank = blanks ? "" : null;
-        final String beginning = prefixed ? Opal.get().getPrefix() : "";
+        final String beginning = prefixed ? OPlugin.get().getPrefix() : "";
 
         sender.sendMessage(Stream.of(line, blank, beginning + message, blank, line)
             .filter(Objects::nonNull)

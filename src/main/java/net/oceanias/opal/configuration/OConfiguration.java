@@ -1,7 +1,7 @@
 package net.oceanias.opal.configuration;
 
 import net.oceanias.opal.component.impl.OProvider;
-import net.oceanias.opal.plugin.OPlugin;
+import net.oceanias.opal.OPlugin;
 import java.io.File;
 import java.nio.file.Path;
 import de.exlll.configlib.*;
@@ -12,8 +12,6 @@ public abstract class OConfiguration<T> implements OProvider {
     private YamlConfigurationStore<T> store;
 
     private boolean isFirstLoad = true;
-
-    protected abstract OPlugin getPlugin();
 
     public abstract String getLabel();
 
@@ -38,7 +36,7 @@ public abstract class OConfiguration<T> implements OProvider {
 
     public final void loadConfiguration() {
         if (path == null) {
-            path = new File(getPlugin().getDataFolder(), getFile().getPath()).toPath();
+            path = new File(OPlugin.get().getDataFolder(), getFile().getPath()).toPath();
         }
 
         if (store == null) {

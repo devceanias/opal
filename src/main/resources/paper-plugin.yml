@@ -1,8 +1,0 @@
-name: "Opal"
-version: "${version}"
-main: "net.oceanias.opal.Opal"
-description: "The utility plugin for Oceanias."
-api-version: "1.21"
-loader: "net.oceanias.opal.plugin.OLoader"
-authors: [ "Plantal" ]
-website: "https://oceanias.net"

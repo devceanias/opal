@@ -19,9 +19,30 @@ import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
 @ExtensionMethod(OCommandSenderExtension.class)
-public final class OBooleanSetting extends OSetting<Boolean, OBooleanSetting> {
+public final class OBooleanSetting extends OSetting<Boolean> {
     public OBooleanSetting(final String pretty, final boolean initial) {
         super(pretty, initial);
+    }
+
+    @Override
+    public OBooleanSetting description(final List<String> description) {
+        super.description(description);
+
+        return this;
+    }
+
+    @Override
+    public OBooleanSetting material(final Material material) {
+        super.material(material);
+
+        return this;
+    }
+
+    @Override
+    public OBooleanSetting value(final Boolean value) {
+        this.value = value;
+
+        return this;
     }
 
     @Contract(" -> new")

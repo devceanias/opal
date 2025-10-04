@@ -1,6 +1,5 @@
 package net.oceanias.opal.command;
 
-import net.oceanias.opal.plugin.OPlugin;
 import java.util.Collections;
 import java.util.List;
 import dev.jorel.commandapi.CommandPermission;
@@ -14,8 +13,6 @@ public abstract class OSubcommand implements OExecutable {
     public static final String SUBCOMMAND_NODE_NAME = "subcommand";
 
     private MultiLiteralArgument base;
-
-    protected abstract OPlugin getPlugin();
 
     public abstract OExecutable getParent();
 
