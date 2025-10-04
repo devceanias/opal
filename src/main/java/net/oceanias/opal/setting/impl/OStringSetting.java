@@ -40,16 +40,24 @@ import org.jetbrains.annotations.NotNull;
 @ExtensionMethod({ OComponentExtension.class, OCommandSenderExtension.class })
 @Getter
 public final class OStringSetting extends OSetting<String> {
-    private transient final Integer limit;
+    private transient Integer limit;
 
-    public OStringSetting(final String pretty, final String initial) {
-        this(pretty, initial, null);
+    public OStringSetting() {
+        super("");
     }
 
-    public OStringSetting(final String pretty, final String initial, final Integer limit) {
-        super(pretty, initial);
+    @Override
+    public OStringSetting name(final String name) {
+        super.name(name);
 
-        this.limit = limit;
+        return this;
+    }
+
+    @Override
+    public OStringSetting initial(final String initial) {
+        super.initial(initial);
+
+        return this;
     }
 
     @Override
@@ -116,7 +124,7 @@ public final class OStringSetting extends OSetting<String> {
             lore.add("&eClick &7to change!");
 
             return new OItemBuilder(type)
-                .setName("&e" + setting.pretty)
+                .setName("&e" + setting.name)
                 .addLore(lore)
                 .hideFlags();
         }

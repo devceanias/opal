@@ -13,6 +13,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.impl.AbstractItem;
 import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import lombok.experimental.ExtensionMethod;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -20,19 +22,28 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings("unused")
 @ExtensionMethod(OCommandSenderExtension.class)
 @Getter
+@Setter
+@Accessors(fluent = true)
 public final class ODoubleSetting extends OSetting<Double> {
-    private transient final Double min;
-    private transient final Double max;
+    private transient Double min;
+    private transient Double max;
 
-    public ODoubleSetting(final String pretty, final double initial) {
-        this(pretty, initial, null, null);
+    public ODoubleSetting() {
+        super(0.0);
     }
 
-    public ODoubleSetting(final String pretty, final double initial, final Double min, final Double max) {
-        super(pretty, initial);
+    @Override
+    public ODoubleSetting name(final String name) {
+        super.name(name);
 
-        this.min = min;
-        this.max = max;
+        return this;
+    }
+
+    @Override
+    public ODoubleSetting initial(final Double initial) {
+        super.initial(initial);
+
+        return this;
     }
 
     @Override
@@ -103,27 +114,16 @@ public final class ODoubleSetting extends OSetting<Double> {
             }
 
             lore.add("&fCurrent: &6" + String.format("%.2f", setting.value));
-
-            if (min != null) {
-                lore.add("");
-                lore.add("&fMinimum: &c" + String.format("%.2f", min));
-            }
-
-            if (max != null) {
-                if (min == null) {
-                    lore.add("");
-                }
-
-                lore.add("&fMaximum: &c" + (max == Double.MAX_VALUE ? "None" : String.format("%.2f", max)));
-            }
-
+            lore.add("");
+            lore.add("&fMinimum: &c" + (max == null ? "None" : String.format("%.2f", min)));
+            lore.add("&fMaximum: &c" + (max == null ? "None" : String.format("%.2f", max)));
             lore.add("");
             lore.add("&eLeft-click &7to add &n" + change + "&7.");
             lore.add("&eRight-click &7to subtract &n" + change + "&7.");
             lore.add("&eShift-click &7to change by &n" + (change * 10.0) + "&7.");
 
             return new OItemBuilder(type)
-                .setName("&e" + setting.pretty)
+                .setName("&e" + setting.name)
                 .addLore(lore)
                 .hideFlags();
         }

@@ -9,32 +9,39 @@ import lombok.experimental.Accessors;
 
 @SuppressWarnings({ "unused", "UnusedReturnValue" })
 @Getter
+@Setter
+@Accessors(fluent = true)
 public abstract class OSetting<T> {
-    @Accessors(fluent = true)
-    protected transient final String pretty;
+    protected transient String name = "Unspecified Name";
 
-    @Accessors(fluent = true)
-    protected transient final T initial;
+    protected transient T initial;
 
-    @Accessors(fluent = true)
     protected transient List<String> description;
 
-    @Accessors(fluent = true)
     protected transient Material material;
 
-    @Setter
-    @Accessors(fluent = true)
     protected T value;
 
-    protected OSetting(final String pretty, final T initial) {
+    protected OSetting(final T initial) {
         if (initial == null) {
             throw new IllegalArgumentException("Error creating setting; initial value must not be null.");
         }
 
-        this.pretty = pretty;
         this.initial = initial;
 
         value = initial;
+    }
+
+    public OSetting<T> name(final String name) {
+        this.name = name;
+
+        return this;
+    }
+
+    public OSetting<T> initial(final T initial) {
+        this.initial = initial;
+
+        return this;
     }
 
     public OSetting<T> description(final List<String> description) {

@@ -14,6 +14,8 @@ import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.impl.AbstractItem;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import lombok.experimental.ExtensionMethod;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -21,19 +23,27 @@ import org.jetbrains.annotations.NotNull;
 @ExtensionMethod(OCommandSenderExtension.class)
 @SuppressWarnings("unused")
 @Getter
+@Setter
+@Accessors(fluent = true)
 public final class OChoiceSetting extends OSetting<String> {
-    private transient final List<String> choices;
+    private transient List<String> choices;
 
-    public OChoiceSetting(final String pretty, final String initial, final @NotNull List<String> choices) {
-        super(pretty, initial);
+    public OChoiceSetting() {
+        super("Option 1");
+    }
 
-        this.choices = choices;
+    @Override
+    public OChoiceSetting name(final String name) {
+        super.name(name);
 
-        if (choices.contains(initial)) {
-            return;
-        }
+        return this;
+    }
 
-        throw new IllegalArgumentException("Error creating setting; initial value must be in choices list.");
+    @Override
+    public OChoiceSetting initial(final String initial) {
+        super.initial(initial);
+
+        return this;
     }
 
     @Override
@@ -52,8 +62,12 @@ public final class OChoiceSetting extends OSetting<String> {
 
     @Override
     public OChoiceSetting value(final String value) {
+        if (choices == null) {
+            throw new IllegalArgumentException("Error updating setting; the choices list is null.");
+        }
+
         if (!choices.contains(value)) {
-            throw new IllegalArgumentException("Error updating setting; new value must be in choices list.");
+            throw new IllegalArgumentException("Error updating setting; new value must be in the choices list.");
         }
 
         this.value = value;
@@ -73,6 +87,12 @@ public final class OChoiceSetting extends OSetting<String> {
 
         @Override
         public ItemProvider getItemProvider(final Player viewer) {
+            final List<String> choices = setting.choices;
+
+            if (choices == null) {
+                throw new IllegalArgumentException("Error constructing item; the choices list is null.");
+            }
+
             final Material material = setting.material;
 
             final List<String> description = setting.description;
@@ -91,7 +111,7 @@ public final class OChoiceSetting extends OSetting<String> {
             lore.add("");
             lore.add("&eChoices:");
 
-            for (final String choice : setting.choices) {
+            for (final String choice : choices) {
                 final String colour = choice.equals(setting.value) ? "&a" : "&7";
 
                 lore.add(colour + "• " + choice);
@@ -102,7 +122,7 @@ public final class OChoiceSetting extends OSetting<String> {
             lore.add("&eRight-click &7to cycle backwards.");
 
             return new OItemBuilder(type)
-                .setName("&e" + setting.pretty)
+                .setName("&e" + setting.name)
                 .addLore(lore)
                 .hideFlags();
         }

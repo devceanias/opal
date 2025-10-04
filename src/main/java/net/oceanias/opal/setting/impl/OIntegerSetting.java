@@ -3,7 +3,6 @@ package net.oceanias.opal.setting.impl;
 import net.oceanias.opal.setting.OSetting;
 import net.oceanias.opal.utility.builder.OItemBuilder;
 import net.oceanias.opal.utility.extension.OCommandSenderExtension;
-import java.beans.Transient;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Material;
@@ -14,6 +13,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.impl.AbstractItem;
 import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import lombok.experimental.ExtensionMethod;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -21,19 +22,28 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings("unused")
 @ExtensionMethod(OCommandSenderExtension.class)
 @Getter
+@Setter
+@Accessors(fluent = true)
 public final class OIntegerSetting extends OSetting<Integer> {
-    private transient final Integer min;
-    private transient final Integer max;
+    private transient Integer min;
+    private transient Integer max;
 
-    public OIntegerSetting(final String pretty, final int initial) {
-        this(pretty, initial, null, null);
+    public OIntegerSetting() {
+        super(0);
     }
 
-    public OIntegerSetting(final String pretty, final int initial, final Integer min, final Integer max) {
-        super(pretty, initial);
+    @Override
+    public OIntegerSetting name(final String name) {
+        super.name(name);
 
-        this.min = min;
-        this.max = max;
+        return this;
+    }
+
+    @Override
+    public OIntegerSetting initial(final Integer initial) {
+        super.initial(initial);
+
+        return this;
     }
 
     @Override
@@ -104,27 +114,16 @@ public final class OIntegerSetting extends OSetting<Integer> {
             }
 
             lore.add("&fCurrent: &6" + setting.value);
-
-            if (min != null) {
-                lore.add("");
-                lore.add("&fMinimum: &c" + min);
-            }
-
-            if (max != null) {
-                if (min == null) {
-                    lore.add("");
-                }
-
-                lore.add("&fMaximum: &c" + (max == Integer.MAX_VALUE ? "None" : max));
-            }
-
+            lore.add("");
+            lore.add("&fMinimum: &c" + (max == null ? "None" : min));
+            lore.add("&fMaximum: &c" + (max == null ? "None" : max));
             lore.add("");
             lore.add("&eLeft-click &7to add &n" + change + "&7.");
             lore.add("&eRight-click &7to subtract &n" + change + "&7.");
             lore.add("&eShift-click &7to change by &n" + (change * 10) + "&7.");
 
             return new OItemBuilder(type)
-                .setName("&e" + setting.pretty)
+                .setName("&e" + setting.name)
                 .addLore(lore)
                 .hideFlags();
         }

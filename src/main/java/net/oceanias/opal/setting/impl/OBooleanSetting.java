@@ -20,8 +20,22 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings("unused")
 @ExtensionMethod(OCommandSenderExtension.class)
 public final class OBooleanSetting extends OSetting<Boolean> {
-    public OBooleanSetting(final String pretty, final boolean initial) {
-        super(pretty, initial);
+    public OBooleanSetting() {
+        super(false);
+    }
+
+    @Override
+    public OBooleanSetting name(final String name) {
+        super.name(name);
+
+        return this;
+    }
+
+    @Override
+    public OBooleanSetting initial(final Boolean initial) {
+        super.initial(initial);
+
+        return this;
     }
 
     @Override
@@ -79,7 +93,7 @@ public final class OBooleanSetting extends OSetting<Boolean> {
             lore.add("&eClick &7to toggle!");
 
             return new OItemBuilder(type)
-                .setName("&e" + setting.pretty)
+                .setName("&e" + setting.name)
                 .addLore(lore)
                 .hideFlags();
         }

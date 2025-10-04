@@ -3,7 +3,7 @@ package net.oceanias.opal.utility.helper;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({ "unused", "BooleanMethodIsAlwaysInverted" })
 public final class OLocationHelper {
     public static boolean hasMovedExact(final @NotNull Location from, final @NotNull Location to) {
         return from.getX() != to.getX()
