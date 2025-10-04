@@ -1,5 +1,5 @@
 project.group = "net.oceanias"
-project.version = "1.0.17"
+project.version = "2.0.0"
 
 plugins {
     id("java-library")
