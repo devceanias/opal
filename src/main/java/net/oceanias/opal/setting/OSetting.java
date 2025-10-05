@@ -41,6 +41,8 @@ public abstract class OSetting<T> {
     public OSetting<T> initial(final T initial) {
         this.initial = initial;
 
+        value = initial;
+
         return this;
     }
 
