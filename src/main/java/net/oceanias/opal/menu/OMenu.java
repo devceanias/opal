@@ -81,8 +81,6 @@ public abstract class OMenu {
                 return new OItemBuilder(Material.SPECTRAL_ARROW)
                     .setName(OPlugin.get().getColour() + "Go Back")
                     .addLore(List.of(
-                        "&fMenu: &6" + back.getWindow(back.getGui(null), null),
-                        "",
                         OPlugin.get().getColour() + "Click &7to use!"
                     ))
                     .addGlint()
