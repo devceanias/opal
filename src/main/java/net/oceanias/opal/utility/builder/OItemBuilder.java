@@ -84,7 +84,7 @@ public final class OItemBuilder implements ItemProvider {
                 : new ArrayList<>();
 
             if (divider) {
-                lore.add(OTextHelper.SIDEBAR_DIVIDER_MAIN.deserialize());
+                lore.add(OTextHelper.LORE_DIVIDER_LONG.deserialize());
             }
 
             for (final String line : lines) {

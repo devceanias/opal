@@ -16,6 +16,6 @@ public final class OTextHelper {
     public static final String LORE_DIVIDER_LONG =
         "[gradient:#555555:#AAAAAA]&m                                                            [/gradient]";
 
-    public static final String SIDEBAR_DIVIDER_MAIN =
+    public static final String LORE_DIVIDER_LONG =
         "[gradient:#AAAAAA:#FFFFFF]&m                              [/gradient]";
 }
