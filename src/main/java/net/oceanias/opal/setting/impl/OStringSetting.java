@@ -159,7 +159,7 @@ public final class OStringSetting extends OSetting<String> {
         private void addCurrentLore(final @NotNull List<String> lore, final @NotNull String value) {
             lore.add("&eCurrent:");
 
-            final int limit = OTextHelper.LORE_DIVIDER_LONG
+            final int limit = OTextHelper.SIDEBAR_DIVIDER_MAIN
                 .replaceAll(OTextHelper.COLOUR_CODE_REGEX, "")
                 .length();
 

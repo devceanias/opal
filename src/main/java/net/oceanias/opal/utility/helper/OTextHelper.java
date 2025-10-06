@@ -5,14 +5,17 @@ public final class OTextHelper {
     public static final String COLOUR_CODE_REGEX = "&[0-9a-fk-or]";
 
     public static final String CHAT_DIVIDER_SHORT =
-        "&7&m                                                            ";
+        "[gradient:#AAAAAA:#FFFFFF]&m                                                            [/gradient]";
 
     public static final String CHAT_DIVIDER_LONG =
-        "&7&m                                                                              ";
+        "[gradient:#AAAAAA:#FFFFFF]&m                                                                          [/gradient]";
 
     public static final String LORE_DIVIDER_SHORT =
-        "&8&m                                              ";
+        "[gradient:#555555:#AAAAAA]&m                                              [/gradient]";
 
     public static final String LORE_DIVIDER_LONG =
-        "&8&m                                                                ";
+        "[gradient:#555555:#AAAAAA]&m                                                            [/gradient]";
+
+    public static final String SIDEBAR_DIVIDER_MAIN =
+        "[gradient:#AAAAAA:#FFFFFF]&m                              [/gradient]";
 }
