@@ -203,8 +203,9 @@ public abstract class OCommand implements OExecutable, OProvider {
         }
 
         for (final Object child : children) {
-            boolean subcommand = false;
             final String name;
+
+            boolean subcommand = false;
             boolean optional = false;
 
             if (child instanceof final AbstractArgument<?, ?, ?, ?> argument) {
