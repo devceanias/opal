@@ -57,6 +57,7 @@ dependencies {
     compileOnly(variantOf(libs.inventoryaccess) { classifier("remapped-mojang") })
 
     compileOnlyApi(libs.invui)
+    compileOnlyApi(libs.groovy)
 }
 
 //zapper {

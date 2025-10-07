@@ -1,22 +1,23 @@
 package net.oceanias.opal;
 
 import net.oceanias.opal.configuration.OConfiguration;
+import net.oceanias.opal.configuration.impl.OScriptConfig;
 import net.oceanias.opal.database.ODatabase;
 import net.oceanias.opal.component.impl.OModule;
 import net.oceanias.opal.menu.OMenu;
+import net.oceanias.opal.module.script.OScriptModule;
 import net.oceanias.opal.setting.impl.OStringSetting;
 import net.oceanias.opal.utility.helper.OTeleportHelper;
 import java.util.List;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPIBukkitConfig;
+import dev.jorel.commandapi.CommandAPIPaperConfig;
 import xyz.xenondevs.invui.InvUI;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-import org.jetbrains.annotations.NotNull;
 
-@SuppressWarnings({ "unused", "deprecation" })
+@SuppressWarnings({ "unused", "deprecation", "UnstableApiUsage" })
 @Getter
 //public abstract class OPlugin extends ZapperJavaPlugin {
 public abstract class OPlugin extends JavaPlugin {
@@ -69,8 +70,8 @@ public abstract class OPlugin extends JavaPlugin {
             throw new IllegalStateException("Error loading plugin; getLoader() returned null.");
         }
 
-        CommandAPI.onLoad(new CommandAPIBukkitConfig(this)
-            .skipReloadDatapacks(!reloadsDatapacks())
+        CommandAPI.onLoad(new CommandAPIPaperConfig(this)
+            .fallbackToLatestNMS(true)
             .missingExecutorImplementationMessage("This command does not support %s.")
         );
 
@@ -87,6 +88,8 @@ public abstract class OPlugin extends JavaPlugin {
 
         InvUI.getInstance().setPlugin(this);
 
+        OScriptConfig.get().registerInternally();
+
         for (final OConfiguration<?> config : getConfigurations()) {
             config.registerInternally();
         }
@@ -96,6 +99,8 @@ public abstract class OPlugin extends JavaPlugin {
         if (getDatabase() != null) {
             getDatabase().registerInternally();
         }
+
+        new OScriptModule().registerInternally();
 
         for (final OModule module : getModules()) {
             module.registerInternally();
