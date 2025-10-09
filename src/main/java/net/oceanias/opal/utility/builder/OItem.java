@@ -1,6 +1,7 @@
 package net.oceanias.opal.utility.builder;
 
 import net.kyori.adventure.text.Component;
+import net.oceanias.opal.OPlugin;
 import net.oceanias.opal.utility.extension.OComponentExtension;
 import net.oceanias.opal.utility.extension.OStringExtension;
 import net.oceanias.opal.utility.helper.OTextHelper;
@@ -21,6 +22,8 @@ import org.bukkit.inventory.meta.components.ToolComponent;
 import org.bukkit.inventory.meta.components.EquippableComponent;
 import org.bukkit.inventory.meta.components.UseCooldownComponent;
 import org.bukkit.inventory.meta.trim.ArmorTrim;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionType;
 import com.destroystokyo.paper.profile.PlayerProfile;
@@ -34,7 +37,9 @@ import lombok.experimental.Accessors;
 import lombok.experimental.ExtensionMethod;
 import xyz.xenondevs.invui.item.ItemProvider;
 
+import java.io.IOException;
 import java.util.*;
+import java.util.logging.Level;
 
 // TODO: Add potential missing methods? I'm not bothered to check.
 @SuppressWarnings({ "unused", "UnstableApiUsage", "ResultOfMethodCallIgnored", "UnusedReturnValue" })
@@ -149,6 +154,11 @@ public final class OItem extends ItemStack implements ItemProvider {
         private MusicInstrument instrument;
 
         private Integer ominousBottleAmplifier;
+
+        private final Map<NamespacedKey, PersistentDataEntry<?>> newPersistentData = new LinkedHashMap<>();
+        private byte[] oldPersistentData;
+
+        private record PersistentDataEntry<T>(PersistentDataType<?, T> type, T value) {}
 
         public @NotNull OItem build() {
             final OItem item = (OItem) new OItem().withType(material);
@@ -407,9 +417,38 @@ public final class OItem extends ItemStack implements ItemProvider {
                 }
             }
 
+            final PersistentDataContainer container = meta.getPersistentDataContainer();
+
+            if (oldPersistentData != null) {
+                try {
+                    container.readFromBytes(oldPersistentData);
+                } catch (final IOException exception) {
+                    OPlugin.get().getLogger().log(
+                        Level.SEVERE,
+                        "Error reading persistent data container:" + exception.getMessage() + "!",
+                        exception
+                    );
+                }
+            }
+
+            if (!newPersistentData.isEmpty()) {
+                for (final Map.Entry<NamespacedKey, PersistentDataEntry<?>> entry : newPersistentData.entrySet()) {
+                    setPersistentData(container, entry.getKey(), entry.getValue());
+                }
+            }
+
             item.setItemMeta(meta);
 
             return item;
+        }
+
+        @SuppressWarnings("unchecked")
+        private static <T> void setPersistentData(
+            final PersistentDataContainer pdc,
+            final NamespacedKey key,
+            final PersistentDataEntry<?> entry
+        ) {
+            pdc.set(key, (PersistentDataType<?, T>) entry.type(), (T) entry.value());
         }
 
         public OItemBuilder lore(final String... lines) {
@@ -544,6 +583,22 @@ public final class OItem extends ItemStack implements ItemProvider {
 
         public OItemBuilder stewEffect(final PotionEffect effect) {
             stewEffects.add(effect);
+
+            return this;
+        }
+
+        public <P, C> OItemBuilder newPersistentData(
+            final NamespacedKey key,
+            final PersistentDataType<P, C> type,
+            final C value
+        ) {
+            newPersistentData.put(key, new PersistentDataEntry<>(type, value));
+
+            return this;
+        }
+
+        public OItemBuilder persistentDataNone() {
+            newPersistentData.clear();
 
             return this;
         }
@@ -792,6 +847,20 @@ public final class OItem extends ItemStack implements ItemProvider {
             if (meta instanceof final OminousBottleMeta ominous) {
                 if (ominous.hasAmplifier()) {
                     ominousBottleAmplifier(ominous.getAmplifier());
+                }
+            }
+
+            final PersistentDataContainer pdc = meta.getPersistentDataContainer();
+
+            if (!pdc.isEmpty()) {
+                try {
+                    oldPersistentData = pdc.serializeToBytes();
+                } catch (final IOException exception) {
+                    OPlugin.get().getLogger().log(
+                        Level.SEVERE,
+                        "Error serializing persistent data container:" + exception.getMessage() + "!",
+                        exception
+                    );
                 }
             }
 
