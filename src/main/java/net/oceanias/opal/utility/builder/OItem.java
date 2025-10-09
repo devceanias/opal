@@ -46,7 +46,7 @@ import java.util.logging.Level;
 @Accessors(fluent = true)
 @ExtensionMethod({ OStringExtension.class, OComponentExtension.class })
 public final class OItem extends ItemStack implements ItemProvider {
-    private static final OItem FILLER = OItem.builder()
+    public static final OItem FILLER = OItem.builder()
         .material(Material.BLACK_STAINED_GLASS_PANE)
         .name("")
         .flagsAll()
