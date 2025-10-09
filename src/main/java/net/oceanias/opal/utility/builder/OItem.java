@@ -41,7 +41,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 
-// TODO: Add potential missing methods? I'm not bothered to check.
+// TODO: Add missing meta types (e.g. ShieldMeta).
 @SuppressWarnings({ "unused", "UnstableApiUsage", "ResultOfMethodCallIgnored", "UnusedReturnValue" })
 @Accessors(fluent = true)
 @ExtensionMethod({ OStringExtension.class, OComponentExtension.class })
