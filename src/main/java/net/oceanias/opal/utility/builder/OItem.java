@@ -37,7 +37,7 @@ import xyz.xenondevs.invui.item.ItemProvider;
 import java.util.*;
 
 // TODO: Add potential missing methods? I'm not bothered to check.
-@SuppressWarnings({ "unused", "UnstableApiUsage", "ResultOfMethodCallIgnored" })
+@SuppressWarnings({ "unused", "UnstableApiUsage", "ResultOfMethodCallIgnored", "UnusedReturnValue" })
 @Accessors(fluent = true)
 @ExtensionMethod({ OStringExtension.class, OComponentExtension.class })
 public final class OItem extends ItemStack implements ItemProvider {
@@ -59,6 +59,10 @@ public final class OItem extends ItemStack implements ItemProvider {
 
     public static OItemBuilder builder(final Material material) {
         return new OItemBuilder().material(material);
+    }
+
+    public static OItemBuilder builder(final ItemStack stack) {
+        return new OItemBuilder().from(stack);
     }
 
     @Override
@@ -139,7 +143,7 @@ public final class OItem extends ItemStack implements ItemProvider {
         private DyeColor fishPatternColour;
 
         private List<ItemStack> crossbowProjectiles;
-        private final List<SuspiciousEffectEntry> stewEffects = new ArrayList<>();
+        private final List<PotionEffect> stewEffects = new ArrayList<>();
 
         private ArmorTrim trim;
         private MusicInstrument instrument;
@@ -377,8 +381,10 @@ public final class OItem extends ItemStack implements ItemProvider {
 
             if (meta instanceof final SuspiciousStewMeta stew) {
                 if (!stewEffects.isEmpty()) {
-                    for (final SuspiciousEffectEntry effect : stewEffects) {
-                        stew.addCustomEffect(effect, true);
+                    for (final PotionEffect effect : stewEffects) {
+                        stew.addCustomEffect(
+                            SuspiciousEffectEntry.create(effect.getType(), effect.getDuration()), true
+                        );
                     }
                 }
             }
@@ -524,20 +530,270 @@ public final class OItem extends ItemStack implements ItemProvider {
             return this;
         }
 
-        public OItemBuilder stewEffects(final SuspiciousEffectEntry... effects) {
+        public OItemBuilder stewEffects(final PotionEffect... effects) {
             stewEffects.addAll(List.of(effects));
 
             return this;
         }
 
-        public OItemBuilder stewEffects(final List<SuspiciousEffectEntry> effects) {
+        public OItemBuilder stewEffects(final List<PotionEffect> effects) {
             stewEffects.addAll(effects);
 
             return this;
         }
 
-        public OItemBuilder stewEffect(final SuspiciousEffectEntry effect) {
+        public OItemBuilder stewEffect(final PotionEffect effect) {
             stewEffects.add(effect);
+
+            return this;
+        }
+
+        @Contract("_ -> this")
+        public OItemBuilder from(final @NotNull ItemStack stack) {
+            final ItemMeta meta = stack.getItemMeta();
+
+            material(stack.getType());
+            amount(stack.getAmount());
+
+            if (meta == null) {
+                return this;
+            }
+
+            if (meta.hasItemName()) {
+                name(meta.itemName().serialize());
+            }
+
+            if (meta.hasLore()) {
+                final List<Component> lines = meta.lore();
+
+                if (lines != null) {
+                    for (final Component line : lines) {
+                        lore(line.serialize());
+                    }
+                }
+            }
+
+            if (meta.hasCustomModelData()) {
+                modelData(meta.getCustomModelData());
+            }
+
+            if (meta.hasItemModel()) {
+                modelKey(meta.getItemModel());
+            }
+
+            if (meta.hasEnchants()) {
+                for (final Map.Entry<Enchantment, Integer> entry : meta.getEnchants().entrySet()) {
+                    enchant(entry.getKey(), entry.getValue());
+                }
+            }
+
+            flags.addAll(meta.getItemFlags());
+
+            if (meta.isUnbreakable()) {
+                unbreakable(true);
+            }
+
+            if (meta instanceof final Damageable damageable) {
+                if (damageable.hasDamage()) {
+                    damageNow(damageable.getDamage());
+                }
+
+                if (damageable.hasMaxDamage()) {
+                    damageMax(damageable.getMaxDamage());
+                }
+            }
+
+            if (meta.hasAttributeModifiers()) {
+                final Multimap<Attribute, AttributeModifier> modifiers = meta.getAttributeModifiers();
+
+                if (modifiers != null) {
+                    for (final Map.Entry<Attribute, AttributeModifier> entry : modifiers.entries()) {
+                        attributeModifier(entry.getKey(), entry.getValue());
+                    }
+                }
+            }
+
+            if (meta.hasMaxStackSize()) {
+                maxStackSize(meta.getMaxStackSize());
+            }
+
+            if (meta.hasRarity()) {
+                rarity(meta.getRarity());
+            }
+
+            if (meta.hasFood()) {
+                food(meta.getFood());
+            }
+
+            if (meta.hasTool()) {
+                tool(meta.getTool());
+            }
+
+            if (meta.hasJukeboxPlayable()) {
+                jukebox(meta.getJukeboxPlayable());
+            }
+
+            if (meta.hasEquippable()) {
+                equippable(meta.getEquippable());
+            }
+
+            if (meta.hasEnchantable()) {
+                enchantable(meta.getEnchantable());
+            }
+
+            if (meta.isGlider()) {
+                glider(true);
+            }
+
+            if (meta.hasUseCooldown()) {
+                useCooldown(meta.getUseCooldown());
+            }
+
+            if (meta.hasUseRemainder()) {
+                useRemainder(meta.getUseRemainder());
+            }
+
+            if (meta.hasEnchantmentGlintOverride()) {
+                glintOverride(meta.getEnchantmentGlintOverride());
+            }
+
+            if (meta.hasDamageResistant()) {
+                damageResistant(meta.getDamageResistant());
+            }
+
+            if (meta.hasTooltipStyle()) {
+                tooltipStyle(meta.getTooltipStyle());
+            }
+
+            if (meta.isHideTooltip()) {
+                tooltipHidden(true);
+            }
+
+            if (meta instanceof final SkullMeta skull) {
+                final PlayerProfile profile = skull.getPlayerProfile();
+
+                if (skull.hasOwner()) {
+                    skullOwner(skull.getOwningPlayer());
+                }
+
+                if (profile != null) {
+                    playerProfile(profile);
+                }
+            }
+
+            if (meta instanceof final PotionMeta potion) {
+                if (potion.hasBasePotionType()) {
+                    potionType(potion.getBasePotionType());
+                }
+
+                if (potion.hasColor()) {
+                    potionColour(potion.getColor());
+                }
+
+                if (potion.hasCustomEffects()) {
+                    potionEffects.addAll(potion.getCustomEffects());
+                }
+            }
+
+            if (meta instanceof final BookMeta book) {
+                if (book.hasTitle()) {
+                    bookTitle(book.title().serialize());
+                }
+
+                if (book.hasAuthor()) {
+                    bookAuthor(book.author().serialize());
+                }
+
+                if (book.hasPages()) {
+                    for (final Component page : book.pages()) {
+                        bookPage(page.serialize());
+                    }
+                }
+
+                if (book.hasGeneration()) {
+                    bookGeneration(book.getGeneration());
+                }
+            }
+
+            if (meta instanceof final LeatherArmorMeta leather) {
+                leatherColor(leather.getColor());
+            }
+
+            if (meta instanceof final BannerMeta banner) {
+                final List<Pattern> patterns = banner.getPatterns();
+
+                if (!patterns.isEmpty()) {
+                    bannerPatterns(patterns);
+                }
+            }
+
+            if (meta instanceof final FireworkMeta firework) {
+                if (firework.hasEffects()) {
+                    fireworkEffects.addAll(firework.getEffects());
+                }
+
+                fireworkPower(firework.getPower());
+            }
+
+            if (meta instanceof final MapMeta map) {
+                if (map.hasColor()) {
+                    mapColour(map.getColor());
+                }
+
+                if (map.isScaling()) {
+                    mapScaling(true);
+                }
+            }
+
+            if (meta instanceof final CompassMeta compass) {
+                if (compass.hasLodestone()) {
+                    lodestoneLocation(compass.getLodestone());
+                }
+
+                if (compass.isLodestoneTracked()) {
+                    lodestoneTracked(true);
+                }
+            }
+
+            if (meta instanceof final TropicalFishBucketMeta fish) {
+                if (fish.hasVariant()) {
+                    fishPatternType(fish.getPattern());
+                    fishBodyColour(fish.getBodyColor());
+                    fishPatternColour(fish.getPatternColor());
+                }
+            }
+
+            if (meta instanceof final CrossbowMeta crossbow) {
+                if (crossbow.hasChargedProjectiles()) {
+                    crossbowProjectiles(crossbow.getChargedProjectiles());
+                }
+            }
+
+            if (meta instanceof final SuspiciousStewMeta stew) {
+                if (stew.hasCustomEffects()) {
+                    stewEffects.addAll(stew.getCustomEffects());
+                }
+            }
+
+            if (meta instanceof final ArmorMeta armour) {
+                if (armour.hasTrim()) {
+                    trim(armour.getTrim());
+                }
+            }
+
+            if (meta instanceof final MusicInstrumentMeta music) {
+                final MusicInstrument instrument = music.getInstrument();
+
+                if (instrument != null) {
+                    instrument(instrument);
+                }
+            }
+
+            if (meta instanceof final OminousBottleMeta ominous) {
+                if (ominous.hasAmplifier()) {
+                    ominousBottleAmplifier(ominous.getAmplifier());
+                }
+            }
 
             return this;
         }
