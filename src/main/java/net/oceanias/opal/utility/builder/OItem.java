@@ -42,7 +42,7 @@ import java.util.*;
 import java.util.logging.Level;
 
 // TODO: Add missing meta types (e.g. ShieldMeta).
-@SuppressWarnings({ "unused", "UnstableApiUsage", "ResultOfMethodCallIgnored", "UnusedReturnValue" })
+@SuppressWarnings({ "unused", "UnstableApiUsage", "ResultOfMethodCallIgnored", "UnusedReturnValue", "unchecked" })
 @Accessors(fluent = true)
 @ExtensionMethod({ OStringExtension.class, OComponentExtension.class })
 public final class OItem extends ItemStack implements ItemProvider {
@@ -155,8 +155,8 @@ public final class OItem extends ItemStack implements ItemProvider {
 
         private Integer ominousBottleAmplifier;
 
-        private final Map<NamespacedKey, PersistentDataEntry<?>> newPersistentData = new LinkedHashMap<>();
-        private byte[] oldPersistentData;
+        private final Map<NamespacedKey, PersistentDataEntry<?>> persistentData = new LinkedHashMap<>();
+        private byte[] persistentBytes;
 
         private record PersistentDataEntry<T>(PersistentDataType<?, T> type, T value) {}
 
@@ -419,20 +419,20 @@ public final class OItem extends ItemStack implements ItemProvider {
 
             final PersistentDataContainer container = meta.getPersistentDataContainer();
 
-            if (oldPersistentData != null) {
+            if (persistentBytes != null) {
                 try {
-                    container.readFromBytes(oldPersistentData);
+                    container.readFromBytes(persistentBytes);
                 } catch (final IOException exception) {
                     OPlugin.get().getLogger().log(
                         Level.SEVERE,
-                        "Error reading persistent data container:" + exception.getMessage() + "!",
+                        "Error reading persistent data container: " + exception.getMessage() + "!",
                         exception
                     );
                 }
             }
 
-            if (!newPersistentData.isEmpty()) {
-                for (final Map.Entry<NamespacedKey, PersistentDataEntry<?>> entry : newPersistentData.entrySet()) {
+            if (!persistentData.isEmpty()) {
+                for (final Map.Entry<NamespacedKey, PersistentDataEntry<?>> entry : persistentData.entrySet()) {
                     setPersistentData(container, entry.getKey(), entry.getValue());
                 }
             }
@@ -442,11 +442,10 @@ public final class OItem extends ItemStack implements ItemProvider {
             return item;
         }
 
-        @SuppressWarnings("unchecked")
         private static <T> void setPersistentData(
-            final PersistentDataContainer pdc,
+            final @NotNull PersistentDataContainer pdc,
             final NamespacedKey key,
-            final PersistentDataEntry<?> entry
+            final @NotNull PersistentDataEntry<?> entry
         ) {
             pdc.set(key, (PersistentDataType<?, T>) entry.type(), (T) entry.value());
         }
@@ -587,18 +586,18 @@ public final class OItem extends ItemStack implements ItemProvider {
             return this;
         }
 
-        public <P, C> OItemBuilder newPersistentData(
+        public <P, C> OItemBuilder persistentData(
             final NamespacedKey key,
             final PersistentDataType<P, C> type,
             final C value
         ) {
-            newPersistentData.put(key, new PersistentDataEntry<>(type, value));
+            persistentData.put(key, new PersistentDataEntry<>(type, value));
 
             return this;
         }
 
         public OItemBuilder persistentDataNone() {
-            newPersistentData.clear();
+            persistentData.clear();
 
             return this;
         }
@@ -854,11 +853,11 @@ public final class OItem extends ItemStack implements ItemProvider {
 
             if (!pdc.isEmpty()) {
                 try {
-                    oldPersistentData = pdc.serializeToBytes();
+                    persistentBytes = pdc.serializeToBytes();
                 } catch (final IOException exception) {
                     OPlugin.get().getLogger().log(
                         Level.SEVERE,
-                        "Error serializing persistent data container:" + exception.getMessage() + "!",
+                        "Error serializing persistent data container: " + exception.getMessage() + "!",
                         exception
                     );
                 }
