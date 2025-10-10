@@ -14,7 +14,6 @@ import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import xyz.xenondevs.invui.InvUI;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings({ "unused", "deprecation" })
 @Getter

@@ -30,13 +30,16 @@ public final class OMessage {
     private final List<String> lines;
 
     @Setter
-    private boolean prefix;
+    @Builder.Default
+    private boolean prefix = true;
 
     @Setter
-    private boolean dividers;
+    @Builder.Default
+    private boolean dividers = false;
 
     @Setter
-    private boolean blanks;
+    @Builder.Default
+    private boolean blanks = false;
 
     private Sound sound;
 
