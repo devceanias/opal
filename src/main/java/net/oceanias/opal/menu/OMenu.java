@@ -1,15 +1,15 @@
 package net.oceanias.opal.menu;
 
 import net.oceanias.opal.OPlugin;
-import net.oceanias.opal.utility.builder.OItemBuilder;
+import net.oceanias.opal.utility.builder.OItem;
 import net.oceanias.opal.utility.extension.OCommandSenderExtension;
 import net.oceanias.opal.utility.extension.OStringExtension;
-import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionType;
 import xyz.xenondevs.inventoryaccess.component.AdventureComponentWrapper;
 import xyz.xenondevs.invui.gui.Gui;
@@ -39,7 +39,7 @@ public abstract class OMenu {
     }
 
     public static void addIngredients() {
-        Structure.addGlobalIngredient('#', OItemBuilder.getFiller());
+        Structure.addGlobalIngredient('#', (ItemStack) OItem.FILLER);
         Structure.addGlobalIngredient('<', new OMenu.Previous());
         Structure.addGlobalIngredient('>', new OMenu.Next());
     }
@@ -65,29 +65,29 @@ public abstract class OMenu {
             final int max = gui.getPageAmount();
 
             if (gui.hasPreviousPage()) {
-                return new OItemBuilder(Material.TIPPED_ARROW)
-                    .setPotionType(PotionType.SLOW_FALLING)
-                    .setName(OPlugin.get().getColour() + "Previous Page")
-                    .addLore(List.of(
-                        "&fPage: &e" + now + "&7/&e" + max + " &7» &a" + (now + 1) + "&7/&a" + max,
+                return OItem.builder(Material.TIPPED_ARROW)
+                    .amount(Math.max(1, Math.min(64, now - 1)))
+                    .name(OPlugin.get().getColour() + "Previous Page")
+                    .lore(
+                        "&fCurrent: &6" + now,
                         "",
                         OPlugin.get().getColour() + "Click &7to turn!"
-                    ))
-                    .addGlint()
-                    .hideFlags();
+                    )
+                    .potionType(PotionType.HEALING)
+                    .flagsAll()
+                    .build();
             }
 
             if (back != null) {
-                return new OItemBuilder(Material.SPECTRAL_ARROW)
-                    .setName(OPlugin.get().getColour() + "Go Back")
-                    .addLore(List.of(
-                        OPlugin.get().getColour() + "Click &7to use!"
-                    ))
-                    .addGlint()
-                    .hideFlags();
+                return OItem.builder(Material.TIPPED_ARROW)
+                    .name("&cGo Back")
+                    .lore("&fClick &7to use!")
+                    .potionType(PotionType.HEALING)
+                    .flagsAll()
+                    .build();
             }
 
-            return OItemBuilder.getFiller();
+            return OItem.FILLER;
         }
 
         @Override
@@ -100,6 +100,8 @@ public abstract class OMenu {
                 super.handleClick(click, player, event);
 
                 player.soundDSR(Sound.ITEM_BOOK_PAGE_TURN);
+
+                return;
             }
 
             if (back == null) {
@@ -121,19 +123,20 @@ public abstract class OMenu {
             final int max = gui.getPageAmount();
 
             if (gui.hasNextPage()) {
-                return new OItemBuilder(Material.TIPPED_ARROW)
-                    .setPotionType(PotionType.SLOW_FALLING)
-                    .setName(OPlugin.get().getColour() + "Next Page")
-                    .addLore(List.of(
-                        "&fPage: &e" + now + "&7/&e" + max + " &7» &a" + (now - 1) + "&7/&a" + max,
+                return OItem.builder(Material.TIPPED_ARROW)
+                    .amount(Math.max(1, Math.min(64, now + 1)))
+                    .name(OPlugin.get().getColour() + "Next Page")
+                    .lore(
+                        "&fCurrent: &6" + now,
                         "",
                         OPlugin.get().getColour() + "Click &7to turn!"
-                    ))
-                    .addGlint()
-                    .hideFlags();
+                    )
+                    .potionType(PotionType.LEAPING)
+                    .flagsAll()
+                    .build();
             }
 
-            return OItemBuilder.getFiller();
+            return OItem.FILLER;
         }
 
         @Override
