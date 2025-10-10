@@ -46,14 +46,15 @@ import java.util.logging.Level;
 @Accessors(fluent = true)
 @ExtensionMethod({ OStringExtension.class, OComponentExtension.class })
 public final class OItem extends ItemStack implements ItemProvider {
-    public static final OItem.OItemBuilder FILLER = OItem.builder()
+    public static final OItem FILLER = OItem.builder()
         .material(Material.BLACK_STAINED_GLASS_PANE)
         .name("")
         .flagsAll()
-        .tooltipHidden(true);
+        .tooltipHidden(true)
+        .build();
 
-    private OItem() {
-        super(Material.AIR);
+    private OItem(final Material material) {
+        super(material);
     }
 
     @Contract(" -> new")
@@ -160,7 +161,7 @@ public final class OItem extends ItemStack implements ItemProvider {
         private record PersistentDataEntry<T>(PersistentDataType<?, T> type, T value) {}
 
         public @NotNull OItem build() {
-            final OItem item = (OItem) new OItem().withType(material);
+            final OItem item = new OItem(material);
             final ItemMeta meta = item.getItemMeta();
 
             item.setAmount(amount);

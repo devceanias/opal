@@ -39,7 +39,7 @@ public abstract class OMenu {
     }
 
     public static void addIngredients() {
-        Structure.addGlobalIngredient('#', OItem.FILLER.build().get());
+        Structure.addGlobalIngredient('#', OItem.FILLER.get());
         Structure.addGlobalIngredient('<', new OMenu.Previous());
         Structure.addGlobalIngredient('>', new OMenu.Next());
     }
@@ -87,7 +87,7 @@ public abstract class OMenu {
                     .build();
             }
 
-            return OItem.FILLER.build();
+            return OItem.FILLER;
         }
 
         @Override
@@ -136,7 +136,7 @@ public abstract class OMenu {
                     .build();
             }
 
-            return OItem.FILLER.build();
+            return OItem.FILLER;
         }
 
         @Override
