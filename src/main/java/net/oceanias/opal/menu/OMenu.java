@@ -39,7 +39,7 @@ public abstract class OMenu {
     }
 
     public static void addIngredients() {
-        Structure.addGlobalIngredient('#', (ItemStack) OItem.FILLER);
+        Structure.addGlobalIngredient('#', OItem.FILLER.build().get());
         Structure.addGlobalIngredient('<', new OMenu.Previous());
         Structure.addGlobalIngredient('>', new OMenu.Next());
     }
@@ -60,7 +60,7 @@ public abstract class OMenu {
         }
 
         @Override
-        public ItemProvider getItemProvider(final @NotNull PagedGui<?> gui) {
+        public @NotNull ItemProvider getItemProvider(final @NotNull PagedGui<?> gui) {
             final int now = gui.getCurrentPage() + 1;
             final int max = gui.getPageAmount();
 
@@ -87,7 +87,7 @@ public abstract class OMenu {
                     .build();
             }
 
-            return OItem.FILLER;
+            return OItem.FILLER.build();
         }
 
         @Override
@@ -118,7 +118,7 @@ public abstract class OMenu {
         }
 
         @Override
-        public ItemProvider getItemProvider(final @NotNull PagedGui<?> gui) {
+        public @NotNull ItemProvider getItemProvider(final @NotNull PagedGui<?> gui) {
             final int now = gui.getCurrentPage() + 1;
             final int max = gui.getPageAmount();
 
@@ -136,7 +136,7 @@ public abstract class OMenu {
                     .build();
             }
 
-            return OItem.FILLER;
+            return OItem.FILLER.build();
         }
 
         @Override

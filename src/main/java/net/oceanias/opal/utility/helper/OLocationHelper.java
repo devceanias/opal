@@ -16,4 +16,22 @@ public final class OLocationHelper {
             || from.getBlockY() != to.getBlockY()
             || from.getBlockZ() != to.getBlockZ();
     }
+
+    public static @NotNull String formatBlockCoordinates(final @NotNull Location location, final String colour) {
+        return String.format(
+            "%s%d&f, %s%d&f, %s%d",
+            colour, location.getBlockX(),
+            colour, location.getBlockY(),
+            colour, location.getBlockZ()
+        );
+    }
+
+    public static @NotNull String formatPreciseCoordinates(final @NotNull Location location, final String colour) {
+        return String.format(
+            "%s%.2f&f, %s%.2f&f, %s%.2f",
+            colour, location.getX(),
+            colour, location.getY(),
+            colour, location.getZ()
+        );
+    }
 }
