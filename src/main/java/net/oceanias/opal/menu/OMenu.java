@@ -9,15 +9,16 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionType;
 import xyz.xenondevs.inventoryaccess.component.AdventureComponentWrapper;
 import xyz.xenondevs.invui.gui.Gui;
 import xyz.xenondevs.invui.gui.PagedGui;
 import xyz.xenondevs.invui.gui.structure.Structure;
 import xyz.xenondevs.invui.item.ItemProvider;
+import xyz.xenondevs.invui.item.impl.AbstractItem;
 import xyz.xenondevs.invui.item.impl.controlitem.PageItem;
 import xyz.xenondevs.invui.window.Window;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.ExtensionMethod;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -25,6 +26,13 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings("unused")
 @ExtensionMethod({ OStringExtension.class, OCommandSenderExtension.class })
 public abstract class OMenu {
+    private static final OItem GO_BACK_ITEM = OItem.builder(Material.TIPPED_ARROW)
+        .name("&cGo Back")
+        .lore("&fClick &7to use!")
+        .potionType(PotionType.HEALING)
+        .flagsAll()
+        .build();
+
     public abstract Gui getGui(Player player);
 
     public abstract Window getWindow(Gui gui, Player player);
@@ -79,12 +87,7 @@ public abstract class OMenu {
             }
 
             if (back != null) {
-                return OItem.builder(Material.TIPPED_ARROW)
-                    .name("&cGo Back")
-                    .lore("&fClick &7to use!")
-                    .potionType(PotionType.HEALING)
-                    .flagsAll()
-                    .build();
+                return GO_BACK_ITEM;
             }
 
             return OItem.FILLER;
@@ -92,9 +95,7 @@ public abstract class OMenu {
 
         @Override
         public void handleClick(
-            final @NotNull ClickType click,
-            final @NotNull Player player,
-            final @NotNull InventoryClickEvent event
+            final @NotNull ClickType click, final @NotNull Player player, final @NotNull InventoryClickEvent event
         ) {
             if (getGui().hasPreviousPage()) {
                 super.handleClick(click, player, event);
@@ -141,9 +142,7 @@ public abstract class OMenu {
 
         @Override
         public void handleClick(
-            final @NotNull ClickType click,
-            final @NotNull Player player,
-            final @NotNull InventoryClickEvent event
+            final @NotNull ClickType click, final @NotNull Player player, final @NotNull InventoryClickEvent event
         ) {
             if (!getGui().hasNextPage()) {
                 return;
@@ -152,6 +151,23 @@ public abstract class OMenu {
             super.handleClick(click, player, event);
 
             player.soundDSR(Sound.ITEM_BOOK_PAGE_TURN);
+        }
+    }
+
+    @RequiredArgsConstructor
+    public static final class Back extends AbstractItem {
+        private final OMenu back;
+
+        @Override
+        public ItemProvider getItemProvider() {
+            return GO_BACK_ITEM;
+        }
+
+        @Override
+        public void handleClick(
+            final @NotNull ClickType click, final @NotNull Player player, final @NotNull InventoryClickEvent event
+        ) {
+            back.openMenu(player);
         }
     }
 }
