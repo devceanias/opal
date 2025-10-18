@@ -3,6 +3,7 @@ package net.oceanias.opal.configuration;
 import net.oceanias.opal.component.impl.OProvider;
 import net.oceanias.opal.OPlugin;
 import net.oceanias.opal.utility.extension.OStringExtension;
+import net.oceanias.opal.utility.helper.OTextHelper;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
@@ -15,7 +16,7 @@ import lombok.experimental.ExtensionMethod;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-@SuppressWarnings({ "unused", "unchecked" })
+@SuppressWarnings({ "unused", "unchecked", "UnstableApiUsage" })
 @ExtensionMethod(OStringExtension.class)
 public abstract class OConfiguration<T> implements OProvider {
     private Path path;
@@ -134,7 +135,14 @@ public abstract class OConfiguration<T> implements OProvider {
                 result = joined;
             }
 
-            final Component component = result.deserialize();
+            final Component component = result
+                .replace("{plugin-label}", OPlugin.get().getLabel())
+                .replace("{plugin-name}", OPlugin.get().getPluginMeta().getName())
+                .replace("{prefix}", OPlugin.get().getPrefix())
+                .replace("{colour}", OPlugin.get().getColour())
+                .replace("{divider-long}", OTextHelper.CHAT_DIVIDER_LONG)
+                .replace("{divider-short}", OTextHelper.CHAT_DIVIDER_SHORT)
+                .deserialize();
 
             switch (type) {
                 case PLAYER_CHAT -> sender.sendMessage(component);
