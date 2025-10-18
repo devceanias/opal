@@ -1,7 +1,7 @@
 package net.oceanias.opal.setting.impl;
 
 import net.oceanias.opal.setting.OSetting;
-import net.oceanias.opal.utility.builder.OItemBuilder;
+import net.oceanias.opal.utility.builder.OItem;
 import net.oceanias.opal.utility.extension.OCommandSenderExtension;
 import java.util.ArrayList;
 import java.util.List;
@@ -121,10 +121,11 @@ public final class OChoiceSetting extends OSetting<String> {
             lore.add("&eLeft-click &7to cycle forwards.");
             lore.add("&eRight-click &7to cycle backwards.");
 
-            return new OItemBuilder(type)
-                .setName("&e" + setting.name)
-                .addLore(lore)
-                .hideFlags();
+            return OItem.builder(type)
+                .name("&e" + setting.name)
+                .lore(lore)
+                .flagsAll()
+                .build();
         }
 
         @Override

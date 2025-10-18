@@ -14,7 +14,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitTask;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.ExtensionMethod;
 import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.Contract;
@@ -22,7 +21,6 @@ import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
 @ExtensionMethod({ OCommandSenderExtension.class })
-@RequiredArgsConstructor
 @UtilityClass
 public final class OTeleportHelper {
     private final Map<UUID, List<BukkitTask>> PENDING = new ConcurrentHashMap<>();

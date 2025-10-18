@@ -3,7 +3,7 @@ package net.oceanias.opal.setting.impl;
 import net.oceanias.opal.listener.OListener;
 import net.oceanias.opal.menu.OMenu;
 import net.oceanias.opal.setting.OSetting;
-import net.oceanias.opal.utility.builder.OItemBuilder;
+import net.oceanias.opal.utility.builder.OItem;
 import net.oceanias.opal.utility.builder.OMessage;
 import net.oceanias.opal.utility.constant.OFeedbackSound;
 import net.oceanias.opal.utility.extension.OCommandSenderExtension;
@@ -123,10 +123,11 @@ public final class OStringSetting extends OSetting<String> {
             lore.add("");
             lore.add("&eClick &7to change!");
 
-            return new OItemBuilder(type)
-                .setName("&e" + setting.name)
-                .addLore(lore)
-                .hideFlags();
+            return OItem.builder(type)
+                .name("&e" + setting.name)
+                .lore(lore)
+                .flagsAll()
+                .build();
         }
 
         @Override

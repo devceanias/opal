@@ -1,7 +1,7 @@
 package net.oceanias.opal.setting.impl;
 
 import net.oceanias.opal.setting.OSetting;
-import net.oceanias.opal.utility.builder.OItemBuilder;
+import net.oceanias.opal.utility.builder.OItem;
 import net.oceanias.opal.utility.extension.OCommandSenderExtension;
 import java.util.ArrayList;
 import java.util.List;
@@ -92,10 +92,11 @@ public final class OBooleanSetting extends OSetting<Boolean> {
             lore.add("");
             lore.add("&eClick &7to toggle!");
 
-            return new OItemBuilder(type)
-                .setName("&e" + setting.name)
-                .addLore(lore)
-                .hideFlags();
+            return OItem.builder(type)
+                .name("&e" + setting.name)
+                .lore(lore)
+                .flagsAll()
+                .build();
         }
 
         @Override

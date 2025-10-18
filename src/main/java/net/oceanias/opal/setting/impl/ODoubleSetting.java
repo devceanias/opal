@@ -1,7 +1,7 @@
 package net.oceanias.opal.setting.impl;
 
 import net.oceanias.opal.setting.OSetting;
-import net.oceanias.opal.utility.builder.OItemBuilder;
+import net.oceanias.opal.utility.builder.OItem;
 import net.oceanias.opal.utility.extension.OCommandSenderExtension;
 import java.util.ArrayList;
 import java.util.List;
@@ -122,10 +122,11 @@ public final class ODoubleSetting extends OSetting<Double> {
             lore.add("&eRight-click &7to subtract &n" + change + "&7.");
             lore.add("&eShift-click &7to change by &n" + (change * 10.0) + "&7.");
 
-            return new OItemBuilder(type)
-                .setName("&e" + setting.name)
-                .addLore(lore)
-                .hideFlags();
+            return OItem.builder(type)
+                .name("&e" + setting.name)
+                .lore(lore)
+                .flagsAll()
+                .build();
         }
 
         @Override
