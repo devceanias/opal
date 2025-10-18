@@ -88,8 +88,6 @@ public abstract class OCommand implements OExecutable, OProvider {
     @Override
     public final void unregisterInternally() {
         OProvider.super.unregisterInternally();
-
-        CommandAPI.unregister(getLabel(), true);
     }
 
     private void buildDescriptions(@NotNull final List<OSubcommand> commands, final List<String> path) {
