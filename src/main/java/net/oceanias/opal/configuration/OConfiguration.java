@@ -138,8 +138,8 @@ public abstract class OConfiguration<T> implements OProvider {
             final Component component = result
                 .replace("{plugin-label}", OPlugin.get().getLabel())
                 .replace("{plugin-name}", OPlugin.get().getPluginMeta().getName())
-                .replace("{prefix}", OPlugin.get().getPrefix())
                 .replace("{colour}", OPlugin.get().getColour())
+                .replace("{prefix}", OPlugin.get().getPrefix())
                 .replace("{divider-long}", OTextHelper.CHAT_DIVIDER_LONG)
                 .replace("{divider-short}", OTextHelper.CHAT_DIVIDER_SHORT)
                 .deserialize();

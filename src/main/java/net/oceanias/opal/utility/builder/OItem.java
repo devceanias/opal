@@ -119,7 +119,7 @@ public final class OItem extends ItemStack implements ItemProvider {
         private NamespacedKey tooltipStyle;
 
         private OfflinePlayer skullOwner;
-        private PlayerProfile playerProfile;
+        private PlayerProfile skullProfile;
 
         private PotionType potionType;
         private Color potionColour;
@@ -285,8 +285,8 @@ public final class OItem extends ItemStack implements ItemProvider {
                     skull.setOwningPlayer(skullOwner);
                 }
 
-                if (playerProfile != null) {
-                    skull.setPlayerProfile(playerProfile);
+                if (skullProfile != null) {
+                    skull.setPlayerProfile(skullProfile);
                 }
             }
 
@@ -613,8 +613,10 @@ public final class OItem extends ItemStack implements ItemProvider {
                 return this;
             }
 
-            if (meta.hasItemName()) {
-                name(meta.itemName().serialize());
+            final Component name = meta.displayName();
+
+            if (name != null) {
+                name(name.serialize());
             }
 
             if (meta.hasLore()) {
@@ -731,7 +733,7 @@ public final class OItem extends ItemStack implements ItemProvider {
                 }
 
                 if (profile != null) {
-                    playerProfile(profile);
+                    skullProfile(profile);
                 }
             }
 
