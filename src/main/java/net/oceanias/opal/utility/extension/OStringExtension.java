@@ -6,11 +6,13 @@ import java.util.regex.Pattern;
 import net.kyori.adventure.text.Component;
 import com.bruhdows.minitext.FormattedText;
 import com.bruhdows.minitext.MiniText;
+import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
+@UtilityClass
 public final class OStringExtension {
-    private static final Map<String, String> REPLACEMENTS_MAP = Map.ofEntries(
+    private final Map<String, String> REPLACEMENTS_MAP = Map.ofEntries(
         Map.entry("&1", "&#0000E7"), Map.entry("[dark_blue]", "&#0000E7"),
         Map.entry("&2", "&#2BB02B"), Map.entry("[dark_green]", "&#2BB02B"),
         Map.entry("&3", "&#00D1D1"), Map.entry("[dark_aqua]", "&#00D1D1"),
@@ -26,18 +28,18 @@ public final class OStringExtension {
         Map.entry("&g", "&#FFD700"), Map.entry("[gold]", "&#FFD700")
     );
 
-    private static final Pattern REPLACEMENTS_PATTERN = Pattern.compile(REPLACEMENTS_MAP.keySet().stream()
+    private final Pattern REPLACEMENTS_PATTERN = Pattern.compile(REPLACEMENTS_MAP.keySet().stream()
         .map(Pattern::quote) // Escape special characters.
         .sorted((a, b) -> b.length() - a.length()) // Prioritise longer aliases.
         .reduce((a, b) -> a + "|" + b)
         .orElse("")
     );
 
-    public static @NotNull Component deserialize(final String string) {
+    public @NotNull Component deserialize(final String string) {
         return deserializeToFormatted(string).component();
     }
 
-    public static FormattedText deserializeToFormatted(final String string) {
+    public FormattedText deserializeToFormatted(final String string) {
         final Matcher matcher = REPLACEMENTS_PATTERN.matcher(string);
         final StringBuilder builder = new StringBuilder(string.length() * 2);
 

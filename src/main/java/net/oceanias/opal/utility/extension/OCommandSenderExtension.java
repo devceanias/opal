@@ -11,12 +11,14 @@ import org.bukkit.command.CommandSender;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.title.Title;
 import lombok.experimental.ExtensionMethod;
+import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
 @ExtensionMethod({ OStringExtension.class })
+@UtilityClass
 public final class OCommandSenderExtension {
-    public static void messageDSR(
+    public void messageDSR(
         @NotNull final CommandSender sender,
         final String message,
         final boolean prefixed,
@@ -34,29 +36,29 @@ public final class OCommandSenderExtension {
         );
     }
 
-    public static void messageDSR(
+    public void messageDSR(
         final CommandSender sender, final String message, final boolean prefixed, final boolean lines
     ) {
         messageDSR(sender, message, prefixed, lines, false);
     }
 
-    public static void messageDSR(final CommandSender sender, final String message, final boolean prefixed) {
+    public void messageDSR(final CommandSender sender, final String message, final boolean prefixed) {
         messageDSR(sender, message, prefixed, false, false);
     }
 
-    public static void messageDSR(final CommandSender sender, final String message) {
+    public void messageDSR(final CommandSender sender, final String message) {
         messageDSR(sender, message, true, false, false);
     }
 
-    public static void messageDSR(final CommandSender sender) {
+    public void messageDSR(final CommandSender sender) {
         messageDSR(sender, "", true, false, false);
     }
 
-    public static void actionDSR(@NotNull final CommandSender sender, @NotNull final String text) {
+    public void actionDSR(@NotNull final CommandSender sender, @NotNull final String text) {
         sender.sendActionBar(text.deserialize());
     }
 
-    public static void soundDSR(
+    public void soundDSR(
         @NotNull final CommandSender sender,
         @NotNull final org.bukkit.Sound sound,
         final float volume,
@@ -69,7 +71,7 @@ public final class OCommandSenderExtension {
         );
     }
 
-    public static void soundDSR(
+    public void soundDSR(
         final CommandSender sender,
         final org.bukkit.Sound sound,
         final float volume,
@@ -79,21 +81,21 @@ public final class OCommandSenderExtension {
         soundDSR(sender, sound, volume, pitch, emitter, Sound.Source.MASTER);
     }
 
-    public static void soundDSR(
+    public void soundDSR(
         final CommandSender sender, final org.bukkit.Sound sound, final float volume, final float pitch
     ) {
         soundDSR(sender, sound, volume, pitch, Sound.Emitter.self(), Sound.Source.MASTER);
     }
 
-    public static void soundDSR(final CommandSender sender, final org.bukkit.Sound sound, final float volume) {
+    public void soundDSR(final CommandSender sender, final org.bukkit.Sound sound, final float volume) {
         soundDSR(sender, sound, volume, 1f, Sound.Emitter.self(), Sound.Source.MASTER);
     }
 
-    public static void soundDSR(final CommandSender sender, final org.bukkit.Sound sound) {
+    public void soundDSR(final CommandSender sender, final org.bukkit.Sound sound) {
         soundDSR(sender, sound, 1f, 1f, Sound.Emitter.self(), Sound.Source.MASTER);
     }
 
-    public static void titleDSR(
+    public void titleDSR(
         @NotNull final CommandSender sender,
         @NotNull final String title,
         @NotNull final String subtitle,
@@ -110,17 +112,17 @@ public final class OCommandSenderExtension {
         sender.showTitle(Title.title(title.deserialize(), subtitle.deserialize(), times));
     }
 
-    public static void titleDSR(
+    public void titleDSR(
         final CommandSender sender, final String title, final String subtitle, final long fadeIn, final long onScreen
     ) {
         titleDSR(sender, title, subtitle, fadeIn, onScreen, 1000);
     }
 
-    public static void titleDSR(final CommandSender sender, final String title, final String subtitle, final long fadeIn) {
+    public void titleDSR(final CommandSender sender, final String title, final String subtitle, final long fadeIn) {
         titleDSR(sender, title, subtitle, fadeIn, 3000, 1000);
     }
 
-    public static void titleDSR(final CommandSender sender, final String title, final String subtitle) {
+    public void titleDSR(final CommandSender sender, final String title, final String subtitle) {
         titleDSR(sender, title, subtitle, 1000, 3000, 1000);
     }
 }

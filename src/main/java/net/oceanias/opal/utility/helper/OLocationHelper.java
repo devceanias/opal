@@ -1,23 +1,25 @@
 package net.oceanias.opal.utility.helper;
 
 import org.bukkit.Location;
+import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings({ "unused", "BooleanMethodIsAlwaysInverted" })
+@UtilityClass
 public final class OLocationHelper {
-    public static boolean hasMovedExact(final @NotNull Location from, final @NotNull Location to) {
+    public boolean hasMovedExact(final @NotNull Location from, final @NotNull Location to) {
         return from.getX() != to.getX()
             || from.getY() != to.getY()
             || from.getZ() != to.getZ();
     }
 
-    public static boolean hasMovedBlock(final @NotNull Location from, final @NotNull Location to) {
+    public boolean hasMovedBlock(final @NotNull Location from, final @NotNull Location to) {
         return from.getBlockX() != to.getBlockX()
             || from.getBlockY() != to.getBlockY()
             || from.getBlockZ() != to.getBlockZ();
     }
 
-    public static @NotNull String formatBlockCoordinates(final @NotNull Location location, final String colour) {
+    public @NotNull String formatBlockCoordinates(final @NotNull Location location, final String colour) {
         return String.format(
             "%s%d&f, %s%d&f, %s%d",
             colour, location.getBlockX(),
@@ -26,7 +28,7 @@ public final class OLocationHelper {
         );
     }
 
-    public static @NotNull String formatPreciseCoordinates(final @NotNull Location location, final String colour) {
+    public @NotNull String formatPreciseCoordinates(final @NotNull Location location, final String colour) {
         return String.format(
             "%s%.2f&f, %s%.2f&f, %s%.2f",
             colour, location.getX(),

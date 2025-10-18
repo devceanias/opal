@@ -2,11 +2,14 @@ package net.oceanias.opal.utility.helper;
 
 import java.time.Duration;
 import java.util.List;
+import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
+@SuppressWarnings("unused")
+@UtilityClass
 public final class ODurationHelper {
-    public static String formatFullDuration(final @NotNull Duration duration) {
+    public String formatFullDuration(final @NotNull Duration duration) {
         final List<Pair<String, Long>> units = List.of(
             Pair.of("day", duration.toDays()),
             Pair.of("hour", duration.toHours() % 24),

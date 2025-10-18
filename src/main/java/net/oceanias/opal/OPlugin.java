@@ -101,7 +101,7 @@ public abstract class OPlugin extends JavaPlugin {
         }
 
         new OStringSetting.Listener().registerInternally();
-        new OTeleportHelper().registerInternally();
+        new OTeleportHelper.Listener().registerInternally();
 
         enablePlugin();
     }

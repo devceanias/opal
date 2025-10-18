@@ -16,22 +16,24 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitTask;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.ExtensionMethod;
+import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
 @ExtensionMethod({ OCommandSenderExtension.class })
 @RequiredArgsConstructor
-public final class OTeleportHelper extends OListener.Bukkit {
-    private static final Map<UUID, List<BukkitTask>> pending = new ConcurrentHashMap<>();
-    private static final Map<UUID, Location> locations = new ConcurrentHashMap<>();
+@UtilityClass
+public final class OTeleportHelper {
+    private final Map<UUID, List<BukkitTask>> PENDING = new ConcurrentHashMap<>();
+    private final Map<UUID, Location> LOCATIONS = new ConcurrentHashMap<>();
 
-    public static void createTeleportTimer(
+    public void createTeleportTimer(
         final @NotNull Player player, final Location destination, final Duration duration
     ) {
         final UUID uuid = player.getUniqueId();
 
-        if (pending.containsKey(uuid)) {
+        if (PENDING.containsKey(uuid)) {
             player.actionDSR("&fA &6teleportation &fis &calready &fpending.");
 
             return;
@@ -39,7 +41,7 @@ public final class OTeleportHelper extends OListener.Bukkit {
 
         player.closeInventory();
 
-        locations.put(uuid, player.getLocation());
+        LOCATIONS.put(uuid, player.getLocation());
 
         final long seconds = duration.getSeconds();
         final List<BukkitTask> tasks = new ArrayList<>();
@@ -59,7 +61,7 @@ public final class OTeleportHelper extends OListener.Bukkit {
         }
 
         final BukkitTask teleportation = OTaskHelper.runTaskLater(() -> {
-            if (!pending.containsKey(uuid)) {
+            if (!PENDING.containsKey(uuid)) {
                 return;
             }
 
@@ -72,16 +74,16 @@ public final class OTeleportHelper extends OListener.Bukkit {
 
             player.soundDSR(Sound.ENTITY_ENDERMAN_TELEPORT);
 
-            pending.remove(uuid);
+            PENDING.remove(uuid);
         }, duration);
 
         tasks.add(teleportation);
 
-        pending.put(uuid, tasks);
+        PENDING.put(uuid, tasks);
     }
 
-    public static void cancelTeleportTimer(@NotNull final Player player) {
-        final List<BukkitTask> tasks = pending.remove(player.getUniqueId());
+    public void cancelTeleportTimer(@NotNull final Player player) {
+        final List<BukkitTask> tasks = PENDING.remove(player.getUniqueId());
 
         if (tasks != null) {
             tasks.forEach(BukkitTask::cancel);
@@ -90,11 +92,11 @@ public final class OTeleportHelper extends OListener.Bukkit {
             player.soundDSR(Sound.BLOCK_ANVIL_LAND, 1f, 0.5f);
         }
 
-        locations.remove(player.getUniqueId());
+        LOCATIONS.remove(player.getUniqueId());
     }
 
     @Contract(pure = true)
-    private static @NotNull String getSecondsColour(final double remaining, final double original) {
+    private @NotNull String getSecondsColour(final double remaining, final double original) {
         final double percentage = (remaining / original) * 100;
 
         if (percentage > 67) {
@@ -112,56 +114,58 @@ public final class OTeleportHelper extends OListener.Bukkit {
         return "&e";
     }
 
-    @EventHandler
-    public void onPlayerMove(@NotNull final PlayerMoveEvent event) {
-        final Location from = event.getFrom();
-        final Location to = event.getTo();
+    public static final class Listener extends OListener.Bukkit {
+        @EventHandler
+        public void onPlayerMove(@NotNull final PlayerMoveEvent event) {
+            final Location from = event.getFrom();
+            final Location to = event.getTo();
 
-        if (!OLocationHelper.hasMovedExact(from, to)) {
-            return;
+            if (!OLocationHelper.hasMovedExact(from, to)) {
+                return;
+            }
+
+            final Player player = event.getPlayer();
+            final UUID uuid = player.getUniqueId();
+
+            if (!PENDING.containsKey(uuid)) {
+                return;
+            }
+
+            final Location location = LOCATIONS.get(uuid);
+
+            if (location == null) {
+                return;
+            }
+
+            if (!OLocationHelper.hasMovedExact(location, to)) {
+                return;
+            }
+
+            cancelTeleportTimer(player);
         }
 
-        final Player player = event.getPlayer();
-        final UUID uuid = player.getUniqueId();
+        @EventHandler
+        public void onEntityDamage(@NotNull final EntityDamageEvent event) {
+            if (!(event.getEntity() instanceof final Player player)) {
+                return;
+            }
 
-        if (!pending.containsKey(uuid)) {
-            return;
+            if (!PENDING.containsKey(player.getUniqueId())) {
+                return;
+            }
+
+            cancelTeleportTimer(player);
         }
 
-        final Location location = locations.get(uuid);
+        @EventHandler
+        public void onPlayerQuit(@NotNull final PlayerQuitEvent event) {
+            final Player player = event.getPlayer();
 
-        if (location == null) {
-            return;
+            if (!PENDING.containsKey(player.getUniqueId())) {
+                return;
+            }
+
+            cancelTeleportTimer(player);
         }
-
-        if (!OLocationHelper.hasMovedExact(location, to)) {
-            return;
-        }
-
-        cancelTeleportTimer(player);
-    }
-
-    @EventHandler
-    public void onEntityDamage(@NotNull final EntityDamageEvent event) {
-        if (!(event.getEntity() instanceof final Player player)) {
-            return;
-        }
-
-        if (!pending.containsKey(player.getUniqueId())) {
-            return;
-        }
-
-        cancelTeleportTimer(player);
-    }
-
-    @EventHandler
-    public void onPlayerQuit(@NotNull final PlayerQuitEvent event) {
-        final Player player = event.getPlayer();
-
-        if (!pending.containsKey(player.getUniqueId())) {
-            return;
-        }
-
-        cancelTeleportTimer(player);
     }
 }
