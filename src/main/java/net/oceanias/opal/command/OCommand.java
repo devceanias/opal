@@ -10,9 +10,6 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.JoinConfiguration;
-import net.kyori.adventure.text.event.HoverEvent;
 import dev.jorel.commandapi.*;
 import dev.jorel.commandapi.arguments.AbstractArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
@@ -53,18 +50,7 @@ public abstract class OCommand implements OExecutable, OProvider {
 
     @Override
     public final void registerInternally() {
-        final Set<String> commands = new HashSet<>();
-
-        final CommandTree tree = getCommand()
-            .withPermission(getPermission());
-
-        commands.add(getLabel());
-
-        Collections.addAll(commands, tree.getAliases());
-
-        for (final String command : commands) {
-            CommandAPIBukkit.unregister(command, true, true);
-        }
+        final CommandTree tree = getCommand().withPermission(getPermission());
 
         buildDescriptions(getSubcommands(), new ArrayList<>());
 
@@ -117,49 +103,51 @@ public abstract class OCommand implements OExecutable, OProvider {
         }
     }
 
-    private void sendHelp(final CommandSender sender, final CommandArguments args) {
-        final List<Component> lines = new ArrayList<>(List.of(
-            OTextHelper.CHAT_DIVIDER_LONG.deserialize(),
-            (OPlugin.get().getColour() + WordUtils.capitalize(getLabel()) + " Commands:").deserialize()
+    private void sendHelp(final CommandSender sender, final CommandArguments arguments) {
+        final String pretty = WordUtils.capitalize(getLabel().replace("-", " "));
+
+        final List<String> lines = new ArrayList<>(List.of(
+            OTextHelper.CHAT_DIVIDER_LONG,
+            (OPlugin.get().getColour() + pretty + " Commands:")
         ));
 
-        for (final HelpLine line : getUsages()) {
+        for (final HelpLine usage : getUsages()) {
             final StringBuilder builder = new StringBuilder("/").append(getLabel());
+            final List<String> description = usage.description;
+            final String bullet = "&7• &f";
 
-            for (final HelpSegment seg : line.segments) {
+            for (final HelpSegment segment : usage.segments) {
+                final String name = segment.name;
+
                 builder.append(" ");
 
-                if (seg.literal) {
-                    builder.append(seg.name);
+                if (segment.literal) {
+                    builder.append(name);
 
                     continue;
                 }
 
-                if (seg.optional) {
-                    builder.append("&e[").append(seg.name).append("]");
+                if (segment.optional) {
+                    builder.append("&e[").append(name).append("]");
 
                     continue;
                 }
 
-                builder.append("&e(").append(seg.name).append(")");
+                builder.append("&e(").append(name).append(")");
             }
-
-            final List<String> description = line.description;
-
-            Component component = ("&7• &f" + builder).deserialize();
 
             if (description != null) {
-                component = component.hoverEvent(HoverEvent.showText(
-                    String.join("\n", OPlugin.get().getColour() + description).deserialize()
-                ));
-            }
+                final String hover = "[hover:show_text:'" + String.join("\n", description) + "']";
 
-            lines.add(component);
+                lines.add(bullet + hover + builder + "[/hover]");
+            } else {
+                lines.add(bullet + builder);
+            }
         }
 
-        lines.add(OTextHelper.CHAT_DIVIDER_LONG.deserialize());
+        lines.add(OTextHelper.CHAT_DIVIDER_LONG);
 
-        sender.sendMessage(Component.join(JoinConfiguration.separator(Component.newline()), lines));
+        sender.sendMessage(String.join("\n", lines).deserialize());
         sender.soundDSR(Sound.BLOCK_NOTE_BLOCK_CHIME);
     }
 
