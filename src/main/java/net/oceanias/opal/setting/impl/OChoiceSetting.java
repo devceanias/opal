@@ -40,8 +40,8 @@ public final class OChoiceSetting extends OSetting<String> {
     }
 
     @Override
-    public OChoiceSetting initial(final String initial) {
-        super.initial(initial);
+    public OChoiceSetting initial(final String initial, final boolean overwriteCurrentValue) {
+        super.initial(initial, overwriteCurrentValue);
 
         return this;
     }

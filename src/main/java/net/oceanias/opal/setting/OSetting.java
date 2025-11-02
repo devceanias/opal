@@ -9,7 +9,6 @@ import lombok.experimental.Accessors;
 
 @SuppressWarnings({ "unused", "UnusedReturnValue" })
 @Getter
-@Setter
 @Accessors(fluent = true)
 public abstract class OSetting<T> {
     protected transient String name = "Unspecified Name";
@@ -20,6 +19,7 @@ public abstract class OSetting<T> {
 
     protected transient Material material;
 
+    @Setter
     protected T value;
 
     protected OSetting(final T initial) {
@@ -38,10 +38,12 @@ public abstract class OSetting<T> {
         return this;
     }
 
-    public OSetting<T> initial(final T initial) {
+    public OSetting<T> initial(final T initial, final boolean overwriteCurrentValue) {
         this.initial = initial;
 
-        value = initial;
+        if (overwriteCurrentValue) {
+            value = initial;
+        }
 
         return this;
     }
