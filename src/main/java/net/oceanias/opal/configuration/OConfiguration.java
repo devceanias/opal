@@ -86,8 +86,6 @@ public abstract class OConfiguration<T> implements OProvider {
     @Override
     public final void unregisterInternally() {
         OProvider.super.unregisterInternally();
-
-        saveConfiguration();
     }
 
     public record Message(
