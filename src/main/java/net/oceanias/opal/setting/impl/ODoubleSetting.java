@@ -40,8 +40,8 @@ public final class ODoubleSetting extends OSetting<Double> {
     }
 
     @Override
-    public ODoubleSetting initial(final Double initial, final boolean overwriteCurrentValue) {
-        super.initial(initial, overwriteCurrentValue);
+    public ODoubleSetting initial(final Double initial) {
+        super.initial(initial);
 
         return this;
     }

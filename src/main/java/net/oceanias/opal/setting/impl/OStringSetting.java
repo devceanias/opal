@@ -54,8 +54,8 @@ public final class OStringSetting extends OSetting<String> {
     }
 
     @Override
-    public OStringSetting initial(final String initial, final boolean overwriteCurrentValue) {
-        super.initial(initial, overwriteCurrentValue);
+    public OStringSetting initial(final String initial) {
+        super.initial(initial);
 
         return this;
     }

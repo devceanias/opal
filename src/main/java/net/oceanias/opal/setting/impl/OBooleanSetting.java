@@ -32,8 +32,8 @@ public final class OBooleanSetting extends OSetting<Boolean> {
     }
 
     @Override
-    public OBooleanSetting initial(final Boolean initial, final boolean overwriteCurrentValue) {
-        super.initial(initial, overwriteCurrentValue);
+    public OBooleanSetting initial(final Boolean initial) {
+        super.initial(initial);
 
         return this;
     }

@@ -38,10 +38,10 @@ public abstract class OSetting<T> {
         return this;
     }
 
-    public OSetting<T> initial(final T initial, final boolean overwriteCurrentValue) {
+    public OSetting<T> initial(final T initial) {
         this.initial = initial;
 
-        if (overwriteCurrentValue) {
+        if (value == null) {
             value = initial;
         }
 

@@ -40,8 +40,8 @@ public final class OIntegerSetting extends OSetting<Integer> {
     }
 
     @Override
-    public OIntegerSetting initial(final Integer initial, final boolean overwriteCurrentValue) {
-        super.initial(initial, overwriteCurrentValue);
+    public OIntegerSetting initial(final Integer initial) {
+        super.initial(initial);
 
         return this;
     }
