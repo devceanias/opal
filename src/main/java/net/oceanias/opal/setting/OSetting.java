@@ -3,13 +3,16 @@ package net.oceanias.opal.setting;
 import java.util.List;
 import org.bukkit.Material;
 import xyz.xenondevs.invui.item.Item;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @SuppressWarnings({ "unused", "UnusedReturnValue" })
 @Getter
 @Accessors(fluent = true)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class OSetting<T> {
     protected transient String name = "Unspecified Name";
 
@@ -21,16 +24,6 @@ public abstract class OSetting<T> {
 
     @Setter
     protected T value;
-
-    protected OSetting(final T initial) {
-        if (initial == null) {
-            throw new IllegalArgumentException("Error creating setting; initial value must not be null.");
-        }
-
-        this.initial = initial;
-
-        value = initial;
-    }
 
     public OSetting<T> name(final String name) {
         this.name = name;
@@ -61,6 +54,10 @@ public abstract class OSetting<T> {
     }
 
     public final void reset() {
+        if (initial == null) {
+            throw new IllegalArgumentException("Error resetting setting; initial value must not be null.");
+        }
+
         value = initial;
     }
 

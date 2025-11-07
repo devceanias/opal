@@ -42,10 +42,6 @@ import org.jetbrains.annotations.NotNull;
 public final class OStringSetting extends OSetting<String> {
     private transient Integer limit;
 
-    public OStringSetting() {
-        super("");
-    }
-
     @Override
     public OStringSetting name(final String name) {
         super.name(name);

@@ -28,10 +28,6 @@ public final class ODoubleSetting extends OSetting<Double> {
     private transient Double min;
     private transient Double max;
 
-    public ODoubleSetting() {
-        super(0.0);
-    }
-
     @Override
     public ODoubleSetting name(final String name) {
         super.name(name);

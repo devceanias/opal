@@ -20,10 +20,6 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings("unused")
 @ExtensionMethod(OCommandSenderExtension.class)
 public final class OBooleanSetting extends OSetting<Boolean> {
-    public OBooleanSetting() {
-        super(false);
-    }
-
     @Override
     public OBooleanSetting name(final String name) {
         super.name(name);

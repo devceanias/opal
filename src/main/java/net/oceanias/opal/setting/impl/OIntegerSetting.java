@@ -28,10 +28,6 @@ public final class OIntegerSetting extends OSetting<Integer> {
     private transient Integer min;
     private transient Integer max;
 
-    public OIntegerSetting() {
-        super(0);
-    }
-
     @Override
     public OIntegerSetting name(final String name) {
         super.name(name);

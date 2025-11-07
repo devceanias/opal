@@ -3,8 +3,8 @@ package net.oceanias.opal;
 import net.oceanias.opal.configuration.OConfiguration;
 import net.oceanias.opal.database.ODatabase;
 import net.oceanias.opal.component.impl.OModule;
-import net.oceanias.opal.menu.OMenu;
 import net.oceanias.opal.setting.impl.OStringSetting;
+import net.oceanias.opal.utility.builder.OItem;
 import net.oceanias.opal.utility.helper.OTeleportHelper;
 import java.util.List;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -12,6 +12,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import xyz.xenondevs.invui.InvUI;
+import xyz.xenondevs.invui.gui.structure.Structure;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
@@ -90,7 +91,7 @@ public abstract class OPlugin extends JavaPlugin {
             config.registerInternally();
         }
 
-        OMenu.addIngredients();
+        Structure.addGlobalIngredient('#', OItem.FILLER.get());
 
         if (getDatabase() != null) {
             getDatabase().registerInternally();

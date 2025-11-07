@@ -28,10 +28,6 @@ import org.jetbrains.annotations.NotNull;
 public final class OChoiceSetting extends OSetting<String> {
     private transient List<String> choices;
 
-    public OChoiceSetting() {
-        super("Option 1");
-    }
-
     @Override
     public OChoiceSetting name(final String name) {
         super.name(name);

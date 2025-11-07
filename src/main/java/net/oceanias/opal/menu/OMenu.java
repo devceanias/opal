@@ -33,23 +33,22 @@ public abstract class OMenu {
         .flagsAll()
         .build();
 
-    public abstract Gui getGui(Player player);
+    public abstract Gui.Builder<?, ?> getGui(Player player);
 
     public abstract Window getWindow(Gui gui, Player player);
 
     public void openMenu(final Player player) {
-        getWindow(getGui(player), player).open();
+        final Gui gui = getGui(player)
+            .addIngredient('<', new OMenu.Previous())
+            .addIngredient('>', new OMenu.Next())
+            .build();
+
+        getWindow(gui, player).open();
     }
 
     @Contract("_ -> new")
     public static @NotNull AdventureComponentWrapper ofTitle(@NotNull final String title) {
         return new AdventureComponentWrapper(title.deserialize());
-    }
-
-    public static void addIngredients() {
-        Structure.addGlobalIngredient('#', OItem.FILLER.get());
-        Structure.addGlobalIngredient('<', new OMenu.Previous());
-        Structure.addGlobalIngredient('>', new OMenu.Next());
     }
 
     public static final class Previous extends PageItem {
