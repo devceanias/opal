@@ -13,7 +13,6 @@ import org.bukkit.potion.PotionType;
 import xyz.xenondevs.inventoryaccess.component.AdventureComponentWrapper;
 import xyz.xenondevs.invui.gui.Gui;
 import xyz.xenondevs.invui.gui.PagedGui;
-import xyz.xenondevs.invui.gui.structure.Structure;
 import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.impl.AbstractItem;
 import xyz.xenondevs.invui.item.impl.controlitem.PageItem;
@@ -38,12 +37,13 @@ public abstract class OMenu {
     public abstract Window getWindow(Gui gui, Player player);
 
     public void openMenu(final Player player) {
-        final Gui gui = getGui(player)
-            .addIngredient('<', new OMenu.Previous())
-            .addIngredient('>', new OMenu.Next())
-            .build();
+        getWindow(addPageControlItems(getGui(player)).build(), player).open();
+    }
 
-        getWindow(gui, player).open();
+    public Gui.Builder<?, ?> addPageControlItems(final Gui.@NotNull Builder<?, ?> builder) {
+        return builder
+            .addIngredient('<', new OMenu.Previous())
+            .addIngredient('>', new OMenu.Next());
     }
 
     @Contract("_ -> new")
