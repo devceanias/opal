@@ -59,8 +59,14 @@ public final class OSound {
 
     public static final class OSoundBuilder {
         @Contract("_ -> this")
-        public OSoundBuilder sound(final @NotNull OSound.Preset sound) {
+        public OSoundBuilder sound(final @NotNull Preset sound) {
             this.sound = sound.getDelegate();
+
+            return this;
+        }
+
+        public OSoundBuilder sound(final @NotNull Sound sound) {
+            this.sound = sound;
 
             return this;
         }
