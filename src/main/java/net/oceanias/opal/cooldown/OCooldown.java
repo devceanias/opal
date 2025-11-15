@@ -1,6 +1,7 @@
 package net.oceanias.opal.cooldown;
 
 import net.oceanias.opal.OPlugin;
+import net.oceanias.opal.utility.builder.OSound;
 import net.oceanias.opal.utility.extension.OCommandSenderExtension;
 import net.oceanias.opal.utility.helper.ODurationHelper;
 import net.oceanias.opal.utility.helper.OTaskHelper;
@@ -71,7 +72,8 @@ public final class OCooldown {
         }
 
         sender.actionDSR(message);
-        sender.soundDSR(Sound.BLOCK_NOTE_BLOCK_BASS);
+
+        OSound.builder().sound(OSound.Preset.ERROR).build().play(sender);
     }
 
     public Duration getRemaining(final CommandSender sender) {

@@ -2,6 +2,7 @@ package net.oceanias.opal.setting.impl;
 
 import net.oceanias.opal.setting.OSetting;
 import net.oceanias.opal.utility.builder.OItem;
+import net.oceanias.opal.utility.builder.OSound;
 import net.oceanias.opal.utility.extension.OCommandSenderExtension;
 import java.util.ArrayList;
 import java.util.List;
@@ -101,7 +102,7 @@ public final class OBooleanSetting extends OSetting<Boolean> {
         ) {
             setting.value(!setting.value);
 
-            player.soundDSR(Sound.BLOCK_NOTE_BLOCK_PLING);
+            OSound.builder().sound(Sound.BLOCK_NOTE_BLOCK_PLING).build().play(player);
 
             notifyWindows();
         }

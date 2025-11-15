@@ -2,6 +2,7 @@ package net.oceanias.opal.menu;
 
 import net.oceanias.opal.OPlugin;
 import net.oceanias.opal.utility.builder.OItem;
+import net.oceanias.opal.utility.builder.OSound;
 import net.oceanias.opal.utility.extension.OCommandSenderExtension;
 import net.oceanias.opal.utility.extension.OStringExtension;
 import java.util.*;
@@ -268,7 +269,7 @@ public abstract class OMenu {
             if (getGui().hasPreviousPage()) {
                 super.handleClick(click, player, event);
 
-                player.soundDSR(Sound.ITEM_BOOK_PAGE_TURN);
+                OSound.builder().sound(Sound.ITEM_BOOK_PAGE_TURN).build().play(player);
 
                 return;
             }
@@ -318,7 +319,7 @@ public abstract class OMenu {
 
             super.handleClick(click, player, event);
 
-            player.soundDSR(Sound.ITEM_BOOK_PAGE_TURN);
+            OSound.builder().sound(Sound.ITEM_BOOK_PAGE_TURN).build().play(player);
         }
     }
 

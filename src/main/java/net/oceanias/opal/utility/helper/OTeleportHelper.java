@@ -19,6 +19,7 @@ import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+// TODO: Convert to builder.
 @SuppressWarnings("unused")
 @ExtensionMethod({ OCommandSenderExtension.class })
 @UtilityClass

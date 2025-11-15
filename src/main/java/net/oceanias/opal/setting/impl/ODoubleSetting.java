@@ -2,6 +2,7 @@ package net.oceanias.opal.setting.impl;
 
 import net.oceanias.opal.setting.OSetting;
 import net.oceanias.opal.utility.builder.OItem;
+import net.oceanias.opal.utility.builder.OSound;
 import net.oceanias.opal.utility.extension.OCommandSenderExtension;
 import java.util.ArrayList;
 import java.util.List;
@@ -143,7 +144,7 @@ public final class ODoubleSetting extends OSetting<Double> {
                 setting.value(current - change);
             }
 
-            player.soundDSR(Sound.BLOCK_NOTE_BLOCK_CHIME);
+            OSound.builder().sound(Sound.BLOCK_NOTE_BLOCK_CHIME).build().play(player);
 
             notifyWindows();
         }

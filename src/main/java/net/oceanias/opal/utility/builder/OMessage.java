@@ -1,8 +1,6 @@
 package net.oceanias.opal.utility.builder;
 
 import net.oceanias.opal.OPlugin;
-import net.oceanias.opal.utility.constant.OFeedbackSound;
-import net.oceanias.opal.utility.extension.OCommandSenderExtension;
 import net.oceanias.opal.utility.extension.OStringExtension;
 import net.oceanias.opal.utility.helper.OTextHelper;
 import java.util.List;
@@ -11,7 +9,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import net.kyori.adventure.text.Component;
 import lombok.*;
 import lombok.experimental.Accessors;
@@ -23,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @Accessors(fluent = true)
 @Builder
-@ExtensionMethod({ OStringExtension.class, OCommandSenderExtension.class })
+@ExtensionMethod({ OStringExtension.class })
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public final class OMessage {
     @Singular
@@ -62,11 +59,15 @@ public final class OMessage {
             return;
         }
 
-        sender.soundDSR(sound);
+        OSound.builder().sound(sound).build().play(sender);
     }
 
     public void send(final @NotNull Iterable<? extends CommandSender> senders) {
         final Component message = component();
+
+        final OSound sound = this.sound != null
+            ? OSound.builder().sound(this.sound).build()
+            : null;
 
         for (final CommandSender sender : senders) {
             sender.sendMessage(message);
@@ -75,27 +76,17 @@ public final class OMessage {
                 continue;
             }
 
-            sender.soundDSR(sound);
+            sound.play(sender);
         }
     }
 
     public void broadcast() {
-        final Component message = component();
-
-        for (final Player sender : OPlugin.get().getServer().getOnlinePlayers()) {
-            sender.sendMessage(message);
-
-            if (sound == null) {
-                continue;
-            }
-
-            sender.soundDSR(sound);
-        }
+        send(OPlugin.get().getServer().getOnlinePlayers());
     }
 
     public static final class OMessageBuilder {
         @Contract("_ -> this")
-        public OMessageBuilder sound(final @NotNull OFeedbackSound sound) {
+        public OMessageBuilder sound(final @NotNull OSound.Preset sound) {
             this.sound = sound.getDelegate();
 
             return this;

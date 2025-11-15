@@ -5,7 +5,7 @@ import net.oceanias.opal.menu.OMenu;
 import net.oceanias.opal.setting.OSetting;
 import net.oceanias.opal.utility.builder.OItem;
 import net.oceanias.opal.utility.builder.OMessage;
-import net.oceanias.opal.utility.constant.OFeedbackSound;
+import net.oceanias.opal.utility.builder.OSound;
 import net.oceanias.opal.utility.extension.OCommandSenderExtension;
 import net.oceanias.opal.utility.extension.OComponentExtension;
 import net.oceanias.opal.utility.helper.OTaskHelper;
@@ -146,7 +146,7 @@ public final class OStringSetting extends OSetting<String> {
                 .line("&aEnter a new value in the chat!")
                 .line("&7→ &fType &ccancel &fto cancel.")
                 .blanks(true)
-                .sound(OFeedbackSound.SUCCESS)
+                .sound(OSound.Preset.SUCCESS)
                 .build()
                 .send(player);
 
@@ -229,7 +229,7 @@ public final class OStringSetting extends OSetting<String> {
                 OMessage.builder()
                     .line("&fThe input has &ctimed out&f!")
                     .blanks(true)
-                    .sound(OFeedbackSound.ERROR)
+                    .sound(OSound.Preset.ERROR)
                     .build()
                     .send(player);
             }, TIMEOUT_DURATION);
@@ -278,7 +278,7 @@ public final class OStringSetting extends OSetting<String> {
                 OMessage.builder()
                     .line("&fYour input is &ctoo long&f! The limit is &6" + limit + " characters&f.")
                     .blanks(true)
-                    .sound(OFeedbackSound.ERROR)
+                    .sound(OSound.Preset.ERROR)
                     .build()
                     .send(player);
 
@@ -295,7 +295,7 @@ public final class OStringSetting extends OSetting<String> {
                 OMessage.builder()
                     .line("&fYou have &ccancelled &fthe input!")
                     .blanks(true)
-                    .sound(OFeedbackSound.ERROR)
+                    .sound(OSound.Preset.ERROR)
                     .build()
                     .send(player);
 
@@ -306,7 +306,7 @@ public final class OStringSetting extends OSetting<String> {
 
             setting.value(message);
 
-            player.soundDSR(Sound.BLOCK_NOTE_BLOCK_HARP);
+            OSound.builder().sound(Sound.BLOCK_NOTE_BLOCK_HARP).build().play(player);
 
             leaveInput(player);
         }

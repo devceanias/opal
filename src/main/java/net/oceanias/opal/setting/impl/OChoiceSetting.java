@@ -2,6 +2,7 @@ package net.oceanias.opal.setting.impl;
 
 import net.oceanias.opal.setting.OSetting;
 import net.oceanias.opal.utility.builder.OItem;
+import net.oceanias.opal.utility.builder.OSound;
 import net.oceanias.opal.utility.extension.OCommandSenderExtension;
 import java.util.ArrayList;
 import java.util.List;
@@ -139,7 +140,7 @@ public final class OChoiceSetting extends OSetting<String> {
                 setting.value(choices.get((current - 1 + size) % size));
             }
 
-            player.soundDSR(Sound.BLOCK_NOTE_BLOCK_BIT);
+            OSound.builder().sound(Sound.BLOCK_NOTE_BLOCK_BIT).build().play(player);
 
             notifyWindows();
         }

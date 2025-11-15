@@ -2,6 +2,7 @@ package net.oceanias.opal.command;
 
 import net.oceanias.opal.component.impl.OProvider;
 import net.oceanias.opal.OPlugin;
+import net.oceanias.opal.utility.builder.OSound;
 import net.oceanias.opal.utility.extension.OCommandSenderExtension;
 import net.oceanias.opal.utility.extension.OStringExtension;
 import net.oceanias.opal.utility.helper.OTextHelper;
@@ -10,6 +11,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import dev.jorel.commandapi.*;
 import dev.jorel.commandapi.arguments.AbstractArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
@@ -148,7 +150,8 @@ public abstract class OCommand implements OExecutable, OProvider {
         lines.add(OTextHelper.CHAT_DIVIDER_LONG);
 
         sender.sendMessage(String.join("\n", lines).deserialize());
-        sender.soundDSR(Sound.BLOCK_NOTE_BLOCK_CHIME);
+
+        OSound.builder().sound(Sound.BLOCK_NOTE_BLOCK_CHIME).build().play(sender);
     }
 
     private @NotNull List<HelpLine> getUsages() {
