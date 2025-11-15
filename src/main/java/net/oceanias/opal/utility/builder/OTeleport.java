@@ -53,7 +53,7 @@ public final class OTeleport {
 
         if (COUNTDOWNS.containsKey(uuid)) {
             OMessage.builder()
-                .line("&fYou &ccannot use this &fright now.")
+                .line("&fYou &ccannot use this &fright now!")
                 .sound(OSound.Preset.ERROR)
                 .build()
                 .send(player);
@@ -103,21 +103,33 @@ public final class OTeleport {
         @Override
         public void run() {
             if (remaining <= 0) {
-                player.teleport(destination);
-
-                OActionBar.builder()
-                    .text("&fThe &6teleportation &fhas &acommenced&f.")
-                    .sound(Sound.ENTITY_ENDERMAN_TELEPORT)
-                    .build()
-                    .show(player);
-
                 OTeleport.this.cancel();
+
+                player.teleportAsync(destination).thenAccept(success -> {
+                    OTaskHelper.runTask(() -> {
+                        if (!success) {
+                            OActionBar.builder()
+                                .text("&fThe teleportation has &cfailed&f!")
+                                .sound(OSound.Preset.ERROR)
+                                .build()
+                                .show(player);
+
+                            return;
+                        }
+
+                        OActionBar.builder()
+                            .text("&fYou have been &ateleported&f.")
+                            .sound(Sound.ENTITY_ENDERMAN_TELEPORT)
+                            .build()
+                            .show(player);
+                        });
+                });
 
                 return;
             }
 
             OActionBar.builder()
-                .text("&fTeleporting in " + getSecondsColour(initial, remaining) + " seconds&f.")
+                .text("&fTeleporting in " + getSecondsColour(initial, remaining) + " seconds&f!")
                 .sound(Sound.ENTITY_EXPERIENCE_ORB_PICKUP)
                 .build()
                 .show(player);
