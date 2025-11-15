@@ -150,7 +150,7 @@ public final class OStringSetting extends OSetting<String> {
                 .build()
                 .send(player);
 
-            Listener.get().awaitInput(player, setting, menu);
+            Listener.awaitInput(player, setting, menu);
         }
 
         private void addCurrentLore(final @NotNull List<String> lore, final @NotNull String value) {
@@ -211,7 +211,7 @@ public final class OStringSetting extends OSetting<String> {
         private static final Map<UUID, BukkitTask> TIMEOUT_TASKS = new ConcurrentHashMap<>();
         private static final Map<UUID, OMenu> PREVIOUS_MENUS = new ConcurrentHashMap<>();
 
-        public void awaitInput(final @NotNull Player player, final OStringSetting setting, final OMenu menu) {
+        private static void awaitInput(final @NotNull Player player, final OStringSetting setting, final OMenu menu) {
             final UUID uuid = player.getUniqueId();
 
             cancelTimeout(player);
@@ -238,7 +238,7 @@ public final class OStringSetting extends OSetting<String> {
             PREVIOUS_MENUS.put(uuid, menu);
         }
 
-        private void cancelTimeout(final @NotNull Player player) {
+        private static void cancelTimeout(final @NotNull Player player) {
             final BukkitTask task = TIMEOUT_TASKS.remove(player.getUniqueId());
 
             if (task == null) {
@@ -248,7 +248,7 @@ public final class OStringSetting extends OSetting<String> {
             task.cancel();
         }
 
-        private void leaveInput(final @NotNull Player player) {
+        private static void leaveInput(final @NotNull Player player) {
             final UUID uuid = player.getUniqueId();
 
             AWAITING_INPUT.remove(uuid);

@@ -38,6 +38,7 @@ public final class OMessage {
     @Builder.Default
     private boolean blanks = false;
 
+    @Setter
     private Sound sound;
 
     public @NotNull Component component() {

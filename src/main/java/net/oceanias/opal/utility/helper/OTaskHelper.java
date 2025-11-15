@@ -58,51 +58,51 @@ public final class OTaskHelper {
         return runTaskTimerAsync(task, delay.toMillis() / 50L, period.toMillis() / 50L);
     }
 
-    public void runTask(final @NotNull BukkitRunnable runnable) {
-        runnable.runTask(OPlugin.get());
+    public @NotNull BukkitTask runTask(final @NotNull BukkitRunnable runnable) {
+        return runnable.runTask(OPlugin.get());
     }
 
-    public void runTaskAsync(final @NotNull BukkitRunnable runnable) {
-        runnable.runTaskAsynchronously(OPlugin.get());
+    public @NotNull BukkitTask runTaskAsync(final @NotNull BukkitRunnable runnable) {
+        return runnable.runTaskAsynchronously(OPlugin.get());
     }
 
-    public void runTaskLater(final @NotNull BukkitRunnable runnable, final long delayTicks) {
-        runnable.runTaskLater(OPlugin.get(), delayTicks);
+    public @NotNull BukkitTask runTaskLater(final @NotNull BukkitRunnable runnable, final long delayTicks) {
+        return runnable.runTaskLater(OPlugin.get(), delayTicks);
     }
 
-    public void runTaskLater(final BukkitRunnable runnable, @NotNull final Duration delay) {
-        runTaskLater(runnable, delay.toMillis() / 50L);
+    public @NotNull BukkitTask runTaskLater(final BukkitRunnable runnable, @NotNull final Duration delay) {
+        return runTaskLater(runnable, delay.toMillis() / 50L);
     }
 
-    public void runTaskLaterAsync(final @NotNull BukkitRunnable runnable, final long delayTicks) {
-        runnable.runTaskLaterAsynchronously(OPlugin.get(), delayTicks);
+    public @NotNull BukkitTask runTaskLaterAsync(final @NotNull BukkitRunnable runnable, final long delayTicks) {
+        return runnable.runTaskLaterAsynchronously(OPlugin.get(), delayTicks);
     }
 
-    public void runTaskLaterAsync(final BukkitRunnable runnable, @NotNull final Duration delay) {
-        runTaskLaterAsync(runnable, delay.toMillis() / 50L);
+    public @NotNull BukkitTask runTaskLaterAsync(final BukkitRunnable runnable, @NotNull final Duration delay) {
+        return runTaskLaterAsync(runnable, delay.toMillis() / 50L);
     }
 
-    public void runTaskTimer(
+    public @NotNull BukkitTask runTaskTimer(
         final @NotNull BukkitRunnable runnable, final long delayTicks, final long periodTicks
     ) {
-        runnable.runTaskTimer(OPlugin.get(), delayTicks, periodTicks);
+        return runnable.runTaskTimer(OPlugin.get(), delayTicks, periodTicks);
     }
 
-    public void runTaskTimer(
+    public @NotNull BukkitTask runTaskTimer(
         final BukkitRunnable runnable, @NotNull final Duration delay, @NotNull final Duration period
     ) {
-        runTaskTimer(runnable, delay.toMillis() / 50L, period.toMillis() / 50L);
+        return runTaskTimer(runnable, delay.toMillis() / 50L, period.toMillis() / 50L);
     }
 
-    public void runTaskTimerAsync(
+    public @NotNull BukkitTask runTaskTimerAsync(
         final @NotNull BukkitRunnable runnable, final long delayTicks, final long periodTicks
     ) {
-        runnable.runTaskTimerAsynchronously(OPlugin.get(), delayTicks, periodTicks);
+        return runnable.runTaskTimerAsynchronously(OPlugin.get(), delayTicks, periodTicks);
     }
 
-    public void runTaskTimerAsync(
+    public @NotNull BukkitTask runTaskTimerAsync(
         final BukkitRunnable runnable, @NotNull final Duration delay, @NotNull final Duration period
     ) {
-        runTaskTimerAsync(runnable, delay.toMillis() / 50L, period.toMillis() / 50L);
+        return runTaskTimerAsync(runnable, delay.toMillis() / 50L, period.toMillis() / 50L);
     }
 }

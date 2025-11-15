@@ -5,7 +5,7 @@ import net.oceanias.opal.database.ODatabase;
 import net.oceanias.opal.component.impl.OModule;
 import net.oceanias.opal.setting.impl.OStringSetting;
 import net.oceanias.opal.utility.builder.OItem;
-import net.oceanias.opal.utility.helper.OTeleportHelper;
+import net.oceanias.opal.utility.builder.OTeleport;
 import java.util.List;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -102,7 +102,7 @@ public abstract class OPlugin extends JavaPlugin {
         }
 
         new OStringSetting.Listener().registerInternally();
-        new OTeleportHelper.Listener().registerInternally();
+        new OTeleport.Listener().registerInternally();
 
         enablePlugin();
     }

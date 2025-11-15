@@ -36,6 +36,10 @@ public final class OSound {
     private SoundCategory category = SoundCategory.MASTER;
 
     public void play(final @NotNull CommandSender sender) {
+        if (sound == null) {
+            return;
+        }
+
         if (!(sender instanceof final Player player)) {
             return;
         }
@@ -47,8 +51,12 @@ public final class OSound {
         player.playSound(effective, sound, category, volume, pitch);
     }
 
-    public void play(final @NotNull Iterable<? extends CommandSender> players) {
-        for (final CommandSender player : players) {
+    public void play(final @NotNull Iterable<? extends CommandSender> senders) {
+        if (sound == null) {
+            return;
+        }
+
+        for (final CommandSender player : senders) {
             play(player);
         }
     }
