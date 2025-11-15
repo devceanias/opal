@@ -38,9 +38,9 @@ public abstract class OMenu {
         .flagsAll()
         .build();
 
-    public abstract Gui.Builder<?, ?> getGui(Player player);
+    protected abstract Gui.Builder<?, ?> getGui(Player player);
 
-    public abstract Window getWindow(Gui gui, Player player);
+    protected abstract Window getWindow(Gui gui, Player player);
 
     public void openMenu(final Player player) {
         final Gui.Builder<?, ?> gui = getGui(player);
@@ -53,7 +53,14 @@ public abstract class OMenu {
 
         Tracker.registerMenu(this, window, player);
 
-        window.addCloseHandler(() -> Tracker.unregisterMenu(this, window, player));
+        window.addCloseHandler(() -> {
+            if (isMenuOpenSound()) {
+                OSound.builder().sound(OSound.Preset.OPEN).build().play(player);
+            }
+
+            Tracker.unregisterMenu(this, window, player);
+        });
+
         window.open();
     }
 
@@ -61,6 +68,10 @@ public abstract class OMenu {
         builder
             .addIngredient('<', new OMenu.Previous())
             .addIngredient('>', new OMenu.Next());
+    }
+
+    protected boolean isMenuOpenSound() {
+        return true;
     }
 
     @Contract("_ -> new")
