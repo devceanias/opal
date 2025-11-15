@@ -53,14 +53,13 @@ public abstract class OMenu {
 
         Tracker.registerMenu(this, window, player);
 
-        window.addCloseHandler(() -> {
+        window.addOpenHandler(() -> {
             if (isMenuOpenSound()) {
                 OSound.builder().sound(OSound.Preset.OPEN).build().play(player);
             }
-
-            Tracker.unregisterMenu(this, window, player);
         });
 
+        window.addCloseHandler(() -> Tracker.unregisterMenu(this, window, player));
         window.open();
     }
 
