@@ -130,7 +130,7 @@ public final class OItem extends ItemStack implements ItemProvider {
         private final List<String> bookPages = new ArrayList<>();
         private BookMeta.Generation bookGeneration;
 
-        private Color leatherColor;
+        private Color leatherColour;
 
         private List<Pattern> bannerPatterns;
 
@@ -171,18 +171,18 @@ public final class OItem extends ItemStack implements ItemProvider {
             }
 
             if (name != null) {
-                meta.displayName(name.deserialize().stripAbsentDecorations());
+                meta.displayName(name.deserialize(true));
             }
 
             if (!lore.isEmpty()) {
                 final List<Component> lines = new ArrayList<>();
 
                 if (divider) {
-                    lines.add(OTextHelper.LORE_DIVIDER_LONG.deserialize().stripAbsentDecorations());
+                    lines.add(OTextHelper.LORE_DIVIDER_LONG.deserialize(true));
                 }
 
                 for (final String line : lore) {
-                    lines.add(line.deserialize().stripAbsentDecorations());
+                    lines.add(line.deserialize(true));
                 }
 
                 meta.lore(lines);
@@ -331,8 +331,8 @@ public final class OItem extends ItemStack implements ItemProvider {
             }
 
             if (meta instanceof final LeatherArmorMeta leather) {
-                if (leatherColor != null) {
-                    leather.setColor(leatherColor);
+                if (leatherColour != null) {
+                    leather.setColor(leatherColour);
                 }
             }
 
@@ -772,7 +772,7 @@ public final class OItem extends ItemStack implements ItemProvider {
             }
 
             if (meta instanceof final LeatherArmorMeta leather) {
-                leatherColor(leather.getColor());
+                leatherColour(leather.getColor());
             }
 
             if (meta instanceof final BannerMeta banner) {

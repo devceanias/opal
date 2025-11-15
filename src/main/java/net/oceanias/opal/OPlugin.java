@@ -16,7 +16,7 @@ import xyz.xenondevs.invui.gui.structure.Structure;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
-@SuppressWarnings({ "unused", "deprecation" })
+@SuppressWarnings({ "unused", "UnstableApiUsage" })
 @Getter
 //public abstract class OPlugin extends ZapperJavaPlugin {
 public abstract class OPlugin extends JavaPlugin {
@@ -27,11 +27,11 @@ public abstract class OPlugin extends JavaPlugin {
     private BukkitScheduler scheduler;
 
     public String getLabel() {
-        return getDescription().getName().toLowerCase();
+        return getPluginMeta().getName().toLowerCase();
     }
 
     public List<String> getAuthors() {
-        return getDescription().getAuthors();
+        return getPluginMeta().getAuthors();
     }
 
     public abstract List<OConfiguration<?>> getConfigurations();

@@ -5,6 +5,7 @@ import org.bukkit.inventory.ItemStack;
 import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;
 
+@SuppressWarnings("unused")
 @UtilityClass
 public final class OItemHelper {
     public ItemStack @NotNull [] cloneNonAir(final ItemStack @NotNull [] items) {

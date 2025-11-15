@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import com.bruhdows.minitext.FormattedText;
 import com.bruhdows.minitext.MiniText;
 import lombok.experimental.UtilityClass;
@@ -36,7 +37,19 @@ public final class OStringExtension {
     );
 
     public @NotNull Component deserialize(final String string) {
-        return deserializeToFormatted(string).component();
+        return deserialize(string, false);
+    }
+
+    public @NotNull Component deserialize(final String string, final boolean stripAbsentDecorations) {
+        Component component = deserializeToFormatted(string).component();
+
+        if (stripAbsentDecorations) {
+            for (final TextDecoration decoration : TextDecoration.values()) {
+                component = component.decorationIfAbsent(decoration, TextDecoration.State.FALSE);
+            }
+        }
+
+        return component;
     }
 
     public FormattedText deserializeToFormatted(final String string) {

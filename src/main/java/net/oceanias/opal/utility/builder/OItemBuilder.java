@@ -54,7 +54,7 @@ public final class OItemBuilder implements ItemProvider {
         final ItemMeta meta = stack.getItemMeta();
 
         if (meta != null) {
-            meta.displayName(name.deserialize().stripAbsentDecorations());
+            meta.displayName(name.deserialize(true));
 
             stack.setItemMeta(meta);
         }
@@ -93,7 +93,7 @@ public final class OItemBuilder implements ItemProvider {
             }
 
             for (final String line : lines) {
-                lore.add(line.deserialize().stripAbsentDecorations());
+                lore.add(line.deserialize(true));
             }
 
             meta.lore(lore);

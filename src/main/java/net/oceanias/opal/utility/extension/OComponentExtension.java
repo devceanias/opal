@@ -13,6 +13,7 @@ public final class OComponentExtension {
         return MiniText.miniText().serialize(component);
     }
 
+    @Deprecated
     public Component stripAbsentDecorations(Component component) {
         for (final TextDecoration decoration : TextDecoration.values()) {
             component = component.decorationIfAbsent(decoration, TextDecoration.State.FALSE);
