@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 @SuppressWarnings("unused")
 @RequiredArgsConstructor
 public abstract class ODatabase implements OProvider {
-    private AutosaveTask autosave;
+    private Autosaver autosave;
 
     public abstract void openConnection();
 
@@ -25,7 +25,7 @@ public abstract class ODatabase implements OProvider {
         final Duration interval = getAutosave();
 
         if (interval != null && !interval.isZero() && !interval.isNegative()) {
-            autosave = new AutosaveTask();
+            autosave = new Autosaver();
 
             OTaskHelper.runTaskTimerAsync(autosave, interval, interval);
         }
@@ -58,7 +58,7 @@ public abstract class ODatabase implements OProvider {
     protected void onAutosave() {}
 
     @RequiredArgsConstructor
-    private final class AutosaveTask extends BukkitRunnable {
+    private final class Autosaver extends BukkitRunnable {
         @Override
         public void run() {
             if (!isConnected() || OPlugin.get().getServer().isStopping()) {

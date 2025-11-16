@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public final class OTeleport {
-    private static final Map<UUID, BukkitTask> COUNTDOWNS = new ConcurrentHashMap<>();
+    private static final Map<UUID, BukkitTask> COUNTERS = new ConcurrentHashMap<>();
 
     @Setter
     private Player player;
@@ -51,7 +51,7 @@ public final class OTeleport {
     public void start() {
         final UUID uuid = player.getUniqueId();
 
-        if (COUNTDOWNS.containsKey(uuid)) {
+        if (COUNTERS.containsKey(uuid)) {
             OMessage.builder()
                 .line("&fYou &ccannot use this &fright now!")
                 .sound(OSound.Preset.ERROR)
@@ -65,9 +65,9 @@ public final class OTeleport {
             player.closeInventory();
         }
 
-        COUNTDOWNS.put(
+        COUNTERS.put(
             uuid,
-            OTaskHelper.runTaskTimer(new Countdown((int) duration.getSeconds()), Duration.ZERO, Duration.ofSeconds(1))
+            OTaskHelper.runTaskTimer(new Counter((int) duration.getSeconds()), Duration.ZERO, Duration.ofSeconds(1))
         );
     }
 
@@ -77,7 +77,7 @@ public final class OTeleport {
 
     private static void cancelTeleportTask(final @NotNull Player player) {
         final UUID uuid = player.getUniqueId();
-        final BukkitTask task = COUNTDOWNS.remove(uuid);
+        final BukkitTask task = COUNTERS.remove(uuid);
 
         if (task == null) {
             return;
@@ -87,14 +87,14 @@ public final class OTeleport {
     }
 
     @AllArgsConstructor
-    private final class Countdown extends BukkitRunnable {
+    private final class Counter extends BukkitRunnable {
         // Seconds
         private final int initial;
 
         // Seconds
         private int remaining;
 
-        public Countdown(final int initial) {
+        public Counter(final int initial) {
             this.initial = initial;
 
             remaining = initial;
