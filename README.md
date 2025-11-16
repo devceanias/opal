@@ -1,3 +1,5 @@
 # Opal
 
-The utility plugin for Oceanias.
+The common library for Oceanias.
+
+https://jitpack.io/#devceanias/opal
