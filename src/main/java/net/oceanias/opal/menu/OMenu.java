@@ -25,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.ExtensionMethod;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("unused")
 @ExtensionMethod({ OStringExtension.class, OCommandSenderExtension.class })
@@ -43,6 +44,10 @@ public abstract class OMenu {
     protected abstract Window getWindow(Gui gui, Player player);
 
     public void openMenu(final Player player) {
+        openMenu(player, false);
+    }
+
+    private void openMenu(final Player player, final boolean silent) {
         final Gui.Builder<?, ?> gui = getGui(player);
 
         if (gui instanceof final PagedGui.Builder<?> paged) {
@@ -54,7 +59,7 @@ public abstract class OMenu {
         Tracker.registerMenu(this, window, player);
 
         window.addOpenHandler(() -> {
-            if (isMenuOpenSound()) {
+            if (isMenuOpenSound() && !silent) {
                 OSound.builder().sound(OSound.Preset.OPEN).build().play(player);
             }
         });
@@ -150,6 +155,48 @@ public abstract class OMenu {
             }
         }
 
+        public static void refreshAll(final Class<? extends OMenu> clazz) {
+            final Set<Window> windows = WINDOWS_BY_CLASS.get(clazz);
+
+            if (windows == null) {
+                return;
+            }
+
+            for (final Window window : new ArrayList<>(windows)) {
+                final Player viewer = window.getCurrentViewer();
+
+                if (viewer == null) {
+                    continue;
+                }
+
+                final OMenu menu = findMenuByWindow(window);
+
+                if (menu == null) {
+                    continue;
+                }
+
+                closeAndOpenMenu(window, menu, viewer);
+            }
+        }
+
+        public static void refreshAll(final OMenu menu) {
+            final Map<UUID, Window> instances = WINDOWS_BY_INSTANCE.get(menu);
+
+            if (instances == null) {
+                return;
+            }
+
+            for (final Map.Entry<UUID, Window> entry : new ArrayList<>(instances.entrySet())) {
+                final Player viewer = OPlugin.get().getServer().getPlayer(entry.getKey());
+
+                if (viewer == null) {
+                    continue;
+                }
+
+                closeAndOpenMenu(entry.getValue(), menu, viewer);
+            }
+        }
+
         public static void closeFor(final Class<? extends OMenu> clazz, final Player player) {
             final Set<Window> windows = WINDOWS_BY_CLASS.get(clazz);
 
@@ -174,6 +221,40 @@ public abstract class OMenu {
             }
 
             window.close();
+        }
+
+        public static void refreshFor(final Class<? extends OMenu> clazz, final Player player) {
+            final Set<Window> windows = WINDOWS_BY_CLASS.get(clazz);
+
+            if (windows == null) {
+                return;
+            }
+
+            for (final Window window : new ArrayList<>(windows)) {
+                if (!player.equals(window.getCurrentViewer())) {
+                    continue;
+                }
+
+                final OMenu menu = findMenuByWindow(window);
+
+                if (menu == null) {
+                    return;
+                }
+
+                closeAndOpenMenu(window, menu, player);
+
+                return;
+            }
+        }
+
+        public static void refreshFor(final @NotNull OMenu menu, final @NotNull Player player) {
+            final Window window = menu.windows.get(player.getUniqueId());
+
+            if (window == null) {
+                return;
+            }
+
+            closeAndOpenMenu(window, menu, player);
         }
 
         public static int getOpen(final Class<? extends OMenu> clazz) {
@@ -229,6 +310,26 @@ public abstract class OMenu {
 
             return window != null && player.equals(window.getCurrentViewer());
         }
+
+        private static void closeAndOpenMenu(
+            final @NotNull Window window, final @NotNull OMenu menu, final Player player
+        ) {
+            window.close();
+
+            menu.openMenu(player, true);
+        }
+
+        private static @Nullable OMenu findMenuByWindow(final Window window) {
+            for (final Map.Entry<OMenu, Map<UUID, Window>> entry : WINDOWS_BY_INSTANCE.entrySet()) {
+                if (!entry.getValue().containsValue(window)) {
+                    continue;
+                }
+
+                return entry.getKey();
+            }
+
+            return null;
+        }
     }
 
     public static final class Previous extends PageItem {
@@ -248,15 +349,14 @@ public abstract class OMenu {
 
         @Override
         public @NotNull ItemProvider getItemProvider(final @NotNull PagedGui<?> gui) {
-            final int now = gui.getCurrentPage() + 1;
-            final int max = gui.getPageAmount();
+            final int current = gui.getCurrentPage() + 1;
 
             if (gui.hasPreviousPage()) {
                 return OItem.builder(Material.TIPPED_ARROW)
-                    .amount(Math.max(1, Math.min(64, now - 1)))
+                    .amount(Math.max(1, Math.min(64, current - 1)))
                     .name(OPlugin.get().getColour() + "Previous Page")
                     .lore(
-                        "&fCurrent: &6" + now,
+                        "&fCurrent: &6" + current,
                         "",
                         OPlugin.get().getColour() + "Click &7to turn!"
                     )
@@ -299,15 +399,14 @@ public abstract class OMenu {
 
         @Override
         public @NotNull ItemProvider getItemProvider(final @NotNull PagedGui<?> gui) {
-            final int now = gui.getCurrentPage() + 1;
-            final int max = gui.getPageAmount();
+            final int current = gui.getCurrentPage() + 1;
 
             if (gui.hasNextPage()) {
                 return OItem.builder(Material.TIPPED_ARROW)
-                    .amount(Math.max(1, Math.min(64, now + 1)))
+                    .amount(Math.max(1, Math.min(64, current + 1)))
                     .name(OPlugin.get().getColour() + "Next Page")
                     .lore(
-                        "&fCurrent: &6" + now,
+                        "&fCurrent: &6" + current,
                         "",
                         OPlugin.get().getColour() + "Click &7to turn!"
                     )
