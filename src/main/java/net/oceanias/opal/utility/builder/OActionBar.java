@@ -156,8 +156,8 @@ public final class OActionBar {
 
     public static final class OActionBarBuilder {
         @Contract("_ -> this")
-        public OActionBarBuilder sound(final @NotNull OSound.Preset sound) {
-            this.sound = sound.getDelegate();
+        public OActionBarBuilder sound(final @NotNull OSound.Preset preset) {
+            sound = preset.getDelegate();
 
             return this;
         }

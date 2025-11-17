@@ -2,16 +2,21 @@ package net.oceanias.opal.configuration;
 
 import net.oceanias.opal.component.impl.OProvider;
 import net.oceanias.opal.OPlugin;
+import net.oceanias.opal.utility.builder.OSound;
 import net.oceanias.opal.utility.extension.OStringExtension;
 import net.oceanias.opal.utility.helper.OTextHelper;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
+import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import net.kyori.adventure.text.Component;
 import de.exlll.configlib.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
 import lombok.experimental.ExtensionMethod;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -88,11 +93,24 @@ public abstract class OConfiguration<T> implements OProvider {
         OProvider.super.unregisterInternally();
     }
 
-    public record Message(
-        Type type,
-        String message,
-        List<String> lines
-    ) {
+    @Getter
+    @Accessors(fluent = true)
+    @Configuration
+    @RequiredArgsConstructor
+    public static final class Message {
+        private Type type;
+        private String message;
+        private List<String> lines;
+
+        @Ignore
+        private Sound sound;
+
+        @Ignore
+        private Component cached;
+
+        @Ignore
+        private boolean replacements = false;
+
         public enum Type {
             PLAYER_CHAT,
             ACTION_BAR
@@ -106,42 +124,59 @@ public abstract class OConfiguration<T> implements OProvider {
             this(type, null, lines);
         }
 
+        public Message(final Type type, final String message, final List<String> lines) {
+            this.type = type;
+            this.message = message;
+            this.lines = lines;
+        }
+
+        @Contract(value = "_ -> this", mutates = "this")
+        public Message sound(final OSound.@NotNull Preset preset) {
+            sound = preset.getDelegate();
+
+            return this;
+        }
+
         @Contract("_, _ -> new")
         public @NotNull Message replace(final CharSequence target, final CharSequence replacement) {
             if (lines == null) {
-                return new Message(type, message.replace(target, replacement));
+                final Message updated = new Message(type, message.replace(target, replacement));
+
+                updated.replacements = true;
+
+                return updated;
             }
 
             final List<String> replaced = lines.stream()
                 .map(line -> line.replace(target, replacement))
                 .toList();
 
-            return new Message(type, replaced);
+            final Message updated = new Message(type, replaced);
+
+            updated.replacements = true;
+
+            return updated;
         }
 
-        public void send(final CommandSender sender) {
-            final String result;
-            final String joined = lines != null ? String.join("\n", lines) : message;
-
-            if (sender instanceof ConsoleCommandSender || type == Type.PLAYER_CHAT) {
-                if (lines != null && !lines.isEmpty()) {
-                    result = joined;
-                } else {
-                    result = OPlugin.get().getPrefix() + " " + joined;
-                }
-            } else {
-                result = joined;
+        public Component render() {
+            if (!replacements && cached != null) {
+                return cached;
             }
 
-            final Component component = result
-                .replace("{plugin-label}", OPlugin.get().getLabel())
-                .replace("{plugin-name}", OPlugin.get().getPluginMeta().getName())
-                .replace("{colour}", OPlugin.get().getColour())
-                .replace("{prefix}", OPlugin.get().getPrefix())
-                .replace("{divider-long}", OTextHelper.CHAT_DIVIDER_LONG)
-                .replace("{divider-short}", OTextHelper.CHAT_DIVIDER_SHORT)
-                .deserialize();
+            final String joined = lines != null
+                ? String.join("\n", lines)
+                : message;
 
+            final Component component = OTextHelper.resolveCommonPlaceholders(joined).deserialize();
+
+            if (!replacements) {
+                cached = component;
+            }
+
+            return component;
+        }
+
+        private void send(final CommandSender sender, final Component component, final OSound sound) {
             switch (type) {
                 case PLAYER_CHAT -> sender.sendMessage(component);
                 case ACTION_BAR -> {
@@ -154,18 +189,36 @@ public abstract class OConfiguration<T> implements OProvider {
                     sender.sendActionBar(component);
                 }
             }
+
+            if (sound == null) {
+                return;
+            }
+
+            sound.play(sender);
+        }
+
+        public void send(final CommandSender sender) {
+            final OSound sound = this.sound != null
+                ? OSound.builder().sound(this.sound).build()
+                : null;
+
+            send(sender, render(), sound);
         }
 
         public void send(final @NotNull Iterable<? extends CommandSender> senders) {
+            final Component component = render();
+
+            final OSound sound = this.sound != null
+                ? OSound.builder().sound(this.sound).build()
+                : null;
+
             for (final CommandSender sender : senders) {
-                send(sender);
+                send(sender, component, sound);
             }
         }
 
         public void broadcast() {
-            for (final Player sender : OPlugin.get().getServer().getOnlinePlayers()) {
-                send(sender);
-            }
+            send(OPlugin.get().getServer().getOnlinePlayers());
         }
     }
 }

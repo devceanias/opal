@@ -41,7 +41,7 @@ public final class OMessage {
     @Setter
     private Sound sound;
 
-    public @NotNull Component component() {
+    public @NotNull Component render() {
         final String addDividers = dividers ? OTextHelper.CHAT_DIVIDER_LONG : null;
         final String addBlanks = blanks ? "" : null;
         final String addPrefix = prefix ? OPlugin.get().getPrefix() + " ": "";
@@ -54,7 +54,7 @@ public final class OMessage {
     }
 
     public void send(final @NotNull CommandSender sender) {
-        sender.sendMessage(component());
+        sender.sendMessage(render());
 
         if (sound == null) {
             return;
@@ -64,7 +64,7 @@ public final class OMessage {
     }
 
     public void send(final @NotNull Iterable<? extends CommandSender> senders) {
-        final Component message = component();
+        final Component message = render();
 
         final OSound sound = this.sound != null
             ? OSound.builder().sound(this.sound).build()
@@ -87,8 +87,8 @@ public final class OMessage {
 
     public static final class OMessageBuilder {
         @Contract("_ -> this")
-        public OMessageBuilder sound(final @NotNull OSound.Preset sound) {
-            this.sound = sound.getDelegate();
+        public OMessageBuilder sound(final @NotNull OSound.Preset preset) {
+            sound = preset.getDelegate();
 
             return this;
         }

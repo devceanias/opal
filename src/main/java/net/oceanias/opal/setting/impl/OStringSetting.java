@@ -200,10 +200,6 @@ public final class OStringSetting extends OSetting<String> {
 
     @RequiredArgsConstructor
     public static final class Listener extends OListener.Bukkit {
-        @Getter
-        @Accessors(fluent = true)
-        private static final Listener get = new Listener();
-
         private static final Duration TIMEOUT_DURATION = Duration.ofSeconds(45);
         private static final String CANCEL_KEYWORD = "cancel";
 

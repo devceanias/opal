@@ -1,8 +1,13 @@
 package net.oceanias.opal.utility.helper;
 
+import net.oceanias.opal.OPlugin;
+import net.oceanias.opal.utility.extension.OStringExtension;
+import lombok.experimental.ExtensionMethod;
 import lombok.experimental.UtilityClass;
+import org.jetbrains.annotations.NotNull;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({ "unused", "UnstableApiUsage" })
+@ExtensionMethod(OStringExtension.class)
 @UtilityClass
 public final class OTextHelper {
     public final String COLOUR_CODE_REGEX = "&[0-9a-fk-or]";
@@ -21,4 +26,14 @@ public final class OTextHelper {
 
     public final String SIDEBAR_DIVIDER_MAIN =
         "&#AAAAAA&m &#ADADAD&m &#B0B0B0&m &#B3B3B3&m &#B6B6B6&m &#B9B9B9&m &#BCBCBC&m &#BFBFBF&m &#C1C1C1&m &#C4C4C4&m &#C7C7C7&m &#CACACA&m &#CDCDCD&m &#D0D0D0&m &#D3D3D3&m &#D6D6D6&m &#D9D9D9&m &#DCDCDC&m &#DFDFDF&m &#E2E2E2&m &#E5E5E5&m &#E8E8E8&m &#EAEAEA&m &#EDEDED&m &#F0F0F0&m &#F3F3F3&m &#F6F6F6&m &#F9F9F9&m &#FCFCFC&m &#FFFFFF&m &r";
+
+    public @NotNull String resolveCommonPlaceholders(final @NotNull String text) {
+        return text
+            .replace("{plugin-label}", OPlugin.get().getLabel())
+            .replace("{plugin-name}", OPlugin.get().getPluginMeta().getName())
+            .replace("{colour}", OPlugin.get().getColour())
+            .replace("{prefix}", OPlugin.get().getPrefix())
+            .replace("{divider-long}", OTextHelper.CHAT_DIVIDER_LONG)
+            .replace("{divider-short}", OTextHelper.CHAT_DIVIDER_SHORT);
+    }
 }
