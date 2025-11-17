@@ -15,6 +15,7 @@ import net.kyori.adventure.text.Component;
 import de.exlll.configlib.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.experimental.ExtensionMethod;
 import org.jetbrains.annotations.Contract;
@@ -133,6 +134,12 @@ public abstract class OConfiguration<T> implements OProvider {
             this.type = type;
             this.message = message;
             this.lines = lines;
+        }
+
+        public Message sound(final Sound sound) {
+            this.sound = sound;
+
+            return this;
         }
 
         @Contract(value = "_ -> this", mutates = "this")
