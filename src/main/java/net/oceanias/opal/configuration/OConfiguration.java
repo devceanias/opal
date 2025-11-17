@@ -11,7 +11,6 @@ import java.util.List;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.entity.Player;
 import net.kyori.adventure.text.Component;
 import de.exlll.configlib.*;
 import lombok.Getter;
@@ -21,7 +20,7 @@ import lombok.experimental.ExtensionMethod;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-@SuppressWarnings({ "unused", "unchecked", "UnstableApiUsage" })
+@SuppressWarnings({ "unused", "unchecked" })
 @ExtensionMethod(OStringExtension.class)
 public abstract class OConfiguration<T> implements OProvider {
     private Path path;
@@ -93,19 +92,25 @@ public abstract class OConfiguration<T> implements OProvider {
         OProvider.super.unregisterInternally();
     }
 
-    @Getter
     @Accessors(fluent = true)
     @Configuration
     @RequiredArgsConstructor
     public static final class Message {
+        @Getter
         private Type type;
+
+        @Getter
         private String message;
+
+        @Getter
         private List<String> lines;
 
         @Ignore
+        @Getter
         private Sound sound;
 
         @Ignore
+        @Getter
         private Component cached;
 
         @Ignore
