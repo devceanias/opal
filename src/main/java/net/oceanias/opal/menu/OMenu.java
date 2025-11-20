@@ -68,14 +68,14 @@ public abstract class OMenu {
         window.open();
     }
 
-    public void addPageNavigationIngredients(final PagedGui.@NotNull Builder<?> builder) {
-        builder
-            .addIngredient('<', new OMenu.Previous())
-            .addIngredient('>', new OMenu.Next());
-    }
-
     protected boolean isMenuOpenSound() {
         return true;
+    }
+
+    public static void addPageNavigationIngredients(final PagedGui.@NotNull Builder<?> builder) {
+        builder
+            .addIngredient('<', new Previous())
+            .addIngredient('>', new Next());
     }
 
     @Contract("_ -> new")
@@ -85,19 +85,19 @@ public abstract class OMenu {
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static final class Tracker {
-        private static final Map<Class<? extends OMenu>, Set<Window>> WINDOWS_BY_CLASS = new HashMap<>();
-        private static final Map<OMenu, Map<UUID, Window>> WINDOWS_BY_INSTANCE = new HashMap<>();
+        private static final Map<Class<? extends OMenu>, Set<Window>> windowsByClass = new HashMap<>();
+        private static final Map<OMenu, Map<UUID, Window>> windowsByInstance = new HashMap<>();
 
         public static void registerMenu(final @NotNull OMenu menu, final Window window, final @NotNull Player player) {
             final UUID uuid = player.getUniqueId();
 
             menu.windows.put(uuid, window);
 
-            WINDOWS_BY_INSTANCE
+            windowsByInstance
                 .computeIfAbsent(menu, ignored -> new HashMap<>())
                 .put(uuid, window);
 
-            WINDOWS_BY_CLASS
+            windowsByClass
                 .computeIfAbsent(menu.getClass(), ignored -> new HashSet<>())
                 .add(window);
         }
@@ -105,8 +105,8 @@ public abstract class OMenu {
         public static void unregisterMenu(final OMenu menu, final Window window, final @NotNull Player player) {
             final UUID uuid = player.getUniqueId();
 
-            final Map<UUID, Window> windowsByInstance = WINDOWS_BY_INSTANCE.get(menu);
-            final Set<Window> windowsByClass = WINDOWS_BY_CLASS.get(menu.getClass());
+            final Map<UUID, Window> windowsByInstance = Tracker.windowsByInstance.get(menu);
+            final Set<Window> windowsByClass = Tracker.windowsByClass.get(menu.getClass());
 
             menu.windows.remove(uuid);
 
@@ -114,7 +114,7 @@ public abstract class OMenu {
                 windowsByInstance.remove(uuid);
 
                 if (windowsByInstance.isEmpty()) {
-                    WINDOWS_BY_INSTANCE.remove(menu);
+                    Tracker.windowsByInstance.remove(menu);
                 }
             }
 
@@ -128,11 +128,11 @@ public abstract class OMenu {
                 return;
             }
 
-            WINDOWS_BY_CLASS.remove(menu.getClass());
+            Tracker.windowsByClass.remove(menu.getClass());
         }
 
         public static void closeAll(final Class<? extends OMenu> clazz) {
-            final Set<Window> windows = WINDOWS_BY_CLASS.get(clazz);
+            final Set<Window> windows = windowsByClass.get(clazz);
 
             if (windows == null) {
                 return;
@@ -144,7 +144,7 @@ public abstract class OMenu {
         }
 
         public static void closeAll(final OMenu menu) {
-            final Map<UUID, Window> windows = WINDOWS_BY_INSTANCE.get(menu);
+            final Map<UUID, Window> windows = windowsByInstance.get(menu);
 
             if (windows == null) {
                 return;
@@ -156,7 +156,7 @@ public abstract class OMenu {
         }
 
         public static void refreshAll(final Class<? extends OMenu> clazz) {
-            final Set<Window> windows = WINDOWS_BY_CLASS.get(clazz);
+            final Set<Window> windows = windowsByClass.get(clazz);
 
             if (windows == null) {
                 return;
@@ -180,7 +180,7 @@ public abstract class OMenu {
         }
 
         public static void refreshAll(final OMenu menu) {
-            final Map<UUID, Window> instances = WINDOWS_BY_INSTANCE.get(menu);
+            final Map<UUID, Window> instances = windowsByInstance.get(menu);
 
             if (instances == null) {
                 return;
@@ -198,7 +198,7 @@ public abstract class OMenu {
         }
 
         public static void closeFor(final Class<? extends OMenu> clazz, final Player player) {
-            final Set<Window> windows = WINDOWS_BY_CLASS.get(clazz);
+            final Set<Window> windows = windowsByClass.get(clazz);
 
             if (windows == null) {
                 return;
@@ -224,7 +224,7 @@ public abstract class OMenu {
         }
 
         public static void refreshFor(final Class<? extends OMenu> clazz, final Player player) {
-            final Set<Window> windows = WINDOWS_BY_CLASS.get(clazz);
+            final Set<Window> windows = windowsByClass.get(clazz);
 
             if (windows == null) {
                 return;
@@ -258,7 +258,7 @@ public abstract class OMenu {
         }
 
         public static int getOpen(final Class<? extends OMenu> clazz) {
-            final Set<Window> windows = WINDOWS_BY_CLASS.get(clazz);
+            final Set<Window> windows = windowsByClass.get(clazz);
 
             return windows != null
                 ? windows.size()
@@ -266,7 +266,7 @@ public abstract class OMenu {
         }
 
         public static @NotNull Set<Player> getViewers(final Class<? extends OMenu> clazz) {
-            final Set<Window> windows = WINDOWS_BY_CLASS.get(clazz);
+            final Set<Window> windows = windowsByClass.get(clazz);
 
             if (windows == null) {
                 return Set.of();
@@ -288,7 +288,7 @@ public abstract class OMenu {
         }
 
         public static boolean isViewing(final Class<? extends OMenu> clazz, final Player player) {
-            final Set<Window> windows = WINDOWS_BY_CLASS.get(clazz);
+            final Set<Window> windows = windowsByClass.get(clazz);
 
             if (windows == null) {
                 return false;
@@ -320,7 +320,7 @@ public abstract class OMenu {
         }
 
         private static @Nullable OMenu findMenuByWindow(final Window window) {
-            for (final Map.Entry<OMenu, Map<UUID, Window>> entry : WINDOWS_BY_INSTANCE.entrySet()) {
+            for (final Map.Entry<OMenu, Map<UUID, Window>> entry : windowsByInstance.entrySet()) {
                 if (!entry.getValue().containsValue(window)) {
                     continue;
                 }

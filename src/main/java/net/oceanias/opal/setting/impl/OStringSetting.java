@@ -31,7 +31,6 @@ import xyz.xenondevs.invui.window.WindowManager;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.Accessors;
 import lombok.experimental.ExtensionMethod;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -203,24 +202,24 @@ public final class OStringSetting extends OSetting<String> {
         private static final Duration TIMEOUT_DURATION = Duration.ofSeconds(45);
         private static final String CANCEL_KEYWORD = "cancel";
 
-        private static final Map<UUID, OStringSetting> AWAITING_INPUT = new ConcurrentHashMap<>();
-        private static final Map<UUID, BukkitTask> TIMEOUT_TASKS = new ConcurrentHashMap<>();
-        private static final Map<UUID, OMenu> PREVIOUS_MENUS = new ConcurrentHashMap<>();
+        private static final Map<UUID, OStringSetting> awaitingInput = new ConcurrentHashMap<>();
+        private static final Map<UUID, BukkitTask> timeoutTasks = new ConcurrentHashMap<>();
+        private static final Map<UUID, OMenu> previousMenus = new ConcurrentHashMap<>();
 
         private static void awaitInput(final @NotNull Player player, final OStringSetting setting, final OMenu menu) {
             final UUID uuid = player.getUniqueId();
 
             cancelTimeout(player);
 
-            AWAITING_INPUT.put(uuid, setting);
+            awaitingInput.put(uuid, setting);
 
             final BukkitTask task = OTaskHelper.runTaskLater(() -> {
-                if (AWAITING_INPUT.remove(uuid) == null) {
+                if (awaitingInput.remove(uuid) == null) {
                     return;
                 }
 
-                TIMEOUT_TASKS.remove(uuid);
-                PREVIOUS_MENUS.remove(uuid);
+                timeoutTasks.remove(uuid);
+                previousMenus.remove(uuid);
 
                 OMessage.builder()
                     .line("&fThe input has &ctimed out&f!")
@@ -230,12 +229,12 @@ public final class OStringSetting extends OSetting<String> {
                     .send(player);
             }, TIMEOUT_DURATION);
 
-            TIMEOUT_TASKS.put(uuid, task);
-            PREVIOUS_MENUS.put(uuid, menu);
+            timeoutTasks.put(uuid, task);
+            previousMenus.put(uuid, menu);
         }
 
         private static void cancelTimeout(final @NotNull Player player) {
-            final BukkitTask task = TIMEOUT_TASKS.remove(player.getUniqueId());
+            final BukkitTask task = timeoutTasks.remove(player.getUniqueId());
 
             if (task == null) {
                 return;
@@ -247,11 +246,11 @@ public final class OStringSetting extends OSetting<String> {
         private static void leaveInput(final @NotNull Player player) {
             final UUID uuid = player.getUniqueId();
 
-            AWAITING_INPUT.remove(uuid);
+            awaitingInput.remove(uuid);
 
             cancelTimeout(player);
 
-            PREVIOUS_MENUS.remove(uuid);
+            previousMenus.remove(uuid);
         }
 
         @EventHandler
@@ -259,11 +258,11 @@ public final class OStringSetting extends OSetting<String> {
             final Player player = event.getPlayer();
             final UUID uuid = player.getUniqueId();
 
-            if (!AWAITING_INPUT.containsKey(uuid)) {
+            if (!awaitingInput.containsKey(uuid)) {
                 return;
             }
 
-            final OStringSetting setting = AWAITING_INPUT.get(uuid);
+            final OStringSetting setting = awaitingInput.get(uuid);
 
             final Integer limit = setting.limit;
             final String message = event.message().serialize();
@@ -281,7 +280,7 @@ public final class OStringSetting extends OSetting<String> {
                 return;
             }
 
-            final OMenu menu = PREVIOUS_MENUS.get(uuid);
+            final OMenu menu = previousMenus.get(uuid);
 
             if (menu != null) {
                 menu.openMenu(player);

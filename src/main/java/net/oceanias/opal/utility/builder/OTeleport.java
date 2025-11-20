@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public final class OTeleport {
-    private static final Map<UUID, BukkitTask> COUNTERS = new ConcurrentHashMap<>();
+    private static final Map<UUID, BukkitTask> counters = new ConcurrentHashMap<>();
 
     @Setter
     private Player player;
@@ -51,7 +51,7 @@ public final class OTeleport {
     public void start() {
         final UUID uuid = player.getUniqueId();
 
-        if (COUNTERS.containsKey(uuid)) {
+        if (counters.containsKey(uuid)) {
             OMessage.builder()
                 .line("&fYou &ccannot use this &fright now!")
                 .sound(OSound.Preset.ERROR)
@@ -65,7 +65,7 @@ public final class OTeleport {
             player.closeInventory();
         }
 
-        COUNTERS.put(
+        counters.put(
             uuid,
             OTaskHelper.runTaskTimer(new Counter((int) duration.getSeconds()), Duration.ZERO, Duration.ofSeconds(1))
         );
@@ -77,7 +77,7 @@ public final class OTeleport {
 
     private static void cancelTeleportTask(final @NotNull Player player) {
         final UUID uuid = player.getUniqueId();
-        final BukkitTask task = COUNTERS.remove(uuid);
+        final BukkitTask task = counters.remove(uuid);
 
         if (task == null) {
             return;
