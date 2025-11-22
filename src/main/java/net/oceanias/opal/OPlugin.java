@@ -11,6 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
+import dev.jorel.commandapi.CommandAPIPaperConfig;
 import xyz.xenondevs.invui.InvUI;
 import xyz.xenondevs.invui.gui.structure.Structure;
 import lombok.Getter;
@@ -69,8 +70,8 @@ public abstract class OPlugin extends JavaPlugin {
             throw new IllegalStateException("Error loading plugin; getLoader() returned null.");
         }
 
-        CommandAPI.onLoad(new CommandAPIBukkitConfig(this)
-            .skipReloadDatapacks(!reloadsDatapacks())
+        CommandAPI.onLoad(new CommandAPIPaperConfig(this)
+            .setNamespace(getLabel())
             .missingExecutorImplementationMessage("This command does not support %s.")
         );
 

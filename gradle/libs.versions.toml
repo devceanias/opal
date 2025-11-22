@@ -1,7 +1,7 @@
 [versions]
 shadow = "9.2.2"
 invui = "1.47"
-commandapi = "10.1.2"
+commandapi = "11.0.0"
 configlib = "4.6.4"
 lombok = "1.18.42"
 paper = "1.21.4-R0.1-SNAPSHOT"
@@ -12,7 +12,7 @@ zapper = "1.0.7"
 [libraries]
 invui = { group = "xyz.xenondevs.invui", name = "invui-core", version.ref = "invui" }
 inventoryaccess = { group = "xyz.xenondevs.invui", name = "inventory-access-r23", version.ref = "invui" }
-commandapi = { group = "dev.jorel", name = "commandapi-bukkit-shade-mojang-mapped", version.ref = "commandapi" }
+commandapi = { group = "dev.jorel", name = "commandapi-paper-shade", version.ref = "commandapi" }
 configlib = { group = "de.exlll", name = "configlib-paper", version.ref = "configlib" }
 lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" }
 paper = { group = "io.papermc.paper", name = "paper-api", version.ref = "paper" }

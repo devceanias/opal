@@ -17,11 +17,11 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitTask;
 import xyz.xenondevs.invui.item.ItemProvider;
@@ -35,7 +35,7 @@ import lombok.experimental.ExtensionMethod;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({ "unused", "deprecation" })
 @ExtensionMethod({ OComponentExtension.class, OCommandSenderExtension.class })
 @Getter
 public final class OStringSetting extends OSetting<String> {
@@ -108,7 +108,7 @@ public final class OStringSetting extends OSetting<String> {
                 lore.add("");
             }
 
-            addCurrentLore(lore, setting.value);
+            addCurrent(lore, setting.value);
 
             if (limit != null) {
                 lore.add("");
@@ -129,16 +129,16 @@ public final class OStringSetting extends OSetting<String> {
         public void handleClick(
             @NotNull final ClickType click, @NotNull final Player player, @NotNull final InventoryClickEvent event
         ) {
-            final Window window = WindowManager.getInstance().getOpenWindow(player);
+            if (!(event.getInventory().getHolder() instanceof final OMenu opal)) {
+                OSound.builder().sound(OSound.Preset.ERROR).build().play(player);
 
-            final OMenu menu = event.getInventory().getHolder() instanceof final OMenu opal
-                ? opal
-                : null;
+                return;
+            }
+
+            final Window window = WindowManager.getInstance().getOpenWindow(player);
 
             if (window != null) {
                 window.close();
-            } else {
-                player.closeInventory();
             }
 
             OMessage.builder()
@@ -149,10 +149,10 @@ public final class OStringSetting extends OSetting<String> {
                 .build()
                 .send(player);
 
-            Listener.awaitInput(player, setting, menu);
+            Listener.awaitInput(player, setting, opal);
         }
 
-        private void addCurrentLore(final @NotNull List<String> lore, final @NotNull String value) {
+        private void addCurrent(final @NotNull List<String> lore, final @NotNull String value) {
             lore.add("&eCurrent:");
 
             final int limit = OTextHelper.LORE_DIVIDER_LONG
@@ -209,10 +209,6 @@ public final class OStringSetting extends OSetting<String> {
         private static void awaitInput(final @NotNull Player player, final OStringSetting setting, final OMenu menu) {
             final UUID uuid = player.getUniqueId();
 
-            cancelTimeout(player);
-
-            awaitingInput.put(uuid, setting);
-
             final BukkitTask task = OTaskHelper.runTaskLater(() -> {
                 if (awaitingInput.remove(uuid) == null) {
                     return;
@@ -229,6 +225,9 @@ public final class OStringSetting extends OSetting<String> {
                     .send(player);
             }, TIMEOUT_DURATION);
 
+            cancelTimeout(player);
+
+            awaitingInput.put(uuid, setting);
             timeoutTasks.put(uuid, task);
             previousMenus.put(uuid, menu);
         }
@@ -282,10 +281,6 @@ public final class OStringSetting extends OSetting<String> {
 
             final OMenu menu = previousMenus.get(uuid);
 
-            if (menu != null) {
-                menu.openMenu(player);
-            }
-
             if (message.equalsIgnoreCase(CANCEL_KEYWORD)) {
                 OMessage.builder()
                     .line("&fYou have &ccancelled &fthe input!")
@@ -293,21 +288,28 @@ public final class OStringSetting extends OSetting<String> {
                     .sound(OSound.Preset.ERROR)
                     .build()
                     .send(player);
-
-                leaveInput(player);
-
-                return;
+            } else {
+                setting.value(message);
             }
 
-            setting.value(message);
-
-            OSound.builder().sound(Sound.BLOCK_NOTE_BLOCK_HARP).build().play(player);
+            if (menu != null) {
+                menu.openMenu(player);
+            }
 
             leaveInput(player);
         }
 
         @EventHandler
-        public void onQuit(final @NotNull PlayerQuitEvent event) {
+        public void onAsyncPlayerChat(final @NotNull AsyncPlayerChatEvent event) {
+            if (!awaitingInput.containsKey(event.getPlayer().getUniqueId())) {
+                return;
+            }
+
+            event.setCancelled(true);
+        }
+
+        @EventHandler
+        public void onPlayerQuit(final @NotNull PlayerQuitEvent event) {
             leaveInput(event.getPlayer());
         }
     }
