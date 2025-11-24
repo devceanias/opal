@@ -11,7 +11,6 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import dev.jorel.commandapi.*;
 import dev.jorel.commandapi.arguments.AbstractArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
@@ -68,9 +67,7 @@ public abstract class OCommand implements OExecutable, OProvider {
             );
         }
 
-        CommandAPI.unregister(getLabel(), true);
-
-        tree.register();
+        tree.override();
 
         OProvider.super.registerInternally();
     }

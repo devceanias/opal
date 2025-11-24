@@ -112,7 +112,7 @@ public final class ODoubleSetting extends OSetting<Double> {
 
             lore.add("&fCurrent: &6" + String.format("%.2f", setting.value));
             lore.add("");
-            lore.add("&fMinimum: &c" + (max == null ? "None" : String.format("%.2f", min)));
+            lore.add("&fMinimum: &c" + (min == null ? "None" : String.format("%.2f", min)));
             lore.add("&fMaximum: &c" + (max == null ? "None" : String.format("%.2f", max)));
             lore.add("");
             lore.add("&eLeft-click &7to add &n" + change + "&7.");

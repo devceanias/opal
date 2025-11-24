@@ -1,5 +1,5 @@
 group = "net.oceanias"
-version = "4.2.3"
+version = "4.2.4"
 
 plugins {
     id("java-library")
@@ -23,6 +23,7 @@ java {
 repositories {
     mavenCentral()
 
+    maven("https://central.sonatype.com/repository/maven-snapshots/")
     maven("https://repo.codemc.io/repository/maven-public/")
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://oss.sonatype.org/content/groups/public/")

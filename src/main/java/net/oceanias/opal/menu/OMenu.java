@@ -175,7 +175,7 @@ public abstract class OMenu {
                     continue;
                 }
 
-                closeAndOpenMenu(window, menu, viewer);
+                menu.openMenu(viewer, true);
             }
         }
 
@@ -193,7 +193,7 @@ public abstract class OMenu {
                     continue;
                 }
 
-                closeAndOpenMenu(entry.getValue(), menu, viewer);
+                menu.openMenu(viewer, true);
             }
         }
 
@@ -241,7 +241,7 @@ public abstract class OMenu {
                     return;
                 }
 
-                closeAndOpenMenu(window, menu, player);
+                menu.openMenu(player, true);
 
                 return;
             }
@@ -254,7 +254,7 @@ public abstract class OMenu {
                 return;
             }
 
-            closeAndOpenMenu(window, menu, player);
+            menu.openMenu(player, true);
         }
 
         public static int getOpen(final Class<? extends OMenu> clazz) {
@@ -309,14 +309,6 @@ public abstract class OMenu {
             final Window window = menu.windows.get(player.getUniqueId());
 
             return window != null && player.equals(window.getCurrentViewer());
-        }
-
-        private static void closeAndOpenMenu(
-            final @NotNull Window window, final @NotNull OMenu menu, final Player player
-        ) {
-            window.close();
-
-            menu.openMenu(player, true);
         }
 
         private static @Nullable OMenu findMenuByWindow(final Window window) {

@@ -112,7 +112,7 @@ public final class OIntegerSetting extends OSetting<Integer> {
 
             lore.add("&fCurrent: &6" + setting.value);
             lore.add("");
-            lore.add("&fMinimum: &c" + (max == null ? "None" : min));
+            lore.add("&fMinimum: &c" + (min == null ? "None" : min));
             lore.add("&fMaximum: &c" + (max == null ? "None" : max));
             lore.add("");
             lore.add("&eLeft-click &7to add &n" + change + "&7.");
