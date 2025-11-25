@@ -31,8 +31,6 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 @ExtensionMethod({ OStringExtension.class, OCommandSenderExtension.class })
 public abstract class OMenu {
-    private final Map<UUID, Window> windows = new HashMap<>();
-
     private static final OItem GO_BACK_ITEM = OItem.builder(Material.TIPPED_ARROW)
         .name("&cGo Back")
         .lore("&fClick &7to use!")
@@ -49,15 +47,16 @@ public abstract class OMenu {
     }
 
     private void openMenu(final Player player, final boolean silent) {
-        final Gui.Builder<?, ?> gui = getGui(player);
+        final Gui.Builder<?, ?> builder = getGui(player);
 
-        if (gui instanceof final PagedGui.Builder<?> paged) {
+        if (builder instanceof final PagedGui.Builder<?> paged) {
             addPageNavigationIngredients(paged);
         }
 
-        final Window window = getWindow(gui.build(), player);
+        final Gui gui = builder.build();
+        final Window window = getWindow(gui, player);
 
-        Tracker.registerMenu(this, window, player);
+        Tracker.registerMenu(this, gui, window, player);
 
         window.addOpenHandler(() -> {
             if (isMenuOpenSound() && !silent) {
@@ -86,91 +85,89 @@ public abstract class OMenu {
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static final class Tracker {
-        private static final Map<Class<? extends OMenu>, Set<Window>> windowsByClass = new HashMap<>();
-        private static final Map<OMenu, Map<UUID, Window>> windowsByInstance = new HashMap<>();
+        private static final Map<Class<? extends OMenu>, Set<Session>> sessionsByClass = new HashMap<>();
+        private static final Map<OMenu, Map<Player, Session>> sessionsByInstance = new HashMap<>();
 
-        public static void registerMenu(final @NotNull OMenu menu, final Window window, final @NotNull Player player) {
-            final UUID uuid = player.getUniqueId();
+        public static void registerMenu(
+            final @NotNull OMenu menu, final Gui gui, final Window window, final @NotNull Player player
+        ) {
+            final Session session = new Session(gui, window);
 
-            menu.windows.put(uuid, window);
+            sessionsByInstance.computeIfAbsent(menu, ignored -> new HashMap<>()).put(player, session);
 
-            windowsByInstance
-                .computeIfAbsent(menu, ignored -> new HashMap<>())
-                .put(uuid, window);
-
-            windowsByClass
+            sessionsByClass
                 .computeIfAbsent(menu.getClass(), ignored -> new HashSet<>())
-                .add(window);
+                .add(session);
         }
 
-        public static void unregisterMenu(final OMenu menu, final Window window, final @NotNull Player player) {
-            final UUID uuid = player.getUniqueId();
+        public static void unregisterMenu(
+            final @NotNull OMenu menu, final Window window, final @NotNull Player player
+        ) {
+            final Set<Session> sessionsByClass = Tracker.sessionsByClass.get(menu.getClass());
+            final Map<Player, Session> sessionsByInstance = Tracker.sessionsByInstance.get(menu);
 
-            final Map<UUID, Window> windowsByInstance = Tracker.windowsByInstance.get(menu);
-            final Set<Window> windowsByClass = Tracker.windowsByClass.get(menu.getClass());
+            final Class<? extends OMenu> clazz = menu.getClass();
 
-            menu.windows.remove(uuid);
-
-            if (windowsByInstance != null) {
-                windowsByInstance.remove(uuid);
-
-                if (windowsByInstance.isEmpty()) {
-                    Tracker.windowsByInstance.remove(menu);
-                }
+            if (sessionsByClass == null || sessionsByInstance == null) {
+                throw new IllegalStateException(
+                    "Error unregistering menu " + clazz.getSimpleName() + "; it is not registered"
+                );
             }
 
-            if (windowsByClass == null) {
+            sessionsByClass.remove(sessionsByInstance.get(player));
+
+            if (sessionsByClass.isEmpty()) {
+                Tracker.sessionsByClass.remove(clazz);
+            }
+
+            sessionsByInstance.remove(player);
+
+            if (!sessionsByInstance.isEmpty()) {
                 return;
             }
 
-            windowsByClass.remove(window);
-
-            if (!windowsByClass.isEmpty()) {
-                return;
-            }
-
-            Tracker.windowsByClass.remove(menu.getClass());
+            Tracker.sessionsByInstance.remove(menu);
         }
 
         public static void closeAll(final Class<? extends OMenu> clazz) {
-            final Set<Window> windows = windowsByClass.get(clazz);
+            final Set<Session> sessions = sessionsByClass.get(clazz);
 
-            if (windows == null) {
+            if (sessions == null) {
                 return;
             }
 
-            for (final Window window : new ArrayList<>(windows)) {
-                window.close();
+            for (final Session session : new ArrayList<>(sessions)) {
+                session.window.close();
             }
         }
 
         public static void closeAll(final OMenu menu) {
-            final Map<UUID, Window> windows = windowsByInstance.get(menu);
+            final Map<Player, Session> sessions = sessionsByInstance.get(menu);
 
-            if (windows == null) {
+            if (sessions == null) {
                 return;
             }
 
-            for (final Window window : new ArrayList<>(windows.values())) {
-                window.close();
+            for (final Session session : new ArrayList<>(sessions.values())) {
+                session.window.close();
             }
         }
 
         public static void refreshAll(final Class<? extends OMenu> clazz) {
-            final Set<Window> windows = windowsByClass.get(clazz);
+            final Set<Session> sessions = sessionsByClass.get(clazz);
 
-            if (windows == null) {
+            if (sessions == null) {
                 return;
             }
 
-            for (final Window window : new ArrayList<>(windows)) {
-                final Player viewer = window.getCurrentViewer();
+            for (final Session session : new ArrayList<>(sessions)) {
+                final Player viewer = session.window.getCurrentViewer();
 
                 if (viewer == null) {
                     continue;
                 }
 
-                final OMenu menu = findMenuByWindow(window);
+                final OMenu menu = findMenu(session);
 
                 if (menu == null) {
                     continue;
@@ -181,14 +178,14 @@ public abstract class OMenu {
         }
 
         public static void refreshAll(final OMenu menu) {
-            final Map<UUID, Window> instances = windowsByInstance.get(menu);
+            final Map<Player, Session> sessions = sessionsByInstance.get(menu);
 
-            if (instances == null) {
+            if (sessions == null) {
                 return;
             }
 
-            for (final Map.Entry<UUID, Window> entry : new ArrayList<>(instances.entrySet())) {
-                final Player viewer = OPlugin.get().getServer().getPlayer(entry.getKey());
+            for (final Map.Entry<Player, Session> session : new ArrayList<>(sessions.entrySet())) {
+                final Player viewer = session.getKey();
 
                 if (viewer == null) {
                     continue;
@@ -199,13 +196,15 @@ public abstract class OMenu {
         }
 
         public static void closeFor(final Class<? extends OMenu> clazz, final Player player) {
-            final Set<Window> windows = windowsByClass.get(clazz);
+            final Set<Session> sessions = sessionsByClass.get(clazz);
 
-            if (windows == null) {
+            if (sessions == null) {
                 return;
             }
 
-            for (final Window window : new ArrayList<>(windows)) {
+            for (final Session session : new ArrayList<>(sessions)) {
+                final Window window = session.window;
+
                 if (!player.equals(window.getCurrentViewer())) {
                     continue;
                 }
@@ -215,28 +214,28 @@ public abstract class OMenu {
         }
 
         public static void closeFor(final @NotNull OMenu menu, final @NotNull Player player) {
-            final Window window = menu.windows.get(player.getUniqueId());
+            final Session session = findSession(menu, player);
 
-            if (window == null) {
+            if (session == null) {
                 return;
             }
 
-            window.close();
+            session.window.close();
         }
 
         public static void refreshFor(final Class<? extends OMenu> clazz, final Player player) {
-            final Set<Window> windows = windowsByClass.get(clazz);
+            final Set<Session> sessions = sessionsByClass.get(clazz);
 
-            if (windows == null) {
+            if (sessions == null) {
                 return;
             }
 
-            for (final Window window : new ArrayList<>(windows)) {
-                if (!player.equals(window.getCurrentViewer())) {
+            for (final Session session : new ArrayList<>(sessions)) {
+                if (!player.equals(session.window.getCurrentViewer())) {
                     continue;
                 }
 
-                final OMenu menu = findMenuByWindow(window);
+                final OMenu menu = findMenu(session);
 
                 if (menu == null) {
                     return;
@@ -249,9 +248,7 @@ public abstract class OMenu {
         }
 
         public static void refreshFor(final @NotNull OMenu menu, final @NotNull Player player) {
-            final Window window = menu.windows.get(player.getUniqueId());
-
-            if (window == null) {
+            if (findSession(menu, player) == null) {
                 return;
             }
 
@@ -259,24 +256,26 @@ public abstract class OMenu {
         }
 
         public static int getOpen(final Class<? extends OMenu> clazz) {
-            final Set<Window> windows = windowsByClass.get(clazz);
+            final Set<Session> sessions = sessionsByClass.get(clazz);
 
-            return windows != null
-                ? windows.size()
-                : 0;
+            if (sessions == null) {
+                return 0;
+            }
+
+            return sessions.size();
         }
 
         public static @NotNull Set<Player> getViewers(final Class<? extends OMenu> clazz) {
-            final Set<Window> windows = windowsByClass.get(clazz);
+            final Set<Session> sessions = sessionsByClass.get(clazz);
 
-            if (windows == null) {
+            if (sessions == null) {
                 return Set.of();
             }
 
             final Set<Player> viewers = new HashSet<>();
 
-            for (final Window window : windows) {
-                final Player viewer = window.getCurrentViewer();
+            for (final Session session : sessions) {
+                final Player viewer = session.window.getCurrentViewer();
 
                 if (viewer == null) {
                     continue;
@@ -289,14 +288,14 @@ public abstract class OMenu {
         }
 
         public static boolean isViewing(final Class<? extends OMenu> clazz, final Player player) {
-            final Set<Window> windows = windowsByClass.get(clazz);
+            final Set<Session> sessions = sessionsByClass.get(clazz);
 
-            if (windows == null) {
+            if (sessions == null) {
                 return false;
             }
 
-            for (final Window window : windows) {
-                if (!player.equals(window.getCurrentViewer())) {
+            for (final Session session : sessions) {
+                if (!player.equals(session.window.getCurrentViewer())) {
                     continue;
                 }
 
@@ -307,15 +306,23 @@ public abstract class OMenu {
         }
 
         public static boolean isViewing(final @NotNull OMenu menu, final @NotNull Player player) {
-            final Window window = menu.windows.get(player.getUniqueId());
+            final Session session = findSession(menu, player);
 
-            return window != null && player.equals(window.getCurrentViewer());
+            return session != null && player.equals(session.window.getCurrentViewer());
         }
 
         private static void reopenMenu(final @NotNull OMenu menu, final Player player) {
+            final Session session = findSession(menu, player);
+
+            if (session == null) {
+                return;
+            }
+
+            final Gui gui = session.gui;
+
             final Window intermediate = Window.single()
                 .setViewer(player)
-                .setGui(Gui.empty(9, 1))
+                .setGui(Gui.empty(gui.getWidth(), gui.getHeight()))
                 .setTitle("")
                 .build();
 
@@ -326,9 +333,19 @@ public abstract class OMenu {
             );
         }
 
-        private static @Nullable OMenu findMenuByWindow(final Window window) {
-            for (final Map.Entry<OMenu, Map<UUID, Window>> entry : windowsByInstance.entrySet()) {
-                if (!entry.getValue().containsValue(window)) {
+        public static @Nullable Session findSession(final OMenu menu, final Player player) {
+            final Map<Player, Session> sessions = Tracker.sessionsByInstance.get(menu);
+
+            if (sessions == null) {
+                return null;
+            }
+
+            return sessions.get(player);
+        }
+
+        private static @Nullable OMenu findMenu(final Session session) {
+            for (final Map.Entry<OMenu, Map<Player, Session>> entry : sessionsByInstance.entrySet()) {
+                if (!entry.getValue().containsValue(session)) {
                     continue;
                 }
 
@@ -337,6 +354,8 @@ public abstract class OMenu {
 
             return null;
         }
+
+        public record Session(Gui gui, Window window) {}
     }
 
     public static final class Previous extends PageItem {
