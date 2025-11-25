@@ -46,8 +46,7 @@ import java.util.logging.Level;
 @Accessors(fluent = true)
 @ExtensionMethod({ OStringExtension.class, OComponentExtension.class })
 public final class OItem extends ItemStack implements ItemProvider {
-    public static final OItem FILLER = OItem.builder()
-        .material(Material.BLACK_STAINED_GLASS_PANE)
+    public static final OItem FILLER = OItem.builder(Material.BLACK_STAINED_GLASS_PANE)
         .name("")
         .flagsAll()
         .tooltipHidden(true)
@@ -55,11 +54,6 @@ public final class OItem extends ItemStack implements ItemProvider {
 
     private OItem(final Material material) {
         super(material);
-    }
-
-    @Contract(" -> new")
-    public static @NotNull OItemBuilder builder() {
-        return new OItemBuilder();
     }
 
     public static OItemBuilder builder(final Material material) {

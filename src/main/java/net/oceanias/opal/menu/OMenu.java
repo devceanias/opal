@@ -64,7 +64,7 @@ public abstract class OMenu {
             }
         });
 
-        window.addCloseHandler(() -> Tracker.unregisterMenu(this, window, player));
+        window.addCloseHandler(() -> Tracker.unregisterMenu(this, player));
         window.open();
     }
 
@@ -100,9 +100,7 @@ public abstract class OMenu {
                 .add(session);
         }
 
-        public static void unregisterMenu(
-            final @NotNull OMenu menu, final Window window, final @NotNull Player player
-        ) {
+        public static void unregisterMenu(final @NotNull OMenu menu, final @NotNull Player player) {
             final Set<Session> sessionsByClass = Tracker.sessionsByClass.get(menu.getClass());
             final Map<Player, Session> sessionsByInstance = Tracker.sessionsByInstance.get(menu);
 
