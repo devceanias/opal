@@ -5,6 +5,7 @@ import net.oceanias.opal.utility.builder.OItem;
 import net.oceanias.opal.utility.builder.OSound;
 import net.oceanias.opal.utility.extension.OCommandSenderExtension;
 import net.oceanias.opal.utility.extension.OStringExtension;
+import net.oceanias.opal.utility.helper.OTaskHelper;
 import java.util.*;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -175,7 +176,7 @@ public abstract class OMenu {
                     continue;
                 }
 
-                menu.openMenu(viewer, true);
+                reopenMenu(menu, viewer);
             }
         }
 
@@ -193,7 +194,7 @@ public abstract class OMenu {
                     continue;
                 }
 
-                menu.openMenu(viewer, true);
+                reopenMenu(menu, viewer);
             }
         }
 
@@ -241,7 +242,7 @@ public abstract class OMenu {
                     return;
                 }
 
-                menu.openMenu(player, true);
+                reopenMenu(menu, player);
 
                 return;
             }
@@ -254,7 +255,7 @@ public abstract class OMenu {
                 return;
             }
 
-            menu.openMenu(player, true);
+            reopenMenu(menu, player);
         }
 
         public static int getOpen(final Class<? extends OMenu> clazz) {
@@ -309,6 +310,20 @@ public abstract class OMenu {
             final Window window = menu.windows.get(player.getUniqueId());
 
             return window != null && player.equals(window.getCurrentViewer());
+        }
+
+        private static void reopenMenu(final @NotNull OMenu menu, final Player player) {
+            final Window intermediate = Window.single()
+                .setViewer(player)
+                .setGui(Gui.empty(9, 1))
+                .setTitle("")
+                .build();
+
+            intermediate.open();
+
+            OTaskHelper.runTask(() ->
+                menu.openMenu(player, true)
+            );
         }
 
         private static @Nullable OMenu findMenuByWindow(final Window window) {
