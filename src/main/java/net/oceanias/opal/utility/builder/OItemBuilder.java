@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
  * @deprecated Use {@link OItem} instead.
  * This class will be removed in a future version.
  */
-@Deprecated
+@Deprecated(forRemoval = true)
 @SuppressWarnings("unused")
 @ExtensionMethod({ OStringExtension.class, OComponentExtension.class })
 public final class OItemBuilder implements ItemProvider {
