@@ -1,9 +1,10 @@
 package net.oceanias.opal.menu;
 
 import net.oceanias.opal.OPlugin;
+import net.oceanias.opal.menu.item.OAbstractItem;
+import net.oceanias.opal.menu.item.OPageItem;
 import net.oceanias.opal.utility.builder.OItem;
 import net.oceanias.opal.utility.builder.OSound;
-import net.oceanias.opal.utility.extension.OCommandSenderExtension;
 import net.oceanias.opal.utility.extension.OStringExtension;
 import net.oceanias.opal.utility.helper.OTaskHelper;
 import java.util.*;
@@ -17,8 +18,6 @@ import xyz.xenondevs.inventoryaccess.component.AdventureComponentWrapper;
 import xyz.xenondevs.invui.gui.Gui;
 import xyz.xenondevs.invui.gui.PagedGui;
 import xyz.xenondevs.invui.item.ItemProvider;
-import xyz.xenondevs.invui.item.impl.AbstractItem;
-import xyz.xenondevs.invui.item.impl.controlitem.PageItem;
 import xyz.xenondevs.invui.window.Window;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -29,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("unused")
-@ExtensionMethod({ OStringExtension.class, OCommandSenderExtension.class })
+@ExtensionMethod(OStringExtension.class)
 public abstract class OMenu {
     private static final OItem GO_BACK_ITEM = OItem.builder(Material.TIPPED_ARROW)
         .name("&cGo Back")
@@ -356,7 +355,7 @@ public abstract class OMenu {
         public record Session(Gui gui, Window window) {}
     }
 
-    public static final class Previous extends PageItem {
+    public static final class Previous extends OPageItem {
         private final OMenu back;
 
         public Previous() {
@@ -397,11 +396,11 @@ public abstract class OMenu {
         }
 
         @Override
-        public void handleClick(
+        public void onItemClick(
             final @NotNull ClickType click, final @NotNull Player player, final @NotNull InventoryClickEvent event
         ) {
             if (getGui().hasPreviousPage()) {
-                super.handleClick(click, player, event);
+                super.onItemClick(click, player, event);
 
                 OSound.builder().sound(Sound.ITEM_BOOK_PAGE_TURN).build().play(player);
 
@@ -416,7 +415,7 @@ public abstract class OMenu {
         }
     }
 
-    public static final class Next extends PageItem {
+    public static final class Next extends OPageItem {
         public Next() {
             super(true);
         }
@@ -443,21 +442,21 @@ public abstract class OMenu {
         }
 
         @Override
-        public void handleClick(
+        public void onItemClick(
             final @NotNull ClickType click, final @NotNull Player player, final @NotNull InventoryClickEvent event
         ) {
             if (!getGui().hasNextPage()) {
                 return;
             }
 
-            super.handleClick(click, player, event);
+            super.onItemClick(click, player, event);
 
             OSound.builder().sound(Sound.ITEM_BOOK_PAGE_TURN).build().play(player);
         }
     }
 
     @RequiredArgsConstructor
-    public static final class Back extends AbstractItem {
+    public static final class Back extends OAbstractItem {
         private final OMenu back;
 
         @Override
@@ -466,7 +465,7 @@ public abstract class OMenu {
         }
 
         @Override
-        public void handleClick(
+        public void onItemClick(
             final @NotNull ClickType click, final @NotNull Player player, final @NotNull InventoryClickEvent event
         ) {
             back.openMenu(player);

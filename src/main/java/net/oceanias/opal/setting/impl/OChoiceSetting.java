@@ -1,9 +1,9 @@
 package net.oceanias.opal.setting.impl;
 
+import net.oceanias.opal.menu.item.OAbstractItem;
 import net.oceanias.opal.setting.OSetting;
 import net.oceanias.opal.utility.builder.OItem;
 import net.oceanias.opal.utility.builder.OSound;
-import net.oceanias.opal.utility.extension.OCommandSenderExtension;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Material;
@@ -12,16 +12,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import xyz.xenondevs.invui.item.ItemProvider;
-import xyz.xenondevs.invui.item.impl.AbstractItem;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import lombok.experimental.ExtensionMethod;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-@ExtensionMethod(OCommandSenderExtension.class)
 @SuppressWarnings("unused")
 @Getter
 @Setter
@@ -79,7 +76,7 @@ public final class OChoiceSetting extends OSetting<String> {
     }
 
     @RequiredArgsConstructor
-    public static class Item extends AbstractItem {
+    public static class Item extends OAbstractItem {
         private final OChoiceSetting setting;
 
         @Override
@@ -126,7 +123,7 @@ public final class OChoiceSetting extends OSetting<String> {
         }
 
         @Override
-        public void handleClick(
+        public void onItemClick(
             @NotNull final ClickType click, @NotNull final Player player, @NotNull final InventoryClickEvent event
         ) {
             final List<String> choices = setting.choices;

@@ -1,8 +1,9 @@
 package net.oceanias.opal.cooldown;
 
 import net.oceanias.opal.OPlugin;
+import net.oceanias.opal.utility.builder.OActionBar;
+import net.oceanias.opal.utility.builder.OMessage;
 import net.oceanias.opal.utility.builder.OSound;
-import net.oceanias.opal.utility.extension.OCommandSenderExtension;
 import net.oceanias.opal.utility.helper.ODurationHelper;
 import net.oceanias.opal.utility.helper.OTaskHelper;
 import java.time.Duration;
@@ -12,13 +13,11 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.command.CommandSender;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.ExtensionMethod;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
 @RequiredArgsConstructor
-@ExtensionMethod(OCommandSenderExtension.class)
 public final class OCooldown {
     private final String label;
     private final Duration length;
@@ -65,14 +64,12 @@ public final class OCooldown {
         final String message = "&fPlease wait &6" + ODurationHelper.formatFullDuration(getRemaining(sender)) + "&f.";
 
         if (sender instanceof ConsoleCommandSender) {
-            sender.messageDSR(message);
+            OMessage.builder().line(message).sound(OSound.Preset.ERROR).build().send(sender);
 
             return;
         }
 
-        sender.actionDSR(message);
-
-        OSound.builder().sound(OSound.Preset.ERROR).build().play(sender);
+        OActionBar.builder().text(message).sound(OSound.Preset.ERROR).build().show(sender);
     }
 
     public Duration getRemaining(final CommandSender sender) {

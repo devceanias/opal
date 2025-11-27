@@ -2,11 +2,11 @@ package net.oceanias.opal.setting.impl;
 
 import net.oceanias.opal.listener.OListener;
 import net.oceanias.opal.menu.OMenu;
+import net.oceanias.opal.menu.item.OAbstractItem;
 import net.oceanias.opal.setting.OSetting;
 import net.oceanias.opal.utility.builder.OItem;
 import net.oceanias.opal.utility.builder.OMessage;
 import net.oceanias.opal.utility.builder.OSound;
-import net.oceanias.opal.utility.extension.OCommandSenderExtension;
 import net.oceanias.opal.utility.extension.OComponentExtension;
 import net.oceanias.opal.utility.helper.OTaskHelper;
 import net.oceanias.opal.utility.helper.OTextHelper;
@@ -25,7 +25,6 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitTask;
 import xyz.xenondevs.invui.item.ItemProvider;
-import xyz.xenondevs.invui.item.impl.AbstractItem;
 import xyz.xenondevs.invui.window.Window;
 import xyz.xenondevs.invui.window.WindowManager;
 import io.papermc.paper.event.player.AsyncChatEvent;
@@ -36,7 +35,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings({ "unused", "deprecation" })
-@ExtensionMethod({ OComponentExtension.class, OCommandSenderExtension.class })
+@ExtensionMethod(OComponentExtension.class)
 @Getter
 public final class OStringSetting extends OSetting<String> {
     private transient Integer limit;
@@ -87,7 +86,7 @@ public final class OStringSetting extends OSetting<String> {
     }
 
     @RequiredArgsConstructor
-    public static class Item extends AbstractItem {
+    public static class Item extends OAbstractItem {
         private final OStringSetting setting;
 
         @Override
@@ -126,7 +125,7 @@ public final class OStringSetting extends OSetting<String> {
         }
 
         @Override
-        public void handleClick(
+        public void onItemClick(
             @NotNull final ClickType click, @NotNull final Player player, @NotNull final InventoryClickEvent event
         ) {
             if (!(event.getInventory().getHolder() instanceof final OMenu opal)) {

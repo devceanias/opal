@@ -1,9 +1,9 @@
 package net.oceanias.opal.setting.impl;
 
+import net.oceanias.opal.menu.item.OAbstractItem;
 import net.oceanias.opal.setting.OSetting;
 import net.oceanias.opal.utility.builder.OItem;
 import net.oceanias.opal.utility.builder.OSound;
-import net.oceanias.opal.utility.extension.OCommandSenderExtension;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Material;
@@ -12,16 +12,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import xyz.xenondevs.invui.item.ItemProvider;
-import xyz.xenondevs.invui.item.impl.AbstractItem;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import lombok.experimental.ExtensionMethod;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
-@ExtensionMethod(OCommandSenderExtension.class)
 @Getter
 @Setter
 @Accessors(fluent = true)
@@ -78,7 +75,7 @@ public final class ODoubleSetting extends OSetting<Double> {
         return new Item(this);
     }
 
-    public static class Item extends AbstractItem {
+    public static class Item extends OAbstractItem {
         private final ODoubleSetting setting;
         private final double change;
 
@@ -127,7 +124,7 @@ public final class ODoubleSetting extends OSetting<Double> {
         }
 
         @Override
-        public void handleClick(
+        public void onItemClick(
             @NotNull final ClickType click, @NotNull final Player player, @NotNull final InventoryClickEvent event
         ) {
             final double current = setting.value;

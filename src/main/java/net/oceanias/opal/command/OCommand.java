@@ -3,7 +3,6 @@ package net.oceanias.opal.command;
 import net.oceanias.opal.component.impl.OProvider;
 import net.oceanias.opal.OPlugin;
 import net.oceanias.opal.utility.builder.OSound;
-import net.oceanias.opal.utility.extension.OCommandSenderExtension;
 import net.oceanias.opal.utility.extension.OStringExtension;
 import net.oceanias.opal.utility.helper.OTextHelper;
 import java.lang.reflect.Field;
@@ -20,7 +19,7 @@ import org.apache.commons.text.WordUtils;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
-@ExtensionMethod({ OCommandSenderExtension.class, OStringExtension.class })
+@ExtensionMethod(OStringExtension.class)
 public abstract class OCommand implements OExecutable, OProvider {
     private List<HelpLine> help;
     private final Map<List<String>, List<String>> descriptions = new ConcurrentHashMap<>();
