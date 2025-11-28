@@ -1,5 +1,6 @@
-package net.oceanias.opal.menu.item;
+package net.oceanias.opal.menu.item.control.impl;
 
+import net.oceanias.opal.menu.item.control.OControlItem;
 import java.util.Map;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;

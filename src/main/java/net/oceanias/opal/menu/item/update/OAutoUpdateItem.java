@@ -1,5 +1,6 @@
-package net.oceanias.opal.menu.item;
+package net.oceanias.opal.menu.item.update;
 
+import net.oceanias.opal.menu.item.OAbstractItem;
 import net.oceanias.opal.utility.helper.OTaskHelper;
 import java.time.Duration;
 import org.bukkit.scheduler.BukkitTask;

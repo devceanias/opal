@@ -2,7 +2,7 @@ package net.oceanias.opal.menu;
 
 import net.oceanias.opal.OPlugin;
 import net.oceanias.opal.menu.item.OAbstractItem;
-import net.oceanias.opal.menu.item.OPageItem;
+import net.oceanias.opal.menu.item.control.impl.OPageItem;
 import net.oceanias.opal.utility.builder.OItem;
 import net.oceanias.opal.utility.builder.OSound;
 import net.oceanias.opal.utility.extension.OStringExtension;
