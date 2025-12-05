@@ -38,7 +38,6 @@ public final class OTitle {
     @Builder.Default
     private Duration fadeOut = Duration.ofSeconds(1);
 
-    @Setter
     private Sound sound;
 
     public @NotNull Title render() {
@@ -89,6 +88,12 @@ public final class OTitle {
         @Contract("_ -> this")
         public OTitleBuilder sound(final @NotNull OSound.Preset preset) {
             sound = preset.getDelegate();
+
+            return this;
+        }
+
+        public OTitleBuilder sound(final @NotNull Sound sound) {
+            this.sound = sound;
 
             return this;
         }

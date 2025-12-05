@@ -63,7 +63,7 @@ public abstract class OAsyncCycleItem extends OAsyncItem {
         @NotNull final ClickType click, @NotNull final Player player, @NotNull final InventoryClickEvent event
     ) {
         if (click.isRightClick()) {
-            cycle(player, false);
+            cycleItemProvider(player, false);
 
             return;
         }
@@ -72,14 +72,14 @@ public abstract class OAsyncCycleItem extends OAsyncItem {
             return;
         }
 
-        cycle(player, true);
+        cycleItemProvider(player, true);
     }
 
-    public void cycle(final boolean forward) {
-        cycle(null, forward);
+    public void cycleItemProvider(final boolean forward) {
+        cycleItemProvider(null, forward);
     }
 
-    private void cycle(@Nullable final Player player, final boolean forward) {
+    private void cycleItemProvider(@Nullable final Player player, final boolean forward) {
         final List<ItemProvider> list = providers;
 
         if (list.isEmpty()) {

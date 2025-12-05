@@ -38,7 +38,6 @@ public final class OMessage {
     @Builder.Default
     private boolean blanks = false;
 
-    @Setter
     private Sound sound;
 
     public @NotNull Component render() {
@@ -89,6 +88,12 @@ public final class OMessage {
         @Contract("_ -> this")
         public OMessageBuilder sound(final @NotNull OSound.Preset preset) {
             sound = preset.getDelegate();
+
+            return this;
+        }
+
+        public OMessageBuilder sound(final @NotNull Sound sound) {
+            this.sound = sound;
 
             return this;
         }
