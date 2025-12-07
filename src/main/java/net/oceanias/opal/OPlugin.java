@@ -79,6 +79,11 @@ public abstract class OPlugin extends JavaPlugin {
         scheduler = getServer().getScheduler();
 
         setInstance();
+
+        for (final OConfiguration<?> config : getConfigurations()) {
+            config.registerInternally();
+        }
+
         loadPlugin();
     }
 
@@ -87,10 +92,6 @@ public abstract class OPlugin extends JavaPlugin {
         CommandAPI.onEnable();
 
         InvUI.getInstance().setPlugin(this);
-
-        for (final OConfiguration<?> config : getConfigurations()) {
-            config.registerInternally();
-        }
 
         Structure.addGlobalIngredient('#', OItem.FILLER.get());
 
