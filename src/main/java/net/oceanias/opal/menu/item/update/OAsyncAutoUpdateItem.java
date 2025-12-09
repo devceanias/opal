@@ -37,12 +37,12 @@ public abstract class OAsyncAutoUpdateItem extends OAsyncItem {
         }
 
         if (autoAsyncExecution && OPlugin.get().getServer().isPrimaryThread()) {
-            task = OTaskHelper.runTaskTimerAsync(this::setItemProvider, Duration.ZERO, interval);
+            task = OTaskHelper.runTaskTimerAsync(this::setItemProvider, Duration.ofMillis(50), interval);
 
             return;
         }
 
-        task = OTaskHelper.runTaskTimer(this::setItemProvider, Duration.ZERO, interval);
+        task = OTaskHelper.runTaskTimer(this::setItemProvider, Duration.ofMillis(50), interval);
     }
 
     @Override

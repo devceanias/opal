@@ -26,12 +26,12 @@ public abstract class OAsyncControlItem<G extends Gui> extends ControlItem<G> {
         this.autoAsyncExecution = autoAsyncExecution;
 
         if (autoAsyncExecution && OPlugin.get().getServer().isPrimaryThread()) {
-            OTaskHelper.runTaskAsync(this::setItemProvider);
+            OTaskHelper.runTaskLaterAsync(this::setItemProvider, 1L);
 
             return;
         }
 
-        setItemProvider();
+        OTaskHelper.runTaskLater(this::setItemProvider, 1L);
     }
 
     protected final void applyItemProvider(final ItemProvider provider) {
