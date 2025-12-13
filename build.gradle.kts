@@ -1,14 +1,12 @@
 group = "net.oceanias"
-version = "5.0.3"
+version = "5.1.0"
 
 plugins {
     id("java-library")
     id("maven-publish")
 
     alias(libs.plugins.shadow)
-
-    // TODO: Use this plugin for runtime library downloads and relocations after publication is finished.
-//    alias(libs.plugins.zapper)
+    alias(libs.plugins.zapper)
 }
 
 java {
@@ -42,42 +40,35 @@ publishing {
 dependencies {
     annotationProcessor(libs.lombok)
 
-    api(libs.commandapi)
-    api(libs.configlib)
-    api(libs.commons.text)
-    api(libs.minitext)
-
-//    zap(libs.commandapi)
-//    zap(libs.invui)
-//    zap(libs.configlib)
-//    zap(libs.commons.text)
-//    zap(libs.minitext)
-
     compileOnly(libs.lombok)
     compileOnly(libs.paper)
     compileOnly(variantOf(libs.inventoryaccess) { classifier("remapped-mojang") })
 
     compileOnlyApi(libs.invui)
+    compileOnlyApi(libs.commandapi)
+    compileOnlyApi(libs.configlib)
+    compileOnlyApi(libs.commons.text)
+    compileOnlyApi(libs.minitext)
+
+    zap(libs.commandapi)
+    zap(libs.configlib)
+    zap(libs.commons.text)
+    zap(libs.minitext)
 }
 
-//zapper {
-//    libsFolder = "libraries"
-//    relocationPrefix = "$group.$name.libraries"
-//
-//    repositories {
-//        includeProjectRepositories()
-//    }
-//
-//    relocate("com.bruhdows", "bruhdows")
-//    relocate("de.exlll", "exlll")
-//    relocate("dev.jorel", "jorel")
-//    relocate("net.kyori", "kyori")
-//    relocate("org.apache", "apache")
-//    relocate("org.intellij", "intellij")
-//    relocate("org.jetbrains", "jetbrains")
-//    relocate("org.snakeyaml", "snakeyaml")
-//    relocate("xyz.xenondevs", "xenondevs")
-//}
+zapper {
+    libsFolder = "libraries"
+    relocationPrefix = "$group.$name.libraries"
+
+    repositories {
+        includeProjectRepositories()
+    }
+
+    relocate("com.bruhdows", "bruhdows")
+    relocate("dev.jorel", "jorel")
+    relocate("de.exlll", "exlll")
+    relocate("org.apache", "apache")
+}
 
 defaultTasks("build")
 
