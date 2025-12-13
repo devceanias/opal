@@ -58,16 +58,10 @@ dependencies {
 
 zapper {
     libsFolder = "libraries"
-    relocationPrefix = "$group.${name.lowercase()}.libraries"
 
     repositories {
         includeProjectRepositories()
     }
-
-    relocate("com.bruhdows", "bruhdows")
-    relocate("dev.jorel", "jorel")
-    relocate("de.exlll", "exlll")
-    relocate("org.apache", "apache")
 }
 
 defaultTasks("build")
