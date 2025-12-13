@@ -58,7 +58,7 @@ dependencies {
 
 zapper {
     libsFolder = "libraries"
-    relocationPrefix = "$group.$name.libraries"
+    relocationPrefix = "$group.${name.lowercase()}.libraries"
 
     repositories {
         includeProjectRepositories()

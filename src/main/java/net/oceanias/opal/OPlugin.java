@@ -7,6 +7,7 @@ import net.oceanias.opal.setting.impl.OStringSetting;
 import net.oceanias.opal.utility.builder.OItem;
 import net.oceanias.opal.utility.builder.OTeleport;
 import java.util.List;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIPaperConfig;
@@ -14,11 +15,10 @@ import xyz.xenondevs.invui.InvUI;
 import xyz.xenondevs.invui.gui.structure.Structure;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-import revxrsal.zapper.ZapperJavaPlugin;
 
 @SuppressWarnings({ "unused", "UnstableApiUsage" })
 @Getter
-public abstract class OPlugin extends ZapperJavaPlugin {
+public abstract class OPlugin extends JavaPlugin {
     @Getter
     @Accessors(fluent = true)
     private static OPlugin get;
@@ -43,7 +43,10 @@ public abstract class OPlugin extends ZapperJavaPlugin {
 
     public abstract String getPrefix();
 
-    // This ensures that the user provides their own loader for paper-plugin.yml.
+    // This ensures that the user provides their own bootstrap in paper-plugin.yml.
+    public abstract OBootstrap getBootstrap();
+
+    // This ensures that the user provides their own loader in paper-plugin.yml.
     public abstract OLoader getLoader();
 
     protected abstract void setInstance();
@@ -62,6 +65,10 @@ public abstract class OPlugin extends ZapperJavaPlugin {
     public final void onLoad() {
         if (get != null) {
             throw new IllegalStateException("Error loading plugin; only one OPlugin is allowed.");
+        }
+
+        if (getBootstrap() == null) {
+            throw new IllegalStateException("Error loading plugin; getBootstrap() returned null.");
         }
 
         if (getLoader() == null) {
