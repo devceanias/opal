@@ -19,6 +19,7 @@ java {
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
 
     maven("https://central.sonatype.com/repository/maven-snapshots/")
@@ -40,6 +41,8 @@ publishing {
 dependencies {
     annotationProcessor(libs.lombok)
 
+    api(libs.zapper)
+
     compileOnly(libs.lombok)
     compileOnly(libs.paper)
     compileOnly(variantOf(libs.inventoryaccess) { classifier("remapped-mojang") })
@@ -57,11 +60,7 @@ dependencies {
 }
 
 zapper {
-    libsFolder = "libraries"
-
-    repositories {
-        includeProjectRepositories()
-    }
+    relocationPrefix = "$group.${name.lowercase()}.libraries"
 }
 
 defaultTasks("build")
