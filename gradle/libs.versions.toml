@@ -18,7 +18,7 @@ lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" 
 paper = { group = "io.papermc.paper", name = "paper-api", version.ref = "paper" }
 commons-text = { group = "org.apache.commons", name = "commons-text", version.ref = "commons-text" }
 minitext = { group = "com.github.Bruhdows", name = "MiniText", version.ref = "minitext" }
-zapper = { group = "net.oceanias.zapper", name = "zapper", version.ref = "zapper" }
+zapper = { group = "com.github.devceanias", name = "zapper", version.ref = "zapper" }
 
 [bundles]
 
