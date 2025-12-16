@@ -1,7 +1,7 @@
 [versions]
 shadow = "9.2.2"
 invui = "1.47"
-commandapi = "11.0.1-SNAPSHOT"
+commandapi = "11.1.0"
 configlib = "4.6.4"
 lombok = "1.18.42"
 paper = "1.21.4-R0.1-SNAPSHOT"
